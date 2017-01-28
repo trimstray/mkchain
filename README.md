@@ -22,7 +22,7 @@ Usage
   Options:
     -h, --help                  show this message
     -d, --debug                 display information on the screen (debug mode)
-    -r, --root                  root certificate
-    -i, --intermediate          intermediate certificate
-    -c, --client                client certificate
+    -r, --root                  stores a self-signed certificate (root certificate)
+    -i, --intermediate          stores a certificate signed by root (intermediate certificate)
+    -c, --client                stores a certificate signed by intermediate (client certificate)
 ```
