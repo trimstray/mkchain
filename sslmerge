@@ -190,7 +190,7 @@ function ssl::info() {
 
   for i in $_ssl_root $_ssl_client "${_ssl_inter[@]}" ; do
 
-    $openssl_bin x509 -text -noout -in $i | grep CA:TRUE
+    $openssl_bin x509 -text -noout -in "$i" | grep CA:TRUE
 
   done
 
