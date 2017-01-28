@@ -54,7 +54,8 @@ readonly log_file_directory="/var/log/${__init_name}"
 readonly log_file_full_path="${log_file_directory}/${log_file}"
 
 stdout=""
-ssl_root="" ; ssl_inter=() ; ssl_client=""
+# Define variables with random values.
+ssl_root="$RANDOM" ; ssl_inter=() ; ssl_client="$RANDOM"
 
 
 # Saving the states of operation to a log file.
