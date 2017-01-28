@@ -1,0 +1,224 @@
+#!/usr/bin/env bash
+
+### BEGIN SCRIPT INFO
+#
+# fname......"sslmerge"
+# cdate......"28.01.2017"
+# mdate......"28.01.2017"
+# version...."1.0"
+# author....."Michał Żurawski <zurawski@bxlab.pl>, <jboowie@bxlab.pl>"
+#
+### END SCRIPT INFO
+
+###
+#
+# Description:
+#
+#   See README.md file for more information.
+#
+# Patches:
+#
+# License:
+#
+#   This program is free software; you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation; either version 2 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program; if not, write to the Free Software
+#   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+#
+###
+
+
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
+umask 022
+
+__init_params=()
+__script_params=("$@")
+
+readonly __init_name="$(basename "$0")"
+readonly __init_directory="$(dirname "$(readlink -f "$0")")"
+
+readonly tdate=$(date +%Y%m%d)
+
+readonly log_file="${__init_name}.${tdate}.log"
+readonly log_file_directory="/var/log/${__init_name}"
+readonly log_file_full_path="${log_file_directory}/${log_file}"
+
+stdout=""
+
+
+# Saving the states of operation to a log file.
+function _logger() {
+
+  local _FUNCTION_ID="_logger"
+  local _STATE=0
+
+  local type_log_info="$1"
+  local info_to_log=$(shift ; echo "$@")
+
+  local log_file_size=0
+  local log_file_max_size=10485760
+
+  local convert_type_to_upper=$(echo "$type_log_info" | tr '[:lower:]' '[:upper:]')
+
+  if [ ! -d "$log_file_directory" ] ; then
+    mkdir -m 0750 "$log_file_directory" ; fi
+
+  # Checking the log file exceeds the set max size,
+  # if the max size is exceeded, the log file will be archived.
+  if [ -e "$log_file_full_path" ] ; then
+    log_file_size=$(stat -c%s "$log_file_full_path") ; fi
+
+  if [ "$log_file_size" -gt "$log_file_max_size" ] ; then
+
+    local gzip_log_file="${log_file}.${tdate}.tgz"
+
+    tar czfp "$gzip_log_file" -C "$log_file_directory" "$log_file" && \
+    mv "$gzip_log_file" "$log_file_directory" && \
+    >"$log_file_full_path"
+
+  fi
+
+  # The decision whether an INFO is to be only log to a file
+  # or to a file and to standard output.
+  if [ "$stdout" == "" ] ; then
+
+    printf "%s  %s:  [%s] %s\n" \
+           "$(date +"%d/%m/%y %X")" \
+           "$__init_name" \
+           "$convert_type_to_upper" \
+           "$info_to_log" \
+           >>"$log_file_full_path"
+
+  elif [ "$stdout" == "debug" ] ; then
+
+    printf "%s  %s:  [%s] %s\n" \
+          "$(date +"%d/%m/%y %X")" \
+          "$__init_name" \
+          "$convert_type_to_upper" \
+          "$info_to_log" \
+          | tee -a "$log_file_full_path"
+
+  fi
+
+  # Change permissions to the log file (for security here if the script
+  # unexpectedly interrupted by his INFO before).
+  chmod o-r "$log_file_full_path"
+
+  # Three states of info:
+  #   INFO - normal information log (doesn't perform _exit_ function)
+  #   WARN - warning information log (doesn't perform _exit_ function)
+  #   STOP - interrupts script execution (does perform _exit_ function)
+  #   EXIT - interrupts script execution (doesn't perform _exit_ function)
+  if [ "$type_log_info" == "stop" ] ; then _exit_ 255 ; fi
+
+  return $_STATE
+
+}
+
+# Covers the default exit command.
+function _exit_() { _STATUS="$1" ; exit "$_STATUS" ; }
+
+# Ensuring they always perform necessary cleanup operations,
+# even when something unexpected goes wrong.
+function get_trap_SIG() {
+
+  local _FUNCTION_ID="get_trap_SIG"
+  local _STATE="$_STATUS"
+
+  if [ -z "$_STATE" ] ; then _STATE=255 ; fi
+
+  _logger exit \
+    "${_FUNCTION_ID} exit > signal ${_STATE}"
+
+  return $_STATE
+
+}
+
+# Should be consistent with the contents of the file README.md.
+function _help_() {
+
+  local _FUNCTION_ID="_help_"
+  local _STATE=0
+
+  printf "%s" "\
+
+  Usage:
+    $__init_name [option|long-option]
+
+  Examples:
+    $__init_name --help
+    $__init_name --debug
+
+  Options:
+    -h, --help                  show this message
+    -d, --debug                 display information on the screen (debug mode)
+
+"
+
+  return $_STATE
+
+}
+
+function __main__() {
+
+  local _FUNCTION_ID="__main__"
+  local _STATE=0
+
+  _logger init \
+    "init '${__init_name}' in ${__init_directory}" && \
+  _logger info \
+    "__init_params[] = (${__init_params[*]})," \
+    "__script_params[] = (${__script_params[*]})"
+
+  cd "$__init_directory"
+
+  local _short_opt="hd"
+  local _long_opt="help,debug"
+
+  _GETOPT_PARAMS=$(getopt -o "$_short_opt" --long "$_long_opt" \
+                  -n "${__init_name}" -- "${__script_params[@]}")
+
+  eval set -- "$_GETOPT_PARAMS"
+  while true ; do
+
+    case $1 in
+
+      -h|--help)
+
+        _help_
+        shift ; break ;;
+
+      -d|--debug)
+
+        stdout="debug"
+        shift ;;
+
+      '') shift ; break ;;
+      --) shift ; break ;;
+      *) _exit_ 0 ;;
+
+    esac
+
+  done
+
+  return $_STATE
+
+}
+
+trap get_trap_SIG EXIT
+
+# An array as an argument to a function call __main__,
+# is required if we want to operate on arguments of type $1, $2, ...
+__main__ "${__script_params[@]}"
+
+_exit_ 0
