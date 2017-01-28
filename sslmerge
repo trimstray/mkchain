@@ -182,6 +182,16 @@ function ssl::info() {
   local _FUNCTION_ID="ssl::info"
   local _STATE=0
 
+  local _ssl_root="$1"
+  local _ssl_client="$2"
+  local _ssl_inter=("${ssl_inter[@]}")
+
+  for i in $_ssl_root $_ssl_client ${_ssl_inter[@]} ; do
+
+    true
+
+  done
+
   return $_STATE
 
 }
@@ -253,9 +263,10 @@ function __main__() {
 
   done
 
-  # We pass arguments to the function,
-  # last passed a table because it may contain a different number of parameters.
-  ssl::info "$ssl_root" "$ssl_client" "${ssl_inter[@]}"
+  # We pass arguments to the function without the transfer of the array as a parameter
+  # of the call. It will be used directly in a function and assigned to the local array.
+  # This is due to an unspecified number of arguments array.
+  ssl::info "$ssl_root" "$ssl_client"
 
   return $_STATE
 
