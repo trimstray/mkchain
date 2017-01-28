@@ -55,7 +55,7 @@ readonly log_file_full_path="${log_file_directory}/${log_file}"
 
 stdout=""
 
-# Define variables with random values (without array).
+# Define variables with empty values.
 ssl_root="" ; ssl_client="" ; ssl_inter=()
 
 
@@ -252,6 +252,10 @@ function __main__() {
     esac
 
   done
+
+  # We pass arguments to the function,
+  # last passed a table because it may contain a different number of parameters.
+  ssl::info "$ssl_root" "$ssl_client" "${ssl_inter[@]}"
 
   return $_STATE
 
