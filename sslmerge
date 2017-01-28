@@ -54,7 +54,7 @@ readonly log_file_directory="/var/log/${__init_name}"
 readonly log_file_full_path="${log_file_directory}/${log_file}"
 
 stdout=""
-ssl_ca="" ; ssl_inter="" ; ssl_root=""
+ssl_root="" ; ssl_inter="" ; ssl_client=""
 
 
 # Saving the states of operation to a log file.
@@ -159,10 +159,14 @@ function _help_() {
   Examples:
     $__init_name --help
     $__init_name --debug
+    $__init_name --root Root.crt --intermediate Intermediate1.crt --client Server.crt
 
   Options:
     -h, --help                  show this message
     -d, --debug                 display information on the screen (debug mode)
+    -r, --root                  stores a self-signed certificate (root certificate)
+    -i, --intermediate          stores a certificate signed by root.pem (intermediate certificate)
+    -c, --client                client certificate
 
 "
 
@@ -183,8 +187,8 @@ function __main__() {
 
   cd "$__init_directory"
 
-  local _short_opt="hd"
-  local _long_opt="help,debug"
+  local _short_opt="hdr:i:c:"
+  local _long_opt="help,debug,root:,intermediate:,client:"
 
   _GETOPT_PARAMS=$(getopt -o "$_short_opt" --long "$_long_opt" \
                   -n "${__init_name}" -- "${__script_params[@]}")
@@ -204,9 +208,19 @@ function __main__() {
         stdout="debug"
         shift ;;
 
-      -c|--ca)
+      -r|--root)
 
-        ssl_ca="$2"
+        ssl_root="$2"
+        shift 2 ;;
+
+      -i|--intermediate)
+
+        ssl_inter="$2"
+        shift 2 ;;
+
+      -c|--client)
+
+        ssl_client="$2"
         shift 2 ;;
 
       '') shift ; break ;;
