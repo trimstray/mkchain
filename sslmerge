@@ -54,8 +54,9 @@ readonly log_file_directory="/var/log/${__init_name}"
 readonly log_file_full_path="${log_file_directory}/${log_file}"
 
 stdout=""
-# Define variables with random values.
-ssl_root="$RANDOM" ; ssl_inter=() ; ssl_client="$RANDOM"
+
+# Define variables with random values (without array).
+ssl_root="" ; ssl_client="" ; ssl_inter=()
 
 
 # Saving the states of operation to a log file.
@@ -175,6 +176,7 @@ function _help_() {
 
 }
 
+# Extract information about certificates needed to make a proper chain.
 function ssl::info() {
 
   local _FUNCTION_ID="ssl::info"
@@ -184,6 +186,7 @@ function ssl::info() {
 
 }
 
+# It makes a proper chain of delivered certificates.
 function ssl::chain() {
 
   local _FUNCTION_ID="ssl::chain"
