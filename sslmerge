@@ -54,7 +54,7 @@ readonly log_file_directory="/var/log/${__init_name}"
 readonly log_file_full_path="${log_file_directory}/${log_file}"
 
 stdout=""
-ssl_root="" ; ssl_inter="" ; ssl_client=""
+ssl_root="" ; ssl_inter=() ; ssl_client=""
 
 
 # Saving the states of operation to a log file.
@@ -215,7 +215,7 @@ function __main__() {
 
       -i|--intermediate)
 
-        ssl_inter="$2"
+        ssl_inter+=("$2")
         shift 2 ;;
 
       -c|--client)
