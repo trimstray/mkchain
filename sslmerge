@@ -54,6 +54,7 @@ readonly log_file_directory="/var/log/${__init_name}"
 readonly log_file_full_path="${log_file_directory}/${log_file}"
 
 stdout=""
+ssl_ca="" ; ssl_inter="" ; ssl_root=""
 
 
 # Saving the states of operation to a log file.
@@ -102,11 +103,11 @@ function _logger() {
   elif [ "$stdout" == "debug" ] ; then
 
     printf "%s  %s:  [%s] %s\n" \
-          "$(date +"%d/%m/%y %X")" \
-          "$__init_name" \
-          "$convert_type_to_upper" \
-          "$info_to_log" \
-          | tee -a "$log_file_full_path"
+           "$(date +"%d/%m/%y %X")" \
+           "$__init_name" \
+           "$convert_type_to_upper" \
+           "$info_to_log" \
+           | tee -a "$log_file_full_path"
 
   fi
 
@@ -202,6 +203,11 @@ function __main__() {
 
         stdout="debug"
         shift ;;
+
+      -c|--ca)
+
+        ssl_ca="$2"
+        shift 2 ;;
 
       '') shift ; break ;;
       --) shift ; break ;;
