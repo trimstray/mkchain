@@ -4,7 +4,7 @@
 #
 # fname......"sslmerge"
 # cdate......"28.01.2017"
-# mdate......"29.01.2017"
+# mdate......"30.01.2017"
 # version...."1.0"
 # author....."Michał Żurawski <zurawski@bxlab.pl>, <jboowie@bxlab.pl>"
 #
@@ -233,8 +233,6 @@ function ssl::info() {
   local _ssl_keep_attr=()
   local _key=""
   local _value=""
-
-  sprintf "info" "extracting information about certificates"
 
   for i in "${_ssl_cert[@]}" ; do
 
