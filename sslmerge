@@ -184,6 +184,8 @@ function ssl::info() {
   local _FUNCTION_ID="ssl::info"
   local _STATE=0
 
+  local _ssl_ident_ca_string="CA:TRUE"
+
   local _ssl_root="$1"
   local _ssl_client="$2"
   local _ssl_inter=("${ssl_inter[@]}")
@@ -195,11 +197,25 @@ function ssl::info() {
 
   for i in $_ssl_root $_ssl_client "${_ssl_inter[@]}" ; do
 
+    # Responsible for search CA:TRUE string which define the type of certificate => (grep "$_ssl_ident_ca_string")
+    # and removes the initial whitespace => (sed 's/  *//g').
+    local _ssl_substr=$($openssl_bin x509 -text -noout -in "$i" | grep "$_ssl_ident_ca_string" | sed 's/  *//g')
+
     _key="$(basename "$i")"
 
-    if [ "CA:TRUE" == $(openssl_bin x509 -text -noout -in "$i" | grep -Eio "CA:TRUE") ] ; then
+    # The condition specifying that the certificate is a root certificate.
+    if [[ $(echo "$_ssl_substr" | egrep -o "$_ssl_ident_ca_string" | wc -l) -gt "0" ]] && [[ ${#_ssl_substr} -eq 7 ]] ; then
+
       _value="root"
+
+    # The condition specifying that the certificate is a intermediate certificate.
+    elif [[ $(echo "$_ssl_substr" | egrep -o "[0-9]" | wc -l) -gt "0" ]] ; then
+
+      _value="int"$(echo "$_ssl_substr" | egrep -o "[0-9]")
+
     fi
+
+    _ssl_keep_attr+=("${_key}:${_value}")
 
   done
 
