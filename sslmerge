@@ -202,12 +202,16 @@ function ssl::info() {
     # The condition specifying that the certificate is a root certificate.
     if [[ $(echo "$_ssl_substr" | egrep -o "$_ssl_ident_ca_string" | wc -l) -gt "0" ]] && [[ ${#_ssl_substr} -eq 7 ]] ; then
 
-      _value="root"
+      _value="rootca"
 
     # The condition specifying that the certificate is a intermediate certificate.
     elif [[ $(echo "$_ssl_substr" | egrep -o "[0-9]" | wc -l) -gt "0" ]] ; then
 
-      _value="int"$(echo "$_ssl_substr" | egrep -o "[0-9]")
+      _value="inter"$(echo "$_ssl_substr" | egrep -o "[0-9]")
+
+    else
+
+      _value="client"
 
     fi
 
