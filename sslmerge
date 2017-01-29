@@ -195,7 +195,11 @@ function ssl::info() {
 
   for i in $_ssl_root $_ssl_client "${_ssl_inter[@]}" ; do
 
-    $openssl_bin x509 -text -noout -in "$i" | grep CA:TRUE
+    _key="$(basename "$i")"
+
+    if [ "CA:TRUE" == $(openssl_bin x509 -text -noout -in "$i" | grep -Eio "CA:TRUE") ] ; then
+      _value="root"
+    fi
 
   done
 
