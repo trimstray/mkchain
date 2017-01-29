@@ -18,7 +18,7 @@ Usage
     sslmerge --help
     sslmerge --debug
     sslmerge --cert Root.crt --cert Intermediate1.crt --cert Server.crt
-		sslmerge --cert root.crt --cert intermediate01.crt --cert intermediate02.crt --cert server.crt
+    sslmerge --cert root.crt --cert intermediate01.crt --cert intermediate02.crt --cert server.crt
 
   Options:
     -h, --help                  show this message
