@@ -242,6 +242,8 @@ function ssl::info() {
 
     _key="$(basename "$i")"
 
+    sprintf "info" "processing for $_key"
+
     # The condition specifying that the certificate is a root certificate.
     if [[ $(echo "$_ssl_substr" | egrep -o "$_ssl_ident_ca_string" | wc -l) -gt "0" ]] && [[ ${#_ssl_substr} -eq 7 ]] ; then
 
@@ -251,7 +253,7 @@ function ssl::info() {
         "$_FUNCTION_ID()" \
         "set value for _value - '$_value'"
 
-        sprintf "info" "identified as a root certificate -> code: '$_value"
+        sprintf "info" "- identified as a root certificate -> code: '$_value"
 
     # The condition specifying that the certificate is a intermediate certificate.
     elif [[ $(echo "$_ssl_substr" | egrep -o "[0-9]" | wc -l) -gt "0" ]] ; then
@@ -262,7 +264,7 @@ function ssl::info() {
         "$_FUNCTION_ID()" \
         "set value for _value - '$_value'"
 
-        sprintf "info" "identified as a intermediate certificate -> code: '$_value"
+        sprintf "info" "- identified as a intermediate certificate -> code: '$_value"
 
     else
 
@@ -272,13 +274,13 @@ function ssl::info() {
         "$_FUNCTION_ID()" \
         "set value for _value - '$_value'"
 
-        sprintf "info" "identified as a client certificate -> code: '$_value"
+        sprintf "info" "- identified as a client certificate -> code: '$_value"
 
     fi
 
     _ssl_keep_attr+=("${_key}:${_value}")
 
-    sprintf "info" "creating a valid array 'key':'value' given certificates"
+    sprintf "info" "- creating a valid array 'key':'value' given certificate"
 
     _logger info \
       "$_FUNCTION_ID()" \
