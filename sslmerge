@@ -195,6 +195,16 @@ function _help_() {
 
 }
 
+# Function designed to output to the screen in a clear format.
+function _sprintf() {
+
+  local _FUNCTION_ID="_sprintf"
+  local _STATE=0
+
+  return $_STATE
+
+}
+
 # Extract information about certificates needed to make a proper chain.
 function ssl::info() {
 
