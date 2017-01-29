@@ -190,6 +190,8 @@ function ssl::info() {
 
   # Temporary table for storing data in the form key:value.
   local _ssl_keep_attr=()
+  local _key=""
+  local _value=""
 
   for i in $_ssl_root $_ssl_client "${_ssl_inter[@]}" ; do
 
