@@ -210,6 +210,16 @@ function ssl::info() {
   local _key=""
   local _value=""
 
+  _logger info \
+    "$_FUNCTION_ID()" \
+    "initialization of variables ["\
+    "_ssl_ident_ca_string - '$_ssl_ident_ca_string'," \
+    "_ssl_cert - '$_ssl_cert'," \
+    "_ssl_keep_attr - '$_ssl_keep_attr'," \
+    "_key - '$_key'," \
+    "_value - '$_value'" \
+    "]"
+
   for i in "${_ssl_cert[@]}" ; do
 
     # Responsible for search CA:TRUE string which define the type of certificate => (grep "$_ssl_ident_ca_string")
@@ -304,6 +314,8 @@ function __main__() {
   # We pass without arguments to the function which processes array
   # directly in a function and assigned to the local array.
   ssl::info
+
+  # printf '%s\n' "${ssl_keep_attr[@]}"
 
   return $_STATE
 
