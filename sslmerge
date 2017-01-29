@@ -55,8 +55,8 @@ readonly log_file_full_path="${log_file_directory}/${log_file}"
 
 stdout=""
 
-# Define variables with empty values.
-ssl_root="" ; ssl_client="" ; ssl_inter=()
+# Define array with empty values.
+ssl_cert=()
 
 openssl_bin=$(which openssl)
 
@@ -163,14 +163,12 @@ function _help_() {
   Examples:
     $__init_name --help
     $__init_name --debug
-    $__init_name --root Root.crt --intermediate Intermediate1.crt --client Server.crt
+    $__init_name --cert Root.crt --cert Intermediate1.crt --cert Server.crt
 
   Options:
     -h, --help                  show this message
     -d, --debug                 display information on the screen (debug mode)
-    -r, --root                  stores a self-signed certificate (root certificate)
-    -i, --intermediate          stores a certificate signed by root (intermediate certificate)
-    -c, --client                stores a certificate signed by intermediate (client certificate)
+    -c, --cert                  stores a certificate (ex. root certificate, intermediate certificate and other)
 
 "
 
@@ -186,16 +184,14 @@ function ssl::info() {
 
   local _ssl_ident_ca_string="CA:TRUE"
 
-  local _ssl_root="$1"
-  local _ssl_client="$2"
-  local _ssl_inter=("${ssl_inter[@]}")
+  local _ssl_cert=("${ssl_cert[@]}")
 
   # Temporary table for storing data in the form key:value.
   local _ssl_keep_attr=()
   local _key=""
   local _value=""
 
-  for i in $_ssl_root $_ssl_client "${_ssl_inter[@]}" ; do
+  for i in "${_ssl_cert[@]}" ; do
 
     # Responsible for search CA:TRUE string which define the type of certificate => (grep "$_ssl_ident_ca_string")
     # and removes the initial whitespace => (sed 's/  *//g').
@@ -246,8 +242,8 @@ function __main__() {
 
   cd "$__init_directory"
 
-  local _short_opt="hdr:i:c:"
-  local _long_opt="help,debug,root:,intermediate:,client:"
+  local _short_opt="hdc:"
+  local _long_opt="help,debug,cert:"
 
   _GETOPT_PARAMS=$(getopt -o "$_short_opt" --long "$_long_opt" \
                   -n "${__init_name}" -- "${__script_params[@]}")
@@ -267,19 +263,9 @@ function __main__() {
         stdout="debug"
         shift ;;
 
-      -r|--root)
+      -c|--cert)
 
-        ssl_root="$2"
-        shift 2 ;;
-
-      -i|--intermediate)
-
-        ssl_inter+=("$2")
-        shift 2 ;;
-
-      -c|--client)
-
-        ssl_client="$2"
+        ssl_cert+=("$2")
         shift 2 ;;
 
       '') shift ; break ;;
@@ -290,10 +276,9 @@ function __main__() {
 
   done
 
-  # We pass arguments to the function without the transfer of the array as a parameter
-  # of the call. It will be used directly in a function and assigned to the local array.
-  # This is due to an unspecified number of arguments array.
-  ssl::info "$ssl_root" "$ssl_client"
+  # We pass without arguments to the function which processes array
+  # directly in a function and assigned to the local array.
+  ssl::info
 
   return $_STATE
 
