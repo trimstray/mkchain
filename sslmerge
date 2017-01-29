@@ -163,7 +163,8 @@ function _help_() {
   Examples:
     $__init_name --help
     $__init_name --debug
-    $__init_name --cert Root.crt --cert Intermediate1.crt --cert Server.crt
+    $__init_name --cert Root.crt --cert Intermediate1.crt --cert Server.
+    $__init_name --cert root.crt --cert intermediate01.crt --cert intermediate02.crt --cert server.crt
 
   Options:
     -h, --help                  show this message
@@ -218,6 +219,8 @@ function ssl::info() {
     _ssl_keep_attr+=("${_key}:${_value}")
 
   done
+
+  printf '%s\n' "${_ssl_keep_attr[@]}"
 
   return $_STATE
 

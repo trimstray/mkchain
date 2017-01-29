@@ -17,12 +17,11 @@ Usage
   Examples:
     sslmerge --help
     sslmerge --debug
-    sslmerge --root Root.crt --intermediate Intermediate1.crt --client Server.crt
+    sslmerge --cert Root.crt --cert Intermediate1.crt --cert Server.crt
+		sslmerge --cert root.crt --cert intermediate01.crt --cert intermediate02.crt --cert server.crt
 
   Options:
     -h, --help                  show this message
     -d, --debug                 display information on the screen (debug mode)
-    -r, --root                  stores a self-signed certificate (root certificate)
-    -i, --intermediate          stores a certificate signed by root (intermediate certificate)
-    -c, --client                stores a certificate signed by intermediate (client certificate)
+    -c, --cert                  stores a certificate (ex. root certificate, intermediate certificate and other)
 ```
