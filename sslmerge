@@ -58,6 +58,23 @@ stdout=""
 # Define array with empty values.
 ssl_cert=()
 
+readonly ssl_cert_type=(\
+                        # root ca
+                        "0x00" \
+                        # server cert
+                        "0x09" \
+                        # intermediate certs
+                        "0xA0" \
+                        "0xA1" \
+                        "0xA2" \
+                        "0xA3" \
+                        "0xA4" \
+                        "0xA5" \
+                        "0xA6" \
+                        "0xA7" \
+                        "0xA8" \
+                        "0xA9")
+
 openssl_bin=$(which openssl)
 
 
@@ -203,7 +220,7 @@ function ssl::info() {
     # The condition specifying that the certificate is a root certificate.
     if [[ $(echo "$_ssl_substr" | egrep -o "$_ssl_ident_ca_string" | wc -l) -gt "0" ]] && [[ ${#_ssl_substr} -eq 7 ]] ; then
 
-      _value="rootca"
+      _value="0x09"
 
     # The condition specifying that the certificate is a intermediate certificate.
     elif [[ $(echo "$_ssl_substr" | egrep -o "[0-9]" | wc -l) -gt "0" ]] ; then
