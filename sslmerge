@@ -188,6 +188,9 @@ function ssl::info() {
   local _ssl_client="$2"
   local _ssl_inter=("${ssl_inter[@]}")
 
+  # Temporary table for storing data in the form key:value.
+  local _ssl_keep_attr=()
+
   for i in $_ssl_root $_ssl_client "${_ssl_inter[@]}" ; do
 
     $openssl_bin x509 -text -noout -in "$i" | grep CA:TRUE
