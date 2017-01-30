@@ -185,12 +185,13 @@ function _help_() {
     $__init_name --help
     $__init_name --debug
     $__init_name --cert Root.crt --cert Intermediate1.crt --cert Server.
-    $__init_name --cert root.crt --cert intermediate01.crt --cert intermediate02.crt --cert server.crt
+    $__init_name -c root.crt -c intermediate01.crt -c intermediate02.crt -c server.crt -o bundle.crt
 
   Options:
     -h, --help                  show this message
     -d, --debug                 display information on the screen (debug mode)
     -c, --cert                  stores a certificate (ex. root certificate, intermediate certificate and other)
+    -o, --output                saves the result (chain) to file
 
 "
 
@@ -369,8 +370,8 @@ function __main__() {
 
   cd "$__init_directory"
 
-  local _short_opt="hdc:"
-  local _long_opt="help,debug,cert:"
+  local _short_opt="hdc:o:"
+  local _long_opt="help,debug,cert:output:"
 
   _GETOPT_PARAMS=$(getopt -o "$_short_opt" --long "$_long_opt" \
                   -n "${__init_name}" -- "${__script_params[@]}")
