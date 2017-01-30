@@ -404,7 +404,7 @@ function __main__() {
   cd "$__init_directory"
 
   local _short_opt="hdc:o:"
-  local _long_opt="help,debug,cert:output:"
+  local _long_opt="help,debug,cert:,output:"
 
   _GETOPT_PARAMS=$(getopt -o "$_short_opt" --long "$_long_opt" \
                   -n "${__init_name}" -- "${__script_params[@]}")
