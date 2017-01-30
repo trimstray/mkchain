@@ -380,7 +380,9 @@ function __main__() {
   # directly in a function and assigned to the local array.
   ssl::info
 
-  # printf '%s\n' "${ssl_keep_attr[@]}"
+  # We call the function responsible for creating the chain. Here when calling
+  # anything special but inside the function refers to external array.
+  ssl::chain
 
   return $_STATE
 
