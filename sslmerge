@@ -417,7 +417,7 @@ function __main__() {
       -h|--help)
 
         _help_
-        shift ; break ;;
+        shift ; _exit_ 0 ;;
 
       -d|--debug)
 
