@@ -217,7 +217,12 @@ function sprintf() {
   else _info_char="-" ; _tcolor="0;37"
   fi
 
-  printf '[\e['$_tcolor'm%s\e[m] %s\n' "$_char" "$_info"
+  # If you run the tool in verbose mode do not display output using sprintf.
+  if [[ "$stdout" != "debug" ]] ; then
+
+    printf '[\e['$_tcolor'm%s\e[m] %s\n' "$_char" "$_info"
+
+  fi
 
   return $_STATE
 
