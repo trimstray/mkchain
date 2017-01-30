@@ -291,7 +291,7 @@ function ssl::info() {
 
     _logger info \
       "$_FUNCTION_ID()" \
-      "set attr for _ssl_keep_attr in 'value':'key' notation, _ssl_keep_attr - '${_ssl_keep_attr[@]}'"
+      "set attr for _ssl_keep_attr in 'key':'value' notation, _ssl_keep_attr - '${_ssl_keep_attr[-1]}'"
 
   done
 
@@ -314,13 +314,27 @@ function ssl::chain() {
   local _code=""
   local _path=""
 
-  if [[ -z $output_file ]] ; then output_file="chain.out" ; fi
+  # Set the default file name if it is not given with option -o|--output.
+  if [[ -z $output_file ]] ; then
+
+    _logger info \
+      "$_FUNCTION_ID()" \
+      "set default output filename : '$output_file'"
+
+    output_file="chain.out"
+
+  fi
 
   >$output_file
 
   sprintf "warn" "creating a chain of delivered certificates"
 
+  # Extracting data for each element of the array.
   for i in "${ssl_keep_attr[@]}" ; do
+
+    _logger info \
+      "$_FUNCTION_ID()" \
+      "extracting second item from '${ssl_keep_attr[@]}'"
 
     _code="${i##*:}"
     _path="${i%%:*}"
@@ -331,11 +345,17 @@ function ssl::chain() {
 
   sprintf "info" "- sorting of certificates on the basis of codes"
 
+  _logger info \
+    "$_FUNCTION_ID()" \
+    "sorting elements from _ssl_code_attr=() and insert to _ssl_code_attr_sorted=()"
+
+  # Sorting the data contained in array.
   IFS=$'\n' _ssl_code_attr_sorted=($(sort <<<"${_ssl_code_attr[*]}"))
   unset IFS
 
   sprintf "info" "- cert code chain: ${_ssl_code_attr_sorted[*]}"
 
+  # The mechanism involved in the location of sorted items.
   for i in "${_ssl_code_attr_sorted[@]}" ; do
 
     for j in "${ssl_keep_attr[@]}" ; do
@@ -344,6 +364,10 @@ function ssl::chain() {
       _path="${j%%:*}"
 
       if [[ "$i" == "$_code" ]] ; then
+
+        _logger info \
+          "$_FUNCTION_ID()" \
+          "save $_path content to $_output_file"
 
         sprintf "info" "- add $_code ($_path) to $output_file"
 
