@@ -55,6 +55,9 @@ readonly log_file_full_path="${log_file_directory}/${log_file}"
 
 stdout=""
 
+# Define output files.
+readonly _complete_chain_file="chain.out"
+
 # Define array with empty values.
 ssl_cert=() ; ssl_keep_attr=()
 
@@ -240,7 +243,8 @@ function ssl::info() {
     # and removes the initial whitespace => (sed 's/  *//g').
     local _ssl_substr=$($openssl_bin x509 -text -noout -in "$i" | grep "$_ssl_ident_ca_string" | sed 's/  *//g')
 
-    _key="$(basename "$i")"
+    # _key="$(basename "$i")"
+    _key="$i"
 
     sprintf "info" "processing for $_key"
 
@@ -253,7 +257,7 @@ function ssl::info() {
         "$_FUNCTION_ID()" \
         "set value for _value - '$_value'"
 
-        sprintf "info" "- identified as a root certificate -> code: '$_value"
+      sprintf "info" "- identified as a root certificate -> code: '$_value"
 
     # The condition specifying that the certificate is a intermediate certificate.
     elif [[ $(echo "$_ssl_substr" | egrep -o "[0-9]" | wc -l) -gt "0" ]] ; then
@@ -264,7 +268,7 @@ function ssl::info() {
         "$_FUNCTION_ID()" \
         "set value for _value - '$_value'"
 
-        sprintf "info" "- identified as a intermediate certificate -> code: '$_value"
+      sprintf "info" "- identified as a intermediate certificate -> code: '$_value"
 
     else
 
@@ -274,7 +278,7 @@ function ssl::info() {
         "$_FUNCTION_ID()" \
         "set value for _value - '$_value'"
 
-        sprintf "info" "- identified as a client certificate -> code: '$_value"
+      sprintf "info" "- identified as a client certificate -> code: '$_value"
 
     fi
 
@@ -299,6 +303,17 @@ function ssl::chain() {
 
   local _FUNCTION_ID="ssl::chain"
   local _STATE=0
+
+  for i in "${ssl_keep_attr[@]}" ; do
+
+    # We cut all initial signs of a separator ':', everything is behind him involved in the condition.
+    if [[ "${i##*:}" == "${ssl_cert_type[10]}" ]] ; then
+
+      echo "done"
+
+    fi
+
+  done
 
   return $_STATE
 
