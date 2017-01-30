@@ -256,7 +256,7 @@ function ssl::info() {
 
       _logger info \
         "$_FUNCTION_ID()" \
-        "set value for _value - '$_value'"
+        "set value : _value - '$_value'"
 
       sprintf "info" "- identified as a root certificate -> code: '$_value'"
 
@@ -267,7 +267,7 @@ function ssl::info() {
 
       _logger info \
         "$_FUNCTION_ID()" \
-        "set value for _value - '$_value'"
+        "set value : _value - '$_value'"
 
       sprintf "info" "- identified as a intermediate certificate -> code: '$_value'"
 
@@ -277,7 +277,7 @@ function ssl::info() {
 
       _logger info \
         "$_FUNCTION_ID()" \
-        "set value for _value - '$_value'"
+        "set value : _value - '$_value'"
 
       sprintf "info" "- identified as a client certificate -> code: '$_value'"
 
@@ -339,7 +339,7 @@ function ssl::chain() {
 
     _logger info \
       "$_FUNCTION_ID()" \
-      "extracting second item from '${_path}:${_code}' and save to _ssl_cert=()"
+      "extracting second item from '${_path}:${_code}' and save to _ssl_code_attr=()"
 
     _ssl_code_attr+=("$_code")
 
