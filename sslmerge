@@ -56,7 +56,7 @@ readonly log_file_full_path="${log_file_directory}/${log_file}"
 stdout=""
 
 # Define output file.
-readonly output_file=""
+output_file=""
 
 # Define array with empty values.
 ssl_cert=() ; ssl_keep_attr=()
@@ -313,6 +313,8 @@ function ssl::chain() {
 
   local _code=""
   local _path=""
+
+  if [[ -z $output_file ]] ; then output_file="chain.out" ; fi
 
   >$output_file
 
