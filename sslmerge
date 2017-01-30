@@ -311,7 +311,9 @@ function ssl::chain() {
   local _ssl_path_attr=()
   local _ssl_code_attr_sorted=()
 
+  # Equal _key
   local _code=""
+  # Equal _value
   local _path=""
 
   # Set the default file name if it is not given with option -o|--output.
@@ -332,12 +334,12 @@ function ssl::chain() {
   # Extracting data for each element of the array.
   for i in "${ssl_keep_attr[@]}" ; do
 
-    _logger info \
-      "$_FUNCTION_ID()" \
-      "extracting second item from '${ssl_keep_attr[@]}'"
-
     _code="${i##*:}"
     _path="${i%%:*}"
+
+    _logger info \
+      "$_FUNCTION_ID()" \
+      "extracting second item from '${_path}:${_code}' and save to _ssl_cert=()"
 
     _ssl_code_attr+=("$_code")
 
@@ -367,7 +369,7 @@ function ssl::chain() {
 
         _logger info \
           "$_FUNCTION_ID()" \
-          "save $_path content to $_output_file"
+          "save $_path content to $output_file"
 
         sprintf "info" "- add $_code ($_path) to $output_file"
 
