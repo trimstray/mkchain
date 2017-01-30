@@ -259,7 +259,7 @@ function ssl::info() {
         "$_FUNCTION_ID()" \
         "set value for _value - '$_value'"
 
-      sprintf "info" "- identified as a root certificate -> code: '$_value"
+      sprintf "info" "- identified as a root certificate -> code: '$_value'"
 
     # The condition specifying that the certificate is a intermediate certificate.
     elif [[ $(echo "$_ssl_substr" | egrep -o "[0-9]" | wc -l) -gt "0" ]] ; then
@@ -270,7 +270,7 @@ function ssl::info() {
         "$_FUNCTION_ID()" \
         "set value for _value - '$_value'"
 
-      sprintf "info" "- identified as a intermediate certificate -> code: '$_value"
+      sprintf "info" "- identified as a intermediate certificate -> code: '$_value'"
 
     else
 
@@ -280,7 +280,7 @@ function ssl::info() {
         "$_FUNCTION_ID()" \
         "set value for _value - '$_value'"
 
-      sprintf "info" "- identified as a client certificate -> code: '$_value"
+      sprintf "info" "- identified as a client certificate -> code: '$_value'"
 
     fi
 
@@ -306,6 +306,10 @@ function ssl::chain() {
   local _FUNCTION_ID="ssl::chain"
   local _STATE=0
 
+  local _ssl_code_attr=()
+  local _ssl_path_attr=()
+  local _ssl_code_attr_sorted=()
+
   local _code=""
   local _path=""
 
@@ -316,18 +320,16 @@ function ssl::chain() {
     _code="${i##*:}"
     _path="${i%%:*}"
 
-    # We cut all initial signs of a separator ':', everything is behind him involved in the condition.
-    if [[ "$_code" == "${ssl_cert_type[10]}" ]] ; then
-
-      _logger info \
-        "$_FUNCTION_ID()" \
-        "add $_path with $_code to $_complete_chain_file chain file : "
-
-      sprintf "info" "add $_path (code: $_code) to $_complete_chain_file"
-
-    fi
+    _ssl_code_attr+=("$_code")
 
   done
+
+  sprintf "info" "- sorting of certificates on the basis of codes"
+
+  IFS=$'\n' _ssl_code_attr_sorted=($(sort <<<"${_ssl_code_attr[*]}"))
+  unset IFS
+
+  sprintf "info" "- cert code chain: ${_ssl_code_attr_sorted[*]}"
 
   return $_STATE
 
