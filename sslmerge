@@ -304,12 +304,22 @@ function ssl::chain() {
   local _FUNCTION_ID="ssl::chain"
   local _STATE=0
 
+  local _code=""
+  local _path=""
+
   for i in "${ssl_keep_attr[@]}" ; do
 
-    # We cut all initial signs of a separator ':', everything is behind him involved in the condition.
-    if [[ "${i##*:}" == "${ssl_cert_type[10]}" ]] ; then
+    _code="${i##*:}"
+    _path="${i%%:*}"
 
-      echo "done"
+    # We cut all initial signs of a separator ':', everything is behind him involved in the condition.
+    if [[ "$_code" == "${ssl_cert_type[10]}" ]] ; then
+
+      _logger info \
+        "$_FUNCTION_ID()" \
+        "add $_path with $_code to $_complete_chain_file chain file : "
+
+      sprintf "info" "add $_path (code: $_code) to $_complete_chain_file"
 
     fi
 
