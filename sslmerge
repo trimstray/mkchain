@@ -378,7 +378,7 @@ function ssl::chain() {
 
         sprintf "info" "- add $_code ($_path) to $output_file"
 
-        (truncate -s -1 "$_path" ; cat "$_path" ; echo) >> "$output_file"
+        (cat "$_path" ; echo) >> "$output_file"
 
       fi
 
@@ -442,13 +442,17 @@ function __main__() {
 
   done
 
-  # We pass without arguments to the function which processes array
-  # directly in a function and assigned to the local array.
-  ssl::info
+  if [[ "${#errors[@]}" -ne "0" ]] ; then
 
-  # We call the function responsible for creating the chain. Here when calling
-  # anything special but inside the function refers to external array.
-  ssl::chain
+    # We pass without arguments to the function which processes array
+    # directly in a function and assigned to the local array.
+    ssl::info
+
+    # We call the function responsible for creating the chain. Here when calling
+    # anything special but inside the function refers to external array.
+    ssl::chain
+
+  fi
 
   return $_STATE
 
