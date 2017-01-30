@@ -263,7 +263,7 @@ function ssl::info() {
         "$_FUNCTION_ID()" \
         "set value : _value - '$_value'"
 
-      sprintf "info" "- identified as a root certificate -> code: '$_value'"
+      sprintf "info" "- identified certificate -> code: '$_value'"
 
       _value="${ssl_cert_type[10]}"
 
@@ -274,7 +274,7 @@ function ssl::info() {
         "$_FUNCTION_ID()" \
         "set value : _value - '$_value'"
 
-      sprintf "info" "- identified as a intermediate certificate -> code: '$_value'"
+      sprintf "info" "- identified certificate -> code: '$_value'"
 
       _value="${ssl_cert_type[$(echo "$_ssl_substr" | egrep -o "[0-9]")]}"
 
@@ -284,7 +284,7 @@ function ssl::info() {
         "$_FUNCTION_ID()" \
         "set value : _value - '$_value'"
 
-      sprintf "info" "- identified as a client certificate -> code: '$_value'"
+      sprintf "info" "- identified certificate -> code: '$_value'"
 
       _value="${ssl_cert_type[11]}"
 
