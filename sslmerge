@@ -378,7 +378,7 @@ function ssl::chain() {
 
         sprintf "info" "- add $_code ($_path) to $output_file"
 
-        (cat "$_path" ; echo) >> "$output_file"
+        (truncate -s -1 "$_path" ; cat "$_path" ; echo) >> "$output_file"
 
       fi
 
