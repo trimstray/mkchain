@@ -237,6 +237,8 @@ function ssl::info() {
   local _key=""
   local _value=""
 
+  sprintf "warn" "get information from the available certificates"
+
   for i in "${_ssl_cert[@]}" ; do
 
     # Responsible for search CA:TRUE string which define the type of certificate => (grep "$_ssl_ident_ca_string")
@@ -306,6 +308,8 @@ function ssl::chain() {
 
   local _code=""
   local _path=""
+
+  sprintf "warn" "creating a chain of delivered certificates"
 
   for i in "${ssl_keep_attr[@]}" ; do
 
