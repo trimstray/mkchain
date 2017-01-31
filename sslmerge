@@ -268,10 +268,12 @@ function ssl::info() {
     # removes all whitespace found in strings => (sed 's/  *//g').
     local _ssl_substr_issuer=$($openssl_bin x509 -text -noout -in "$_key" | \
           grep "$_ssl_ident_issuer_string" | egrep -o "$_ssl_regexp_string" | \
+          cut -d "=" -f2 \
           sed 's/  *//g')
 
     local _ssl_substr_subject=$($openssl_bin x509 -text -noout -in "$_key" | \
           grep "$_ssl_ident_subject_string" | egrep -o "$_ssl_regexp_string" | \
+          cut -d "=" -f2 \
           sed 's/  *//g')
 
     _value="${_ssl_substr_issuer}:${_ssl_substr_subject}"
