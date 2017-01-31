@@ -6,7 +6,7 @@
 #
 #   fname......"sslmerge"
 #   cdate......"28.01.2017"
-#   mdate......"31.01.2017"
+#   mdate......"01.02.2017"
 #   version...."1.1-beta"
 #   author....."Michał Żurawski <zurawski@bxlab.pl>, <jboowie@bxlab.pl>"
 #
@@ -327,50 +327,16 @@ function ssl::chain() {
   # Extracting data for each element of the array.
   for i in "${ssl_keep_attr[@]}" ; do
 
-    _code="${i##*:}"
+    # for _path ; alternative: echo $i | awk -v FS="(:|:)" '{print $1}'
     _path="${i%%:*}"
+    # for _subject ; alternative: echo $i | awk -v FS="(:|:)" '{print $3}'
+    _subject="${i##*:}"
+    # for _issuer ;
+    _issuer=$(echo $i | awk -v FS="(:|:)" '{print $2}')
 
     _logger info \
       "$_FUNCTION_ID()" \
-      "extracting second item from '${_path}:${_code}' and save to _ssl_code_attr=()"
-
-    _ssl_code_attr+=("$_code")
-
-  done
-
-  sprintf "info" "- sorting of certificates on the basis of codes"
-
-  _logger info \
-    "$_FUNCTION_ID()" \
-    "sorting elements from _ssl_code_attr=() and insert to _ssl_code_attr_sorted=()"
-
-  # Sorting the data contained in array.
-  IFS=$'\n' _ssl_code_attr_sorted=($(sort <<<"${_ssl_code_attr[*]}"))
-  unset IFS
-
-  sprintf "info" "- cert code chain: ${_ssl_code_attr_sorted[*]}"
-
-  # The mechanism involved in the location of sorted items.
-  for i in "${_ssl_code_attr_sorted[@]}" ; do
-
-    for j in "${ssl_keep_attr[@]}" ; do
-
-      _code="${j##*:}"
-      _path="${j%%:*}"
-
-      if [[ "$i" == "$_code" ]] ; then
-
-        _logger info \
-          "$_FUNCTION_ID()" \
-          "save $_path content to $output_file"
-
-        sprintf "info" "- add $_code ($_path) to $output_file"
-
-        (cat "$_path" ; echo) >> "$output_file"
-
-      fi
-
-    done
+      "extracting second items from ${i} => 0:${_path}, 1:${_subject}, 2:${_issuer}"
 
   done
 
@@ -443,7 +409,7 @@ function __main__() {
 
     # We call the function responsible for creating the chain. Here when calling
     # anything special but inside the function refers to external array.
-    # ssl::chain
+    ssl::chain
 
   fi
 
