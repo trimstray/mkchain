@@ -182,15 +182,22 @@ function _help_() {
 
   Examples:
     $__init_name --help
-    $__init_name --debug
     $__init_name --cert Root.crt --cert Intermediate1.crt --cert Server.
-    $__init_name -c root.crt -c intermediate01.crt -c intermediate02.crt -c server.crt -o bundle.crt
+    $__init_name --debug --cert 01.crt --cert XX.crt --output chain.out
 
   Options:
     -h, --help                  show this message
     -d, --debug                 display information on the screen (debug mode)
     -c, --cert                  stores a certificate (ex. root certificate, intermediate certificate and other)
     -o, --output                saves the result (chain) to file
+
+
+  $__init_name, Copyright (C) 2016  Michał Żurawski
+
+  This program comes with ABSOLUTELY NO WARRANTY.
+  This is free software, and you are welcome to redistribute it
+  under certain conditions; for more details please see
+  <http://www.gnu.org/licenses/>.
 
 "
 
