@@ -40,8 +40,11 @@ PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
 umask 022
 
+
 __init_params=()
 __script_params=("$@")
+
+readonly __version="1.1"
 
 readonly __init_name="$(basename "$0")"
 readonly __init_directory="$(dirname "$(readlink -f "$0")")"
@@ -385,8 +388,8 @@ function __main__() {
 
   cd "$__init_directory"
 
-  local _short_opt="hdc:o:"
-  local _long_opt="help,debug,cert:,output:"
+  local _short_opt="hvdc:o:"
+  local _long_opt="help,version,debug,cert:,output:"
 
   _GETOPT_PARAMS=$(getopt -o "$_short_opt" --long "$_long_opt" \
                   -n "${__init_name}" -- "${__script_params[@]}")
@@ -399,6 +402,11 @@ function __main__() {
       -h|--help)
 
         _help_
+        shift ; _exit_ 0 ;;
+
+      -v|--version)
+
+        printf "%s, %s\n" "$__init_name" "$__version"
         shift ; _exit_ 0 ;;
 
       -d|--debug)
@@ -424,7 +432,7 @@ function __main__() {
 
   done
 
-  if [[ "${#errors[@]}" -ne "0" ]] ; then
+  if [[ "${#ssl_cert[@]}" -ne "0" ]] ; then
 
     # We pass without arguments to the function which processes array
     # directly in a function and assigned to the local array.
@@ -432,7 +440,7 @@ function __main__() {
 
     # We call the function responsible for creating the chain. Here when calling
     # anything special but inside the function refers to external array.
-    ssl::chain
+    # ssl::chain
 
   fi
 
