@@ -240,7 +240,9 @@ function ssl::info() {
   local _FUNCTION_ID="ssl::info"
   local _STATE=0
 
-  local _ssl_ident_ca_string="CA:TRUE"
+  local _ssl_ident_issuer_string="Issuer:"
+  local _ssl_ident_subject_string="Subject:"
+  local _ssl_regexp_string="CN=.*"
 
   local _ssl_cert=("${ssl_cert[@]}")
 
@@ -253,48 +255,22 @@ function ssl::info() {
 
   for i in "${_ssl_cert[@]}" ; do
 
-    # Responsible for search CA:TRUE string which define the type of certificate => (grep "$_ssl_ident_ca_string")
-    # and removes the initial whitespace => (sed 's/  *//g').
-    local _ssl_substr=$($openssl_bin x509 -text -noout -in "$i" | grep "$_ssl_ident_ca_string" | sed 's/  *//g')
-
     # _key="$(basename "$i")"
     _key="$i"
 
     sprintf "info" "processing for $_key"
 
-    # The condition specifying that the certificate is a root certificate.
-    if [[ $(echo "$_ssl_substr" | egrep -o "$_ssl_ident_ca_string" | wc -l) -gt "0" ]] && [[ ${#_ssl_substr} -eq 7 ]] ; then
+    # Responsible for search 'Issuer' and 'Subject' strings defining the relationship between certificates ;
+    # removes all whitespace found in strings => (sed 's/  *//g').
+    local _ssl_substr_issuer=$($openssl_bin x509 -text -noout -in "$_key" | \
+          grep "$_ssl_ident_issuer_string" | egrep -o "$_ssl_regexp_string" | \
+          sed 's/  *//g')
 
-      _value="${ssl_cert_type[10]}"
+    local _ssl_substr_subject=$($openssl_bin x509 -text -noout -in "$_key" | \
+          grep "$_ssl_ident_subject_string" | egrep -o "$_ssl_regexp_string" | \
+          sed 's/  *//g')
 
-      _logger info \
-        "$_FUNCTION_ID()" \
-        "set value : _value - '$_value'"
-
-      sprintf "info" "- identified certificate -> code: '$_value'"
-
-    # The condition specifying that the certificate is a intermediate certificate.
-    elif [[ $(echo "$_ssl_substr" | egrep -o "[0-9]" | wc -l) -gt "0" ]] ; then
-
-      _value="${ssl_cert_type[$(echo "$_ssl_substr" | egrep -o "[0-9]")]}"
-
-      _logger info \
-        "$_FUNCTION_ID()" \
-        "set value : _value - '$_value'"
-
-      sprintf "info" "- identified certificate -> code: '$_value'"
-
-    else
-
-      _value="${ssl_cert_type[11]}"
-
-      _logger info \
-        "$_FUNCTION_ID()" \
-        "set value : _value - '$_value'"
-
-      sprintf "info" "- identified certificate -> code: '$_value'"
-
-    fi
+    _value="${_ssl_substr_issuer}:${_ssl_substr_subject}"
 
     _ssl_keep_attr+=("${_key}:${_value}")
 
