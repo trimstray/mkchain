@@ -403,7 +403,7 @@ function ssl::chain() {
           # for _issuer ;
           _sub_issuer=$(echo $j | awk -v FS="(:|:)" '{print $2}')
 
-          if [[ "$_subject" != "$_last_issuer" ]] || [[ "$_issuer" == "$_last_subject" ]] ; then
+          if [[  "$_subject" != "$_last_subject" ]] || [[ "$_issuer" == "$_last_subject" ]] ; then
 
             sprintf "info" "- found relationship: $_last_subject <==> $_issuer"
 
