@@ -361,6 +361,10 @@ function ssl::chain() {
 
           sprintf "info" "- found: ${_subject}"
 
+          _logger info \
+            "$_FUNCTION_ID()" \
+            "found server certificate: ${_subject}"
+
         fi
 
       done
