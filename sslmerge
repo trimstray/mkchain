@@ -336,7 +336,16 @@ function ssl::chain() {
 
     _logger info \
       "$_FUNCTION_ID()" \
-      "extracting second items from ${i} => 0:${_path}, 1:${_subject}, 2:${_issuer}"
+      "extracting items from ${i} => 0:${_path}, 1:${_issuer}, 2:${_subject}"
+
+  done
+
+  local _array_num="${#ssl_keep_attr[@]}"
+  local _num=0
+
+  while [[ $_num -eq $_array_num  ]] ; do
+
+    _num=$((num+1))
 
   done
 
