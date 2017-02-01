@@ -372,6 +372,8 @@ function ssl::chain() {
     local _ssl_keep_attr_len=${#ssl_keep_attr[@]}
     local _ssl_keep_attr_num=0
 
+    local _tmp_sub_subject=""
+
     while [[ "$_ssl_keep_attr_len" -eq "${#ssl_keep_attr[@]}" ]] ; do
 
       sprintf "info" "- search for other certificates"
@@ -407,25 +409,29 @@ function ssl::chain() {
 
             sprintf "info" "- found relationship: $_last_subject <==> $_issuer"
 
-            sprintf "info" "  - add certificate for ${_sub_issuer}:${_sub_subject} to chain"
+            sprintf "info" "  - add certificate for ${_sub_subject}:${_sub_issuer} to chain"
 
-            _ssl_code_attr_sorted+=("${_sub_path}:${_sub_issuer}:${_sub_subject}")
+            _ssl_code_attr_sorted+=("${_sub_path}:${_sub_subject}:${_sub_issuer}")
 
             _logger info \
               "$_FUNCTION_ID()" \
               "found relationship: $_last_subject <==> $_issuer"
 
-          elif [[ "$_subject" != "$_last_subject" ]] || [[ "$_issuer" == "$_sub_subject" ]] ; then
+            _tmp_sub_issuer="${_sub_subject}"
+
+          elif [[ "$_subject" != "$_last_subject" ]] || [[ "$_issuer" == "$__tmp_sub_subject" ]] ; then
 
             sprintf "info" "- found relationship: $_sub_subject <==> $_issuer"
 
-            sprintf "info" "  - add certificate for ${_sub_issuer}:${_sub_subject} to chain"
+            sprintf "info" "  - add certificate for ${_sub_subject}:${_sub_issuer} to chain"
 
-            _ssl_code_attr_sorted+=("${_sub_path}:${_sub_issuer}:${_sub_subject}")
+            _ssl_code_attr_sorted+=("${_sub_path}:${_sub_subject}:${_sub_issuer}")
 
             _logger info \
               "$_FUNCTION_ID()" \
               "found relationship: $_sub_subject <==> $_issuer"    
+
+            _tmp_sub_subject="${_sub_subject}"
 
           fi
 
