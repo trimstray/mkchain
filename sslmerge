@@ -253,7 +253,6 @@ function ssl::info() {
   # Temporary table for storing data in the form key:value.
   local _ssl_keep_attr=()
   local _key=""
-  local _value=""
 
   sprintf "warn" "get information from the available certificates"
 
@@ -276,19 +275,21 @@ function ssl::info() {
           cut -d "=" -f2 | \
           sed 's/  *//g')
 
-    _value="${_ssl_substr_issuer}:${_ssl_substr_subject}"
+    _ssl_keep_attr+=("${_key}:${_ssl_substr_issuer}:${_ssl_substr_subject}")
 
-    _ssl_keep_attr+=("${_key}:${_value}")
-
-    sprintf "info" "- creating a valid array with 'key':'value' given certificate"
+    sprintf "info" "- creating a valid array with 'key':'issuer':'subject'' given certificate"
 
     _logger info \
       "$_FUNCTION_ID()" \
-      "set attr for _ssl_keep_attr in 'key':'value' notation, _ssl_keep_attr - '${_ssl_keep_attr[-1]}'"
+      "set attr for _ssl_keep_attr=() in 'key':'issuer':'subject' notation, _ssl_keep_attr=() - '${_ssl_keep_attr[-1]}'"
 
   done
 
   ssl_keep_attr=("${_ssl_keep_attr[@]}")
+
+  _logger info \
+    "$_FUNCTION_ID()" \
+    "copy local _ssl_keep_attr=($_ssl_keep_attr) to global ssl_keep_attr=($ssl_keep_attr)"
 
   return $_STATE
 
@@ -304,10 +305,9 @@ function ssl::chain() {
   local _ssl_path_attr=()
   local _ssl_code_attr_sorted=()
 
-  # Equal _key
-  local _code=""
-  # Equal _value
-  local _path=""
+  local _key=""
+  local _issuer=""
+  local _subject=""
 
   # Set the default file name if it is not given with option -o|--output.
   if [[ -z $output_file ]] ; then
