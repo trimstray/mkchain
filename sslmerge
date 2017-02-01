@@ -356,6 +356,8 @@ function ssl::chain() {
 
       sprintf "info" "- found: ${_subject}"
 
+      sprintf "info" "  - last relationship: ${_subject}:${_issuer}"
+
       _logger info \
         "$_FUNCTION_ID()" \
         "found server certificate: ${_subject}"
@@ -370,33 +372,26 @@ function ssl::chain() {
     "$_FUNCTION_ID()" \
     "search for other certificates"
 
-  # Extracting data for each element of the array.
-  for i in "${ssl_keep_attr[@]}" ; do
-
-    # for _path ; alternative: echo $i | awk -v FS="(:|:)" '{print $1}'
-    _path="${i%%:*}"
-    # for _subject ; alternative: echo $i | awk -v FS="(:|:)" '{print $3}'
-    _subject="${i##*:}"
-    # for _issuer ;
-    _issuer=$(echo $i | awk -v FS="(:|:)" '{print $2}')
-
-    _logger info \
-      "$_FUNCTION_ID()" \
-      "L1 : extracting items from ${i} => 0:${_path}, 1:${_issuer}, 2:${_subject}"
+  local _ssl_keep_attr_num="0"
+  while [[ "$_ssl_keep_attr_num" -lt "${#ssl_keep_attr[@]}" ]] ; do
 
     # Extracting data for each element of the array.
-    for j in "${ssl_keep_attr[@]}" ; do
+    for i in "${ssl_keep_attr[@]}" ; do
 
       # for _path ; alternative: echo $i | awk -v FS="(:|:)" '{print $1}'
-      _jpath="${j%%:*}"
+      _path="${i%%:*}"
       # for _subject ; alternative: echo $i | awk -v FS="(:|:)" '{print $3}'
-      _jsubject="${j##*:}"
+      _subject="${i##*:}"
       # for _issuer ;
-      _jissuer=$(echo $j | awk -v FS="(:|:)" '{print $2}')
+      _issuer=$(echo $i | awk -v FS="(:|:)" '{print $2}')
 
-      echo -en "path: $_path - $_jpath\n"
-      echo -en "issuer: $_issuer - $_jissuer\n"
-      echo -en "subject: $_subject - $_jsubject\n"
+      _logger info \
+        "$_FUNCTION_ID()" \
+        "L1 : extracting items from ${i} => 0:${_path}, 1:${_issuer}, 2:${_subject}"
+
+      echo -en "path: $_path\n"
+      echo -en "issuer: $_issuer\n"
+      echo -en "subject: $_subject\n"
       echo -en "--------------------------\n"
 
       if [[ "$_subject" == "$_last_subject" ]] ; then
@@ -416,6 +411,8 @@ function ssl::chain() {
       fi
 
     done
+
+    _ssl_keep_attr_num=$((_ssl_keep_attr_num+1))
 
   done
 
