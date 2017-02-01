@@ -405,7 +405,7 @@ function ssl::chain() {
 
           if [[ "$_subject" != "$_last_issuer" ]] || [[ "$_issuer" == "$_last_subject" ]] ; then
 
-            sprintf "info" "- found relationship: $_issuer <==> $_last_subject"
+            sprintf "info" "- found relationship: $_last_subject <==> $_issuer"
 
             sprintf "info" "- add certificate for ${_sub_issuer}:${_sub_subject} to chain"
 
@@ -413,11 +413,11 @@ function ssl::chain() {
 
             _logger info \
               "$_FUNCTION_ID()" \
-              "found relationship: $_issuer <==> $_sub_subject"
+              "found relationship: $_last_subject <==> $_issuer"
 
-          elif [[ "$_subject" != "$_last_issuer" ]] || [[ "$_issuer" == "$_sub_subject" ]] ; then
+          elif [[ "$_subject" != "$_last_subject" ]] || [[ "$_issuer" == "$_sub_subject" ]] ; then
 
-            sprintf "info" "- found relationship: $_issuer <==> $_sub_subject"
+            sprintf "info" "- found relationship: $_sub_subject <==> $_issuer"
 
             sprintf "info" "- add certificate for ${_sub_subject}:${_sub_issuer} to chain"
 
@@ -425,7 +425,7 @@ function ssl::chain() {
 
             _logger info \
               "$_FUNCTION_ID()" \
-              "found relationship: $_issuer <==> $_sub_subject"     
+              "found relationship: $_sub_subject <==> $_issuer""     
 
           fi
 
