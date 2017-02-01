@@ -6,7 +6,7 @@
 #
 #   fname......"sslmerge"
 #   cdate......"28.01.2017"
-#   mdate......"01.02.2017"
+#   mdate......"02.02.2017"
 #   version...."1.1"
 #   author....."Michał Żurawski <zurawski@bxlab.pl>, <jboowie@bxlab.pl>"
 #
@@ -44,7 +44,8 @@ umask 022
 __init_params=()
 __script_params=("$@")
 
-readonly __version="1.1"
+readonly __master_version="1.1"
+readonly __devel_version="1.1a"
 
 readonly __init_name="$(basename "$0")"
 readonly __init_directory="$(dirname "$(readlink -f "$0")")"
@@ -453,7 +454,7 @@ function __main__() {
 
       -v|--version)
 
-        printf "%s, %s\n" "$__init_name" "$__version"
+        printf "%s, %s\n" "$__init_name" "$__master_version"
         shift ; _exit_ 0 ;;
 
       -d|--debug)
