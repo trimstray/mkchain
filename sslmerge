@@ -356,7 +356,7 @@ function ssl::chain() {
 
       sprintf "info" "- found: ${_subject}"
 
-      sprintf "info" "  - last relationship: ${_subject}:${_issuer}"
+      sprintf "info" "  - last relationship: ${_subject} <==> ${_issuer}"
 
       _logger info \
         "$_FUNCTION_ID()" \
