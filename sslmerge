@@ -419,9 +419,9 @@ function ssl::chain() {
 
             sprintf "info" "- found relationship: $_sub_subject <==> $_issuer"
 
-            sprintf "info" "- add certificate for ${_sub_subject}:${_sub_issuer} to chain"
+            sprintf "info" "- add certificate for ${_sub_issuer}:${_sub_subject} to chain"
 
-            _ssl_code_attr_sorted+=("${_sub_path}:${_sub_subject}:${_sub_issuer}")
+            _ssl_code_attr_sorted+=("${_sub_path}:${_sub_issuer}:${_sub_subject}")
 
             _logger info \
               "$_FUNCTION_ID()" \
