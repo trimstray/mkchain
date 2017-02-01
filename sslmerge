@@ -400,52 +400,35 @@ function ssl::chain() {
           "$_FUNCTION_ID()" \
           "L1 : extracting items from ${i} => 0:${_path}, 1:${_issuer}, 2:${_subject}"
 
-        for j in "${ssl_keep_attr[@]}" ; do
+        if [[  "$_subject" != "$_last_subject" ]] || [[ "$_issuer" == "$_last_issuer" ]] ; then
 
-          # for _path ; alternative: echo $i | awk -v FS="(:|:)" '{print $1}'
-          _sub_path="${j%%:*}"
-          # for _subject ; alternative: echo $i | awk -v FS="(:|:)" '{print $3}'
-          _sub_subject="${j##*:}"
-          # for _issuer ;
-          _sub_issuer=$(echo $j | awk -v FS="(:|:)" '{print $2}')
+          sprintf "info" "- found relationship: $_last_issuer <==> $_subject"
+
+          sprintf "info" "  - add certificate for ${_subject}:${_issuer} to chain"
+
+          _ssl_code_attr_sorted+=("${_sub_path}:${_subject}:${_issuer}")
 
           _logger info \
             "$_FUNCTION_ID()" \
-            "L2 : extracting items from ${i} => 0:${_sub_path}, 1:${_sub_issuer}, 2:${_sub_subject}"
+            "found relationship: $__last_issuer <==> $_subject"
 
-          if [[  "$_subject" != "$_last_subject" ]] || [[ "$_issuer" == "$_last_subject" ]] ; then
+          _tmp_sub_issuer="${__last_issuer}"
 
-            sprintf "info" "- found relationship: $_last_subject <==> $_issuer"
+        elif [[ "$_subject" != "$_last_subject" ]] || [[ "$_issuer" == "$__tmp_sub_issuer" ]] ; then
 
-            sprintf "info" "  - add certificate for ${_sub_subject}:${_sub_issuer} to chain"
+          sprintf "info" "- found relationship: $__tmp_sub_issuer <==> $_subject"
 
-            _ssl_code_attr_sorted+=("${_sub_path}:${_sub_subject}:${_sub_issuer}")
+          sprintf "info" "  - add certificate for ${_subject}:${_issuer} to chain"
 
-            _logger info \
-              "$_FUNCTION_ID()" \
-              "found relationship: $_last_subject <==> $_issuer"
+          _ssl_code_attr_sorted+=("${_sub_path}:${_subject}:${_issuer}")
 
-            _tmp_sub_issuer="${_sub_issuer}"
+          _logger info \
+            "$_FUNCTION_ID()" \
+            "found relationship: $__tmp_sub_issuer <==> $_subject"
 
-          elif [[ "$_subject" != "$_last_subject" ]] || [[ "$_issuer" == "$__tmp_sub_subject" ]] ; then
+          _tmp_sub_issuer="${_issuer}"
 
-            sprintf "info" "- found relationship: $_sub_subject <==> $_issuer"
-
-            sprintf "info" "  - add certificate for ${_sub_subject}:${_sub_issuer} to chain"
-
-            _ssl_code_attr_sorted+=("${_sub_path}:${_sub_subject}:${_sub_issuer}")
-
-            _logger info \
-              "$_FUNCTION_ID()" \
-              "found relationship: $_sub_subject <==> $_issuer"
-
-            _tmp_sub_issuer="${_sub_issuer}"
-
-          fi
-
-          break
-
-        done
+        fi
 
       done
 
