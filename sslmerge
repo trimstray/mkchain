@@ -440,8 +440,6 @@ function ssl::chain() {
 
   done
 
-  echo "${_ssl_code_attr_sorted[@]}"
-
   return $_STATE
 
 }
