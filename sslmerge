@@ -324,28 +324,46 @@ function ssl::chain() {
 
   sprintf "warn" "creating a chain of delivered certificates"
 
-  # Extracting data for each element of the array.
-  for i in "${ssl_keep_attr[@]}" ; do
-
-    # for _path ; alternative: echo $i | awk -v FS="(:|:)" '{print $1}'
-    _path="${i%%:*}"
-    # for _subject ; alternative: echo $i | awk -v FS="(:|:)" '{print $3}'
-    _subject="${i##*:}"
-    # for _issuer ;
-    _issuer=$(echo $i | awk -v FS="(:|:)" '{print $2}')
-
-    _logger info \
-      "$_FUNCTION_ID()" \
-      "extracting items from ${i} => 0:${_path}, 1:${_issuer}, 2:${_subject}"
-
-  done
-
-  local _array_num="${#ssl_keep_attr[@]}"
+  local _ssl_state=0
+  local _ssl_search_last=0
   local _num=0
 
-  while [[ $_num -eq $_array_num  ]] ; do
+  # First search last element from certificates.
+  while [[ "$_ssl_state" -eq 0 ]] ; do
 
-    _num=$((num+1))
+    if [[ "$_ssl_search_last" -eq 0 ]] ; then
+
+      sprintf "info" "- searching server certificate"
+
+      # Extracting data for each element of the array.
+      for i in "${ssl_keep_attr[@]}" ; do
+
+        # for _path ; alternative: echo $i | awk -v FS="(:|:)" '{print $1}'
+        _path="${i%%:*}"
+        # for _subject ; alternative: echo $i | awk -v FS="(:|:)" '{print $3}'
+        _subject="${i##*:}"
+        # for _issuer ;
+        _issuer=$(echo $i | awk -v FS="(:|:)" '{print $2}')
+
+        _logger info \
+          "$_FUNCTION_ID()" \
+          "extracting items from ${i} => 0:${_path}, 1:${_issuer}, 2:${_subject}"
+
+        if [[ "$_subject" == *"."* ]] ; then
+
+          _ssl_code_attr_sorted+=("${_path}:${_subject}:${_issuer}")
+
+          sprintf "info" "- found: ${_subject}"
+
+        fi
+
+      done
+
+      _ssl_search_last=1
+
+    fi
+
+    _ssl_state=1
 
   done
 
