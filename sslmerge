@@ -312,11 +312,11 @@ function ssl::chain() {
   # Set the default file name if it is not given with option -o|--output.
   if [[ -z $output_file ]] ; then
 
+    output_file="chain.out"
+
     _logger info \
       "$_FUNCTION_ID()" \
       "set default output filename : '$output_file'"
-
-    output_file="chain.out"
 
   fi
 
