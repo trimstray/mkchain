@@ -402,7 +402,7 @@ function ssl::chain() {
 
         if [[  "$_subject" != "$_last_subject" ]] || [[ "$_issuer" == "$_last_issuer" ]] ; then
 
-          sprintf "info" "- found relationship: $_last_issuer <==> $_subject"
+          sprintf "info" "- found relationship: $_last_subject <==> $_subject"
 
           sprintf "info" "  - add certificate for ${_subject}:${_issuer} to chain"
 
