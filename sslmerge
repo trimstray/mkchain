@@ -425,7 +425,7 @@ function ssl::chain() {
 
             _logger info \
               "$_FUNCTION_ID()" \
-              "found relationship: $_sub_subject <==> $_issuer""     
+              "found relationship: $_sub_subject <==> $_issuer"    
 
           fi
 
