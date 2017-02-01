@@ -373,10 +373,13 @@ function ssl::chain() {
     "search for other certificates"
 
   local _ssl_keep_attr_num="0"
+  local _ssl_keep_num="0"
   while [[ "$_ssl_keep_attr_num" -lt "${#ssl_keep_attr[@]}" ]] ; do
 
     # Extracting data for each element of the array.
     for i in "${ssl_keep_attr[@]}" ; do
+
+    if [[ "$_ssl_keep_num" -lt "${#ssl_keep_attr[@]}" ]] ; then
 
       # for _path ; alternative: echo $i | awk -v FS="(:|:)" '{print $1}'
       _path="${i%%:*}"
@@ -388,11 +391,6 @@ function ssl::chain() {
       _logger info \
         "$_FUNCTION_ID()" \
         "L1 : extracting items from ${i} => 0:${_path}, 1:${_issuer}, 2:${_subject}"
-
-      echo -en "path: $_path\n"
-      echo -en "issuer: $_issuer\n"
-      echo -en "subject: $_subject\n"
-      echo -en "--------------------------\n"
 
       if [[ "$_subject" == "$_last_subject" ]] ; then
 
@@ -408,7 +406,11 @@ function ssl::chain() {
 
         _last_subject="$_issuer"
 
+        _ssl_keep_num=$((_ssl_keep_num+1))
+
       fi
+
+    fi
 
     done
 
