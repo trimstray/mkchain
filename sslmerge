@@ -420,6 +420,8 @@ function ssl::chain::generate() {
 
     _path="${i%%:*}"
 
+    echo $_path
+
     _logger info \
       "$_FUNCTION_ID()" \
       "add $_path to $output_file"
