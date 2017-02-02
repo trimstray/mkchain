@@ -383,7 +383,7 @@ function ssl::chain() {
 
         sprintf "info" "  - cert file: $_path"
 
-        _ssl_code_attr_sorted+=("${_sub_path}:${_issuer}:${_last_subject}")
+        _ssl_code_attr_sorted+=("${_path}:${_issuer}:${_last_subject}")
 
         _logger info \
           "$_FUNCTION_ID()" \
@@ -403,9 +403,9 @@ function ssl::chain() {
 
   done
 
-  ssl_code_attr_sorted=("${_ssl_code_attr_sorted[@]}")
+  echo "${_ssl_code_attr_sorted[@]}"
 
-  # ssl::chain::generate
+  ssl::chain::generate
 
   return $_STATE
 
