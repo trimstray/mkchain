@@ -41,6 +41,7 @@ PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 umask 022
 
 
+# Global variables.
 __init_params=()
 __script_params=("$@")
 
@@ -55,8 +56,6 @@ readonly tdate=$(date +%Y%m%d)
 readonly log_file="${__init_name}.${tdate}.log"
 readonly log_file_directory="/var/log/${__init_name}"
 readonly log_file_full_path="${log_file_directory}/${log_file}"
-
-stdout=""
 
 # Define output file.
 output_file=""
