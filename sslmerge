@@ -62,7 +62,7 @@ stdout=""
 output_file=""
 
 # Define array with empty values.
-ssl_cert=() ; ssl_keep_attr=()
+ssl_cert=() ; ssl_keep_attr=() ; ssl_code_attr_sorted=()
 
 openssl_bin=$(which openssl)
 
