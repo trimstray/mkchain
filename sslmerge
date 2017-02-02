@@ -381,6 +381,8 @@ function ssl::chain() {
 
         sprintf "info" "  - add certificate for ${_issuer}:${_last_subject} to chain"
 
+        sprintf "info" "  - cert file: $_path"
+
         _ssl_code_attr_sorted+=("${_sub_path}:${_issuer}:${_last_subject}")
 
         _logger info \
