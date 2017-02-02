@@ -414,6 +414,18 @@ function ssl::chain() {
 
 }
 
+# It generate a proper chain of delivered certificates.
+function ssl::chain::generate() {
+
+  local _FUNCTION_ID="ssl::chain::generate"
+  local _STATE=0
+
+
+
+  return $_STATE
+
+}
+
 function __main__() {
 
   local _FUNCTION_ID="__main__"
