@@ -240,6 +240,12 @@ function ssl::info() {
   local _ssl_keep_attr=()
   local _key=""
 
+  if [[ "${ssl_cert[@]}" -eq 0 ]] ; then
+
+    _ssl_cert=("${ssl_cert[@]}")
+
+  fi
+
   sprintf "warn" "get information from the available certificates"
 
   for i in "${_ssl_cert[@]}" ; do
