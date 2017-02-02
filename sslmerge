@@ -271,10 +271,6 @@ function ssl::info() {
 
   ssl_keep_attr=("${_ssl_keep_attr[@]}")
 
-  _logger info \
-    "$_FUNCTION_ID()" \
-    "copy local _ssl_keep_attr=($_ssl_keep_attr) to global ssl_keep_attr=($ssl_keep_attr)"
-
   return $_STATE
 
 }
