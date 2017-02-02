@@ -204,8 +204,8 @@ function sprintf() {
   local _char="" ; local _tcolor=""
 
   # Determine the type of character and color for each type of output information.
-  if [[ $_type == "info" ]] ; then _char="+" ; _tcolor="1;32"
-  elif [[ $_type == "warn" ]] ; then _char="-" ; _tcolor="1;33"
+  if [[ $_type == "info" ]] ; then _char="+" ; _tcolor="1;33"
+  elif [[ $_type == "warn" ]] ; then _char="-" ; _tcolor="1;32"
   elif [[ $_type == "error" ]] ; then _char="!" ; _tcolor="1;31"
   else _info_char="-" ; _tcolor="0;37"
   fi
