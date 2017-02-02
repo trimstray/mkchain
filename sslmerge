@@ -449,6 +449,11 @@ function __main__() {
         ssl_cert+=("$2")
         shift 2 ;;
 
+      -D|--dir)
+
+        cert_dir="$2"
+        shift 2 ;;
+
       -o|--output)
 
         output_file="$2"
