@@ -403,7 +403,7 @@ function ssl::chain() {
 
   ssl_code_attr_sorted=("${_ssl_code_attr_sorted[@]}")
 
-  ssl::chain::generate
+  # ssl::chain::generate
 
   return $_STATE
 
