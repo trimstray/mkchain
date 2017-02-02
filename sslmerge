@@ -365,7 +365,7 @@ function ssl::chain() {
       # for _subject ; alternative: echo $i | awk -v FS="(:|:)" '{print $3}'
       _subject="${i##*:}"
       # for _issuer ;
-      _issuer=$(echo $i | awk -v FS="(:|:)" '{print $2}')
+      _issuer=$(echo "$i" | awk -v FS="(:|:)" '{print $2}')
 
       _logger info \
         "$_FUNCTION_ID()" \
