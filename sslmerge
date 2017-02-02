@@ -233,6 +233,9 @@ function ssl::info() {
 
   local _ssl_cert=("${ssl_cert[@]}")
 
+  local _ssl_cert=""
+  local _cert_dir=""
+
   # Temporary table for storing data in the form key:value.
   local _ssl_keep_attr=()
   local _key=""
