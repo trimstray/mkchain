@@ -207,7 +207,7 @@ function sprintf() {
   if [[ $_type == "info" ]] ; then _char="+" ; _tcolor="0;33"
   elif [[ $_type == "warn" ]] ; then _char="-" ; _tcolor="1;32"
   elif [[ $_type == "error" ]] ; then _char="!" ; _tcolor="1;31"
-  else _info_char="-" ; _tcolor="0;37"
+  else _char="-" ; _tcolor="0;37"
   fi
 
   # If you run the tool in verbose mode do not display output using sprintf.
