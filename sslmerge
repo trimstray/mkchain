@@ -234,33 +234,33 @@ function ssl::info() {
 
   # Temporary table for storing data in the form key:value.
   local _ssl_attr=()
-  local _key=""
+  local _key_absolute_path=""
 
   sprintf "warn" "get information from the available certificates"
 
   for i in "${_ssl_delivered_certificates[@]}" ; do
 
-    # _key="$(basename "$i")"
-    _key="$i"
+    _key="$(basename "$i")"
+    _key_absolute_path="$i"
 
-    sprintf "info" "processing for $_key"
+    sprintf "info" "processing for $_key_absolute_path"
 
     # Responsible for search 'Issuer' and 'Subject' strings defining the relationship between certificates ;
     # removes all whitespace found in strings => (sed 's/  *//g').
-    local _ssl_substr_issuer=$($openssl_bin x509 -text -noout -in "$_key" | \
+    local _ssl_substr_issuer=$($openssl_bin x509 -text -noout -in "$_key_absolute_path" | \
           grep "$_ssl_ident_issuer_string" | egrep -o "$_ssl_regexp_string" | \
           cut -d "=" -f2 | \
           sed 's/  *//g')
 
-    local _ssl_substr_subject=$($openssl_bin x509 -text -noout -in "$_key" | \
+    local _ssl_substr_subject=$($openssl_bin x509 -text -noout -in "$_key_absolute_path" | \
           grep "$_ssl_ident_subject_string" | egrep -o "$_ssl_regexp_string" | \
           cut -d "=" -f2 | \
           sed 's/  *//g')
 
-    _ssl_attr+=("${_key}:${_ssl_substr_issuer}:${_ssl_substr_subject}")
+    _ssl_attr+=("${_key_absolute_path}:${_ssl_substr_issuer}:${_ssl_substr_subject}")
 
     sprintf "info" "- creating a valid array with 'key':'issuer':'subject given certificate"
-    sprintf "info" "  - ${_key}:${_ssl_substr_issuer}:${_ssl_substr_subject}"
+    sprintf "info" "  - ${_key_absolute_path}:${_ssl_substr_issuer}:${_ssl_substr_subject}"
 
     _logger info \
       "$_FUNCTION_ID()" \
@@ -282,7 +282,7 @@ function ssl::chain() {
 
   local _ssl_attr_sorted=()
 
-  local _key=""
+  local _key_absolute_path=""
   local _issuer=""
   local _subject=""
 
