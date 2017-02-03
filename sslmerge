@@ -370,8 +370,6 @@ function ssl::chain() {
 
         sprintf "info" "  found relationship: $_subject <==> $_issuer"
 
-        sprintf "info" "  add certificate for ${_issuer}:${_last_subject} to chain"
-
         sprintf "info" "  cert file: $_path"
 
         _ssl_attr_sorted+=("${_path}:${_issuer}:${_last_subject}")
