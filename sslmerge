@@ -396,16 +396,16 @@ function ssl::chain() {
 
   ssl_attr_sorted=("${_ssl_attr_sorted[@]}")
 
-  ssl::chain::generate
+  ssl::chain::gen
 
   return $_STATE
 
 }
 
 # It generate a proper chain of delivered certificates.
-function ssl::chain::generate() {
+function ssl::chain::gen() {
 
-  local _FUNCTION_ID="ssl::chain::generate"
+  local _FUNCTION_ID="ssl::chain::gen"
   local _STATE=0
 
   sprintf "warn" "generating $output_file file with the correct chain"
