@@ -243,7 +243,7 @@ function ssl::info() {
     _key="$(basename "$i")"
     _key_absolute_path="$i"
 
-    sprintf "info" "processing for $_key_absolute_path"
+    sprintf "info" "processing for $_key"
 
     # Responsible for search 'Issuer' and 'Subject' strings defining the relationship between certificates ;
     # removes all whitespace found in strings => (sed 's/  *//g').
