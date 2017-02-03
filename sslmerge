@@ -257,12 +257,12 @@ function ssl::info() {
 
     _ssl_attr+=("${_key_absolute_path}:${_ssl_substr_issuer}:${_ssl_substr_subject}")
 
-    sprintf "info" "  creating a valid array with 'key':'issuer':'subject'"
+    sprintf "info" "  creating a valid array with 'path':'issuer':'subject'"
     sprintf "info" "  ${_key_absolute_path}:${_ssl_substr_issuer}:${_ssl_substr_subject}"
 
     _logger info \
       "$_FUNCTION_ID()" \
-      "set attr for _ssl_attr=() in 'key':'issuer':'subject' notation, _ssl_attr=() - '${_ssl_attr[-1]}'"
+      "set attr for _ssl_attr=() in 'path':'issuer':'subject' notation, _ssl_attr=() - '${_ssl_attr[-1]}'"
 
   done
 
