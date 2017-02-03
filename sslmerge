@@ -330,8 +330,6 @@ function ssl::chain() {
       _last_issuer="$_issuer"
       _last_subject="$_subject"
 
-      _ssl_attr_sorted+=("${_path}:${_issuer}:${_subject}")
-
       sprintf "info" "- found: ${_subject}"
 
       sprintf "info" "  - last relationship: ${_subject} <==> ${_issuer}"
