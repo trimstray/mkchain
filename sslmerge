@@ -417,7 +417,8 @@ function ssl::chain::generate() {
   # The mechanism involved in the location of sorted items.
   for i in "${ssl_attr_sorted[@]}" ; do
 
-    _path="${i%%:*}"
+    _absolute_path="${i%%:*}"
+    _path="$(basename "$_absolute_path")"
 
     _logger info \
       "$_FUNCTION_ID()" \
@@ -425,7 +426,7 @@ function ssl::chain::generate() {
 
     sprintf "info" "- add $_path to $output_file"
 
-    (cat "$_path" ; echo) >> "$output_file"
+    (cat "$_absolute_path" ; echo) >> "$output_file"
 
   done
 
