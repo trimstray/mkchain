@@ -204,7 +204,7 @@ function sprintf() {
 
   # Determine the type of character and color for each type of output information.
   if [[ $_type == "info" ]] ; then _char="-" ; _tcolor="0;33"
-  elif [[ $_type == "warn" ]] ; then _char="!" ; _tcolor="1;32"
+  elif [[ $_type == "warn" ]] ; then _char="+" ; _tcolor="1;32"
   elif [[ $_type == "error" ]] ; then _char="!" ; _tcolor="1;31"
   else _char="-" ; _tcolor="0;37"
   fi
@@ -241,7 +241,7 @@ function ssl::info() {
     _key="$(basename "$i")"
     _key_absolute_path="$i"
 
-    sprintf "warn" "get information from $_key"
+    sprintf "warn" "get information from the $_key"
 
     # Responsible for search 'Issuer' and 'Subject' strings defining the relationship between certificates ;
     # removes all whitespace found in strings => (sed 's/  *//g').
@@ -255,10 +255,13 @@ function ssl::info() {
           cut -d "=" -f2 | \
           sed 's/  *//g')
 
-    _ssl_attr+=("${_key_absolute_path}:${_ssl_substr_issuer}:${_ssl_substr_subject}")
+    sprintf "warn" "creating a valid array"
 
-    sprintf "info" "  creating a valid array with 'path':'issuer':'subject'"
-    sprintf "info" "  ${_key_absolute_path}:${_ssl_substr_issuer}:${_ssl_substr_subject}"
+    sprintf "info" " path: ${_key_absolute_path}"
+    sprintf "info" " issuer: ${_ssl_substr_issuer}"
+    sprintf "info" " subject: ${_ssl_substr_subject}"
+
+    _ssl_attr+=("${_key_absolute_path}:${_ssl_substr_issuer}:${_ssl_substr_subject}")
 
     _logger info \
       "$_FUNCTION_ID()" \
@@ -328,9 +331,9 @@ function ssl::chain() {
       _last_issuer="$_issuer"
       _last_subject="$_subject"
 
-      sprintf "info" "  found: ${_subject}"
+      sprintf "info" " found: ${_subject}"
 
-      sprintf "info" "  last relationship: ${_subject} <==> ${_issuer}"
+      sprintf "info" " last relationship: ${_subject} <==> ${_issuer}"
 
       _logger info \
         "$_FUNCTION_ID()" \
@@ -368,9 +371,9 @@ function ssl::chain() {
 
       if [[ "$_subject" == "$_last_subject" ]] ; then
 
-        sprintf "info" "  found relationship: $_subject <==> $_issuer"
+        sprintf "info" " found relationship: $_subject <==> $_issuer"
 
-        sprintf "info" "  cert file: $_path"
+        sprintf "info" " cert file: $_path"
 
         _ssl_attr_sorted+=("${_path}:${_issuer}:${_last_subject}")
 
@@ -418,7 +421,7 @@ function ssl::chain::gen() {
       "$_FUNCTION_ID()" \
       "add $_path"
 
-    sprintf "info" "  add: $_path"
+    sprintf "info" " add: $_path"
 
     (cat "$_absolute_path" ; echo) >> "$output_file"
 
