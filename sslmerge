@@ -300,17 +300,17 @@ function ssl::chain() {
 
   >$output_file
 
-  sprintf "warn" "creating a chain of delivered certificates"
+  sprintf "warn" "creating a chain of delivered certificates (scanning certificates)"
 
   local _last_issuer=""
 
   # First search last element from certificates.
 
-  sprintf "warn" "scanning certificates"
+  # sprintf "warn" "scanning certificates"
 
-  _logger info \
-    "$_FUNCTION_ID()" \
-    "scanning certificates"
+  # _logger info \
+  #   "$_FUNCTION_ID()" \
+  #   "scanning certificates"
 
   # Extracting data for each element of the array.
   for i in "${ssl_attr[@]}" ; do
