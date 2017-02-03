@@ -368,7 +368,7 @@ function ssl::chain() {
 
       _logger info \
         "$_FUNCTION_ID()" \
-        "L1 : extracting items from ${i} => 0:${_path}, 1:${_issuer}, 2:${_subject}"
+        "extracting items from ${i} => 0:${_path}, 1:${_issuer}, 2:${_subject}"
 
       if [[ "$_subject" == "$_last_subject" ]] ; then
 
