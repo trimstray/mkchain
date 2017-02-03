@@ -306,11 +306,11 @@ function ssl::chain() {
 
   # First search last element from certificates.
 
-  sprintf "warn" "searching server certificate"
+  sprintf "warn" "scanning certificates"
 
   _logger info \
     "$_FUNCTION_ID()" \
-    "searching server certificate"
+    "scanning certificates"
 
   # Extracting data for each element of the array.
   for i in "${ssl_attr[@]}" ; do
@@ -342,12 +342,6 @@ function ssl::chain() {
     fi
 
   done
-
-  sprintf "warn" "search for other certificates"
-
-  _logger info \
-    "$_FUNCTION_ID()" \
-    "search for other certificates"
 
   local _ssl_attr_num="0"
   local _ssl_keep_num="0"
