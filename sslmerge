@@ -6,7 +6,7 @@
 #
 #   fname......"sslmerge"
 #   cdate......"28.01.2017"
-#   mdate......"02.02.2017"
+#   mdate......"03.02.2017"
 #   version...."1.1"
 #   author....."Michał Żurawski <michal.zurawski@bxlab.pl>, <contact@bxlab.pl>"
 #
@@ -61,7 +61,7 @@ readonly log_file_full_path="${log_file_directory}/${log_file}"
 _fd=""
 
 # Define array with empty values.
-ssl_delivered_certificates=() ; ssl_keep_attr=() ; ssl_code_attr_sorted=()
+ssl_delivered_certificates=() ; ssl_attr=() ; ssl_attr_sorted=()
 
 openssl_bin=$(which openssl)
 
@@ -233,7 +233,7 @@ function ssl::info() {
   local _ssl_delivered_certificates=("${ssl_delivered_certificates[@]}")
 
   # Temporary table for storing data in the form key:value.
-  local _ssl_keep_attr=()
+  local _ssl_attr=()
   local _key=""
 
   sprintf "warn" "get information from the available certificates"
@@ -257,18 +257,18 @@ function ssl::info() {
           cut -d "=" -f2 | \
           sed 's/  *//g')
 
-    _ssl_keep_attr+=("${_key}:${_ssl_substr_issuer}:${_ssl_substr_subject}")
+    _ssl_attr+=("${_key}:${_ssl_substr_issuer}:${_ssl_substr_subject}")
 
     sprintf "info" "- creating a valid array with 'key':'issuer':'subject given certificate"
     sprintf "info" "  - ${_key}:${_ssl_substr_issuer}:${_ssl_substr_subject}"
 
     _logger info \
       "$_FUNCTION_ID()" \
-      "set attr for _ssl_keep_attr=() in 'key':'issuer':'subject' notation, _ssl_keep_attr=() - '${_ssl_keep_attr[-1]}'"
+      "set attr for _ssl_attr=() in 'key':'issuer':'subject' notation, _ssl_attr=() - '${_ssl_attr[-1]}'"
 
   done
 
-  ssl_keep_attr=("${_ssl_keep_attr[@]}")
+  ssl_attr=("${_ssl_attr[@]}")
 
   return $_STATE
 
@@ -280,7 +280,7 @@ function ssl::chain() {
   local _FUNCTION_ID="ssl::chain"
   local _STATE=0
 
-  local _ssl_code_attr_sorted=()
+  local _ssl_attr_sorted=()
 
   local _key=""
   local _issuer=""
@@ -312,7 +312,7 @@ function ssl::chain() {
     "searching server certificate"
 
   # Extracting data for each element of the array.
-  for i in "${ssl_keep_attr[@]}" ; do
+  for i in "${ssl_attr[@]}" ; do
 
     # for _path ; alternative: echo $i | awk -v FS="(:|:)" '{print $1}'
     _path="${i%%:*}"
@@ -330,7 +330,7 @@ function ssl::chain() {
       _last_issuer="$_issuer"
       _last_subject="$_subject"
 
-      _ssl_code_attr_sorted+=("${_path}:${_issuer}:${_subject}")
+      _ssl_attr_sorted+=("${_path}:${_issuer}:${_subject}")
 
       sprintf "info" "- found: ${_subject}"
 
@@ -350,14 +350,14 @@ function ssl::chain() {
     "$_FUNCTION_ID()" \
     "search for other certificates"
 
-  local _ssl_keep_attr_num="0"
+  local _ssl_attr_num="0"
   local _ssl_keep_num="0"
-  while [[ "$_ssl_keep_attr_num" -lt "${#ssl_keep_attr[@]}" ]] ; do
+  while [[ "$_ssl_attr_num" -lt "${#ssl_attr[@]}" ]] ; do
 
     # Extracting data for each element of the array.
-    for i in "${ssl_keep_attr[@]}" ; do
+    for i in "${ssl_attr[@]}" ; do
 
-    if [[ "$_ssl_keep_num" -lt "${#ssl_keep_attr[@]}" ]] ; then
+    if [[ "$_ssl_keep_num" -lt "${#ssl_attr[@]}" ]] ; then
 
       # for _path ; alternative: echo $i | awk -v FS="(:|:)" '{print $1}'
       _path="${i%%:*}"
@@ -378,7 +378,7 @@ function ssl::chain() {
 
         sprintf "info" "  - cert file: $_path"
 
-        _ssl_code_attr_sorted+=("${_path}:${_issuer}:${_last_subject}")
+        _ssl_attr_sorted+=("${_path}:${_issuer}:${_last_subject}")
 
         _logger info \
           "$_FUNCTION_ID()" \
@@ -394,11 +394,11 @@ function ssl::chain() {
 
     done
 
-    _ssl_keep_attr_num=$((_ssl_keep_attr_num+1))
+    _ssl_attr_num=$((_ssl_attr_num+1))
 
   done
 
-  ssl_code_attr_sorted=("${_ssl_code_attr_sorted[@]}")
+  ssl_attr_sorted=("${_ssl_attr_sorted[@]}")
 
   ssl::chain::generate
 
@@ -415,7 +415,7 @@ function ssl::chain::generate() {
   sprintf "warn" "generating a output file with the correct chain"
 
   # The mechanism involved in the location of sorted items.
-  for i in "${ssl_code_attr_sorted[@]}" ; do
+  for i in "${ssl_attr_sorted[@]}" ; do
 
     _path="${i%%:*}"
 
