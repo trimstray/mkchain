@@ -259,8 +259,8 @@ function ssl::info() {
 
     _ssl_attr+=("${_key_absolute_path}:${_ssl_substr_issuer}:${_ssl_substr_subject}")
 
-    sprintf "info" "- creating a valid array with 'key':'issuer':'subject' given certificate"
-    sprintf "info" "  - ${_key_absolute_path}:${_ssl_substr_issuer}:${_ssl_substr_subject}"
+    sprintf "info" "  creating a valid array with 'key':'issuer':'subject' given certificate"
+    sprintf "info" "  ${_key_absolute_path}:${_ssl_substr_issuer}:${_ssl_substr_subject}"
 
     _logger info \
       "$_FUNCTION_ID()" \
@@ -305,7 +305,7 @@ function ssl::chain() {
 
   # First search last element from certificates.
 
-  sprintf "info" "- searching server certificate"
+  sprintf "info" "  searching server certificate"
 
   _logger info \
     "$_FUNCTION_ID()" \
@@ -330,9 +330,9 @@ function ssl::chain() {
       _last_issuer="$_issuer"
       _last_subject="$_subject"
 
-      sprintf "info" "- found: ${_subject}"
+      sprintf "info" "  found: ${_subject}"
 
-      sprintf "info" "  - last relationship: ${_subject} <==> ${_issuer}"
+      sprintf "info" "  last relationship: ${_subject} <==> ${_issuer}"
 
       _logger info \
         "$_FUNCTION_ID()" \
@@ -342,7 +342,7 @@ function ssl::chain() {
 
   done
 
-  sprintf "info" "- search for other certificates"
+  sprintf "info" "  search for other certificates"
 
   _logger info \
     "$_FUNCTION_ID()" \
@@ -370,11 +370,11 @@ function ssl::chain() {
 
       if [[ "$_subject" == "$_last_subject" ]] ; then
 
-        sprintf "info" "- found relationship: $_subject <==> $_issuer"
+        sprintf "info" "  found relationship: $_subject <==> $_issuer"
 
-        sprintf "info" "  - add certificate for ${_issuer}:${_last_subject} to chain"
+        sprintf "info" "  add certificate for ${_issuer}:${_last_subject} to chain"
 
-        sprintf "info" "  - cert file: $_path"
+        sprintf "info" "  cert file: $_path"
 
         _ssl_attr_sorted+=("${_path}:${_issuer}:${_last_subject}")
 
