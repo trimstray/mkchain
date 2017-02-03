@@ -412,7 +412,7 @@ function ssl::chain::generate() {
   local _FUNCTION_ID="ssl::chain::generate"
   local _STATE=0
 
-  sprintf "warn" "generating $_output_file file with the correct chain"
+  sprintf "warn" "generating $output_file file with the correct chain"
 
   # The mechanism involved in the location of sorted items.
   for i in "${ssl_attr_sorted[@]}" ; do
