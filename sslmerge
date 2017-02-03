@@ -303,7 +303,7 @@ function ssl::chain() {
 
   # First search last element from certificates.
 
-  sprintf "info" "  searching server certificate"
+  sprintf "warn" "searching server certificate"
 
   _logger info \
     "$_FUNCTION_ID()" \
@@ -340,7 +340,7 @@ function ssl::chain() {
 
   done
 
-  sprintf "info" "  search for other certificates"
+  sprintf "warn" "search for other certificates"
 
   _logger info \
     "$_FUNCTION_ID()" \
