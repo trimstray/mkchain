@@ -412,7 +412,7 @@ function ssl::chain::generate() {
   local _FUNCTION_ID="ssl::chain::generate"
   local _STATE=0
 
-  sprintf "warn" "generating a output file with the correct chain"
+  sprintf "warn" "generating $_output_file file with the correct chain"
 
   # The mechanism involved in the location of sorted items.
   for i in "${ssl_attr_sorted[@]}" ; do
@@ -422,9 +422,9 @@ function ssl::chain::generate() {
 
     _logger info \
       "$_FUNCTION_ID()" \
-      "add $_path to $output_file"
+      "add $_path"
 
-    sprintf "info" "- add $_path to $output_file"
+    sprintf "info" "- add $_path"
 
     (cat "$_absolute_path" ; echo) >> "$output_file"
 
