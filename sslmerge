@@ -266,10 +266,10 @@ function ssl::info() {
           cut -d "=" -f2 | \
           sed 's/  *//g')
 
-    sprintf "warn" "creating a valid array" && \
+    sprintf "warn" "complement the array of valid elements" && \
     _logger info \
       "$_FUNCTION_ID()" \
-      "creating a valid array"
+      "complement the array of valid elements"
 
     _ssl_attr+=("${_key_path}:${_key_issuer}:${_key_subject}")
 
