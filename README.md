@@ -22,7 +22,7 @@ Examples of ways to use:
   Examples:
     sslmerge --help
     sslmerge --cert Root.crt --cert Intermediate1.crt --cert Server.crt
-    sslmerge --debug --cert 01.crt --cert XX.crt --output chain.out
+    sslmerge --debug --cert 01.crt --cert XX.crt --output nginx_bundle.crt
 
   Options:
     -h, --help                  show this message

@@ -6,7 +6,7 @@
 #
 #   fname......"sslmerge"
 #   cdate......"28.01.2017"
-#   mdate......"03.02.2017"
+#   mdate......"05.02.2017"
 #   version...."1.1"
 #   author....."Michał Żurawski <michal.zurawski@bxlab.pl>, <contact@bxlab.pl>"
 #
@@ -57,7 +57,7 @@ readonly log_file="${__init_name}.${tdate}.log"
 readonly log_file_directory="/var/log/${__init_name}"
 readonly log_file_full_path="${log_file_directory}/${log_file}"
 
-# Define output file => like a file descriptor.
+# Define output file.
 _fd=""
 
 # Define array with empty values.
@@ -168,7 +168,7 @@ function _help_() {
   Examples:
     $__init_name --help
     $__init_name --cert Root.crt --cert Intermediate1.crt --cert Server.
-    $__init_name --debug --cert 01.crt --cert XX.crt --output chain.out
+    $__init_name --debug --cert 01.crt --cert XX.crt --output nginx_bundle.crt
 
   Options:
     -h, --help                  show this message
