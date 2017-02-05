@@ -271,6 +271,7 @@ function ssl::info() {
       "$_FUNCTION_ID()" \
       "adding new elements to the array"
 
+    # Assign an element to the array with 'paht:issuer:subject' notation.
     _ssl_attr+=("${_key_path}:${_key_issuer}:${_key_subject}")
 
     sprintf "info" " path: ${_key_path_name}"
@@ -283,6 +284,7 @@ function ssl::info() {
 
   done
 
+  # Copy the contents of the temporary (local) array to the global array.
   ssl_attr=("${_ssl_attr[@]}")
 
   _logger info \
