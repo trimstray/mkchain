@@ -6,7 +6,7 @@
 #
 #   fname......"sslmerge"
 #   cdate......"28.01.2017"
-#   mdate......"05.02.2017"
+#   mdate......"06.02.2017"
 #   version...."1.1"
 #   author....."Michał Żurawski <michal.zurawski@bxlab.pl>, <contact@bxlab.pl>"
 #
@@ -170,14 +170,12 @@ function _help_() {
     $__init_name --help
     $__init_name --cert Root.crt --cert Intermediate1.crt --cert Server.crt
     $__init_name --debug --cert 01.crt --cert XX.crt --output nginx_bundle.crt
-    $__init_name --dir /tmp/certs --output chain.crt
 
   Options:
     -h, --help                  show this message
     -v, --version               show script version
     -d, --debug                 display information on the screen (debug mode)
     -c, --cert                  stores a certificate (ex. root certificate, intermediate certificate and other)
-    -D, --dir                   set the directory containing certificates
     -o, --output                saves the result (chain) to file
 
 
@@ -510,11 +508,6 @@ function __main__() {
       -c|--cert)
 
         ssl_delivered_certificates+=("$2")
-        shift 2 ;;
-
-      -D|--dir)
-
-        cert_dir="$2"
         shift 2 ;;
 
       -o|--output)

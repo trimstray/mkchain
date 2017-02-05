@@ -30,7 +30,6 @@ Examples of ways to use:
     -v, --version               show script version
     -d, --debug                 display information on the screen (debug mode)
     -c, --cert                  stores a certificate (ex. root certificate, intermediate certificate and other)
-    -D, --dir                   set the directory containing certificates
     -o, --output                saves the result (chain) to file
 ```
 
