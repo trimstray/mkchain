@@ -333,6 +333,22 @@ function ssl::chain() {
 
   sprintf "warn" "creating a chain of delivered certificates (scanning certificates)"
 
+  ssl::chain::last
+
+  ssl::chain::rel
+
+  ssl::chain::gen
+
+  return $_STATE
+
+}
+
+# Responsible for establishing the Server/Owner Certificate.
+ssl::chain::last() {
+
+  local _FUNCTION_ID="ssl::chain::last"
+  local _STATE=0
+
   # Extracting data for each element of the array.
   for i in "${ssl_attr[@]}" ; do
 
@@ -347,6 +363,7 @@ function ssl::chain() {
       "$_FUNCTION_ID()" \
       "extracting items from ${i} => 0:${_key_path}, 1:${_key_issuer}, 2:${_key_subject}"
 
+    # If the box contains CN period (eg. domain.com)
     if [[ "$_key_subject" == *"."* ]] ; then
 
       # Very important variables that set the beginning of the chain ;
@@ -369,8 +386,19 @@ function ssl::chain() {
 
   done
 
+  return $_STATE
+
+}
+
+# Set relationship between certificates.
+function ssl::chain::rel() {
+
+  local _FUNCTION_ID="ssl::chain::rel"
+  local _STATE=0
+
   local _ssl_attr_num="0"
   local _ssl_keep_num="0"
+
   while [[ "$_ssl_attr_num" -lt "${#ssl_attr[@]}" ]] ; do
 
     # Extracting data for each element of the array.
@@ -389,12 +417,15 @@ function ssl::chain() {
         "$_FUNCTION_ID()" \
         "extracting items from ${i} => 0:${_key_path}, 1:${_key_issuer}, 2:${_key_subject}"
 
+      # Compares the current field 'Subject' certificate processed
+      # on the last field 'Subject' of the previous certificate.
       if [[ "$_key_subject" == "$_last_subject" ]] ; then
 
         sprintf "info" " found relationship: $_key_subject <==> $_key_issuer"
 
         sprintf "info" " cert file: $_key_path"
 
+        # Assign an element to the array with 'paht:issuer:subject' notation.
         _ssl_attr_sorted+=("${_key_path}:${_key_issuer}:${_last_subject}")
 
         _logger info \
@@ -415,9 +446,8 @@ function ssl::chain() {
 
   done
 
+  # Copy the sorted contents of the temporary (local) array to the global array.
   ssl_attr_sorted=("${_ssl_attr_sorted[@]}")
-
-  ssl::chain::gen
 
   return $_STATE
 
