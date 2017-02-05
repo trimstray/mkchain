@@ -57,8 +57,9 @@ readonly log_file="${__init_name}.${tdate}.log"
 readonly log_file_directory="/var/log/${__init_name}"
 readonly log_file_full_path="${log_file_directory}/${log_file}"
 
-# Define output file.
+# Define output file and default filename.
 _fd=""
+_fd_default="chain.out"
 
 # Define array with empty values.
 ssl_delivered_certificates=() ; ssl_attr=() ; ssl_attr_sorted=()
@@ -314,25 +315,6 @@ function ssl::chain() {
   local _last_issuer=""
   local _last_subject=""
 
-  # Set the default file name if it is not given with option -o|--output.
-  if [[ -z $_fd ]] ; then
-
-    _fd="chain.output"
-
-    _logger info \
-      "$_FUNCTION_ID()" \
-      "set output filename to (default filename)'$_fd'"
-
-  else
-
-    _logger info \
-      "$_FUNCTION_ID()" \
-      "set output filename to '$_fd'"
-
-  fi
-
-  >$_fd
-
   sprintf "warn" "creating a chain of delivered certificates (scanning certificates)"
 
   # Looking for a server certificate (last certificate of the chain).
@@ -547,6 +529,25 @@ function __main__() {
     esac
 
   done
+
+  # Set the default file name if it is not given with option -o|--output.
+  if [[ -z $_fd ]] ; then
+
+    _fd="$_fd_default"
+
+    _logger info \
+      "$_FUNCTION_ID()" \
+      "set output filename to (default filename)'$_fd'"
+
+  else
+
+    _logger info \
+      "$_FUNCTION_ID()" \
+      "set output filename to '$_fd'"
+
+  fi
+
+  >$_fd
 
   if [[ "${#ssl_delivered_certificates[@]}" -ne "0" ]] ; then
 
