@@ -333,10 +333,13 @@ function ssl::chain() {
 
   sprintf "warn" "creating a chain of delivered certificates (scanning certificates)"
 
+  # Looking for a server certificate (last certificate of the chain).
   ssl::chain::last
 
+  # Looking for the relationship between certificates.
   ssl::chain::rel
 
+  # Generate the correct chain.
   ssl::chain::gen
 
   return $_STATE
