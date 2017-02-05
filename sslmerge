@@ -232,16 +232,23 @@ function ssl::info() {
 
   local _ssl_delivered_certificates=("${ssl_delivered_certificates[@]}")
 
-  # Temporary table for storing data in the form key:value.
+  # Temporary table for storing data in the form path:issuer:subject.
   local _ssl_attr=()
   local _key_absolute_path=""
 
+  _logger info \
+    "$_FUNCTION_ID()" \
+    "initialization of initial variables"
+
   for i in "${_ssl_delivered_certificates[@]}" ; do
 
-    _key="$(basename "$i")"
+    _key_path="$(basename "$i")"
     _key_absolute_path="$i"
 
-    sprintf "warn" "get information from the $_key"
+    sprintf "warn" "get information from the $_key_path" && \
+    _logger info \
+      "$_FUNCTION_ID()" \
+      "get information from the $_key_path"
 
     # Responsible for search 'Issuer' and 'Subject' strings defining the relationship between certificates ;
     # removes all whitespace found in strings => (sed 's/  *//g').
@@ -257,11 +264,11 @@ function ssl::info() {
 
     sprintf "warn" "creating a valid array"
 
+    _ssl_attr+=("${_key_absolute_path}:${_ssl_substr_issuer}:${_ssl_substr_subject}")
+
     sprintf "info" " path: ${_key_absolute_path}"
     sprintf "info" " issuer: ${_ssl_substr_issuer}"
     sprintf "info" " subject: ${_ssl_substr_subject}"
-
-    _ssl_attr+=("${_key_absolute_path}:${_ssl_substr_issuer}:${_ssl_substr_subject}")
 
     _logger info \
       "$_FUNCTION_ID()" \
