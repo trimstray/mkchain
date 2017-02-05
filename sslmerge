@@ -316,7 +316,13 @@ function ssl::chain() {
 
     _logger info \
       "$_FUNCTION_ID()" \
-      "set default output filename : '$_fd'"
+      "set output filename to (default filename)'$_fd'"
+
+  else
+
+    _logger info \
+      "$_FUNCTION_ID()" \
+      "set output filename to '$_fd'"
 
   fi
 
@@ -342,16 +348,21 @@ function ssl::chain() {
 
     if [[ "$_key_subject" == *"."* ]] ; then
 
+      # Very important variables that set the beginning of the chain ;
+      # it contain 'Server/Owner Certificate' info.
       _last_issuer="$_key_issuer"
       _last_subject="$_key_subject"
-
-      sprintf "info" " found: ${_key_subject}"
-
-      sprintf "info" " last relationship: ${_key_subject} <==> ${_key_issuer}"
 
       _logger info \
         "$_FUNCTION_ID()" \
         "found server certificate: ${_key_subject}"
+
+      sprintf "info" " found: ${_key_subject}"
+      sprintf "info" " last relationship: ${_key_subject} <==> ${_key_issuer}"
+
+      _logger info \
+        "$_FUNCTION_ID()" \
+        "found last relationship: ${_key_subject} <==> ${_key_issuer}"
 
     fi
 
