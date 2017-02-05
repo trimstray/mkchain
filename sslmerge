@@ -301,63 +301,57 @@ function ssl::chain() {
   local _FUNCTION_ID="ssl::chain"
   local _STATE=0
 
+  # In the initial phase is empty, it will be filled with the sorted items
+  # forming the correct string.
   local _ssl_attr_sorted=()
 
-  local _key_path_name=""
-  local _issuer=""
-  local _subject=""
+  local _key_path=""
+  local _key_issuer=""
+  local _key_subject=""
 
   # Set the default file name if it is not given with option -o|--output.
-  if [[ -z $output_file ]] ; then
+  if [[ -z $_fd ]] ; then
 
-    output_file="chain.out"
+    _fd="chain.output"
 
     _logger info \
       "$_FUNCTION_ID()" \
-      "set default output filename : '$output_file'"
+      "set default output filename : '$_fd'"
 
   fi
 
-  >$output_file
+  >$_fd
 
   sprintf "warn" "creating a chain of delivered certificates (scanning certificates)"
 
   local _last_issuer=""
 
-  # First search last element from certificates.
-
-  # sprintf "warn" "scanning certificates"
-
-  # _logger info \
-  #   "$_FUNCTION_ID()" \
-  #   "scanning certificates"
-
   # Extracting data for each element of the array.
   for i in "${ssl_attr[@]}" ; do
 
-    # for _path ; alternative: echo $i | awk -v FS="(:|:)" '{print $1}'
-    _path="${i%%:*}"
-    # for _subject ; alternative: echo $i | awk -v FS="(:|:)" '{print $3}'
-    _subject="${i##*:}"
-    # for _issuer ;
-    _issuer=$(echo "$i" | awk -v FS="(:|:)" '{print $2}')
+    # for _key_path ; alternative: echo $i | awk -v FS="(:|:)" '{print $1}'
+    _key_path="${i%%:*}"
+    # for _key_subject ; alternative: echo $i | awk -v FS="(:|:)" '{print $3}'
+    _key_subject="${i##*:}"
+    # for _key_issuer ;
+    _key_issuer=$(echo "$i" | awk -v FS="(:|:)" '{print $2}')
 
     _logger info \
       "$_FUNCTION_ID()" \
-      "extracting items from ${i} => 0:${_path}, 1:${_issuer}, 2:${_subject}"
+      "extracting items from ${i} => 0:${_key_path}, 1:${_key_issuer}, 2:${_key_subject}"
 
-    if [[ "$_subject" == *"."* ]] ; then
+    if [[ "$_key_subject" == *"."* ]] ; then
 
-      _last_issuer="$_issuer"
-      _last_subject="$_subject"
+      _last_issuer="$_key_issuer"
+      _last_subject="$_key_subject"
 
-      sprintf "info" " found: ${_subject}"
+      sprintf "info" " found: ${_key_subject}"
 
-      sprintf "info" " last relationship: ${_subject} <==> ${_issuer}"
+      sprintf "info" " last relationship: ${_key_subject} <==> ${_key_issuer}"
 
       _logger info \
         "$_FUNCTION_ID()" \
-        "found server certificate: ${_subject}"
+        "found server certificate: ${_key_subject}"
 
     fi
 
@@ -372,30 +366,30 @@ function ssl::chain() {
 
     if [[ "$_ssl_keep_num" -lt "${#ssl_attr[@]}" ]] ; then
 
-      # for _path ; alternative: echo $i | awk -v FS="(:|:)" '{print $1}'
-      _path="${i%%:*}"
-      # for _subject ; alternative: echo $i | awk -v FS="(:|:)" '{print $3}'
-      _subject="${i##*:}"
-      # for _issuer ;
-      _issuer=$(echo "$i" | awk -v FS="(:|:)" '{print $2}')
+      # for _key_path ; alternative: echo $i | awk -v FS="(:|:)" '{print $1}'
+      _key_path="${i%%:*}"
+      # for _key_subject ; alternative: echo $i | awk -v FS="(:|:)" '{print $3}'
+      _key_subject="${i##*:}"
+      # for _key_issuer ;
+      _key_issuer=$(echo "$i" | awk -v FS="(:|:)" '{print $2}')
 
       _logger info \
         "$_FUNCTION_ID()" \
-        "extracting items from ${i} => 0:${_path}, 1:${_issuer}, 2:${_subject}"
+        "extracting items from ${i} => 0:${_key_path}, 1:${_key_issuer}, 2:${_key_subject}"
 
-      if [[ "$_subject" == "$_last_subject" ]] ; then
+      if [[ "$_key_subject" == "$_last_subject" ]] ; then
 
-        sprintf "info" " found relationship: $_subject <==> $_issuer"
+        sprintf "info" " found relationship: $_key_subject <==> $_key_issuer"
 
-        sprintf "info" " cert file: $_path"
+        sprintf "info" " cert file: $_key_path"
 
-        _ssl_attr_sorted+=("${_path}:${_issuer}:${_last_subject}")
+        _ssl_attr_sorted+=("${_key_path}:${_key_issuer}:${_last_subject}")
 
         _logger info \
           "$_FUNCTION_ID()" \
-          "found relationship: $_last_subject <==> $_issuer"
+          "found relationship: $_last_subject <==> $_key_issuer"
 
-        _last_subject="$_issuer"
+        _last_subject="$_key_issuer"
 
         _ssl_keep_num=$((_ssl_keep_num+1))
 
@@ -423,7 +417,7 @@ function ssl::chain::gen() {
   local _FUNCTION_ID="ssl::chain::gen"
   local _STATE=0
 
-  sprintf "warn" "generating $output_file file with the correct chain"
+  sprintf "warn" "generating $_fd file with the correct chain"
 
   # The mechanism involved in the location of sorted items.
   for i in "${ssl_attr_sorted[@]}" ; do
@@ -437,7 +431,7 @@ function ssl::chain::gen() {
 
     sprintf "info" " add: $_path"
 
-    (cat "$_absolute_path" ; echo) >> "$output_file"
+    (cat "$_absolute_path" ; echo) >> "$_fd"
 
   done
 
@@ -496,7 +490,7 @@ function __main__() {
 
       -o|--output)
 
-        output_file="$2"
+        _fd="$2"
         shift 2 ;;
 
       '') shift ; break ;;
