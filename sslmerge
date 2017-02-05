@@ -167,14 +167,16 @@ function _help_() {
 
   Examples:
     $__init_name --help
-    $__init_name --cert Root.crt --cert Intermediate1.crt --cert Server.
+    $__init_name --cert Root.crt --cert Intermediate1.crt --cert Server.crt
     $__init_name --debug --cert 01.crt --cert XX.crt --output nginx_bundle.crt
+    $__init_name --dir /tmp/certs --output chain.crt
 
   Options:
     -h, --help                  show this message
     -v, --version               show script version
     -d, --debug                 display information on the screen (debug mode)
     -c, --cert                  stores a certificate (ex. root certificate, intermediate certificate and other)
+    -D, --dir                   set the directory containing certificates
     -o, --output                saves the result (chain) to file
 
 
