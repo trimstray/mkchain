@@ -242,7 +242,7 @@ function ssl::info() {
 
   _logger info \
     "$_FUNCTION_ID()" \
-    "initialization of initial variables"
+    "initialization of variables with initial values"
 
   for i in "${_ssl_delivered_certificates[@]}" ; do
 
