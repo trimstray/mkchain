@@ -3,7 +3,7 @@ sslmerge
 
 [![bash_logotype_new_2.png](https://s29.postimg.org/lgglyiqif/bash_logotype_new_2.png)](https://www.gnu.org/software/bash/)
 
-![N|Solid](https://img.shields.io/badge/version-1.1-brightgreen.svg) [![N|Solid](https://img.shields.io/badge/license-GPLv3-lightgrey.svg)](https://www.gnu.org/licenses/gpl-3.0.en.html)
+![N|Solid](https://img.shields.io/badge/version-1.1a-brightgreen.svg) [![N|Solid](https://img.shields.io/badge/license-GPLv3-lightgrey.svg)](https://www.gnu.org/licenses/gpl-3.0.en.html)
 
 **sslmerge** is a tool to help create the correct chain of SSL certificates delivered.
 
