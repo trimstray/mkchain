@@ -354,7 +354,7 @@ function ssl::chain::last() {
       # Very important variables that set the beginning of the chain ;
       # it contain 'Server/Owner Certificate' info.
       _last_issuer="$_key_issuer"
-      _last_subject="$_key_subject"
+      _last_subject=$(echo "$_key_subject" | awk -F/ '{print $3')
 
       _logger info \
         "$_FUNCTION_ID()" \
