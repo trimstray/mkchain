@@ -360,7 +360,7 @@ function ssl::chain::last() {
         "found server certificate: ${_key_subject}"
 
       sprintf "info" " found: ${_key_subject}"
-      sprintf "info" " last relationship: ${_key_subject} <==> ${_key_issuer}"
+      # sprintf "info" " last relationship: ${_key_subject} <==> ${_key_issuer}"
 
       _logger info \
         "$_FUNCTION_ID()" \
