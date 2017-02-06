@@ -328,7 +328,7 @@ function ssl::chain() {
 }
 
 # Responsible for establishing the Server/Owner Certificate.
-ssl::chain::last() {
+function ssl::chain::last() {
 
   local _FUNCTION_ID="ssl::chain::last"
   local _STATE=0
