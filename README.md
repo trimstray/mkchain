@@ -23,13 +23,14 @@ Examples of ways to use:
     sslmerge --help
     sslmerge --cert Root.crt --cert Intermediate1.crt --cert Server.crt
     sslmerge --debug --cert 01.crt --cert XX.crt --output nginx_bundle.crt
-    sslmerge --dir /tmp/certs --output chain.crt
+    sslmerge --dir /tmp/certs --output nginx_bundle.crt
 
   Options:
     -h, --help                  show this message
     -v, --version               show script version
     -d, --debug                 display information on the screen (debug mode)
     -c, --cert                  stores a certificate (ex. root certificate, intermediate certificate and other)
+    -D, --cert-dir              specifies the directory with certificates
     -o, --output                saves the result (chain) to file
 ```
 
