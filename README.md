@@ -40,8 +40,7 @@ Examples of ways to use:
 ### Todos
 
  - add error handling mechanism
- - better and more accurate parsing based on attributes `Issuer` and `Subject`
- - issue of new lines
+ - set the directory with certificates
 
 ### Problems
 
