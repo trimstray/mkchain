@@ -543,7 +543,7 @@ function __main__() {
 
   if [[ "${#ssl_delivered_certificates[@]}" -ne "0" ]] ; then
 
-    local ssl_delivered_certificates_list
+    local ssl_delivered_certificates_list=""
 
     # For better control of the log file (do not use sprintf).
     for i in "${ssl_delivered_certificates[@]}" ; do
@@ -562,7 +562,7 @@ function __main__() {
 
         _logger info \
           "$_FUNCTION_ID()" \
-          "script param ($i) is a file"
+          "script param ($i) is a directory"
 
       fi
 
