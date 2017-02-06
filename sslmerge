@@ -230,7 +230,7 @@ function ssl::info() {
   local _ssl_ident_subject_string="Subject:"
   local _ssl_regexp_string="CN=.*"
 
-  local _ssl_delivered_certificates=("${ssl_delivered_certificates[@]}")
+  local _ssl_delivered_certificates=("${ssl_delivered_certificates_list[@]}")
 
   local _key_path=""
   local _key_path_name=""
@@ -542,6 +542,31 @@ function __main__() {
   >$_fd
 
   if [[ "${#ssl_delivered_certificates[@]}" -ne "0" ]] ; then
+
+    local ssl_delivered_certificates_list
+
+    # For better control of the log file (do not use sprintf).
+    for i in "${ssl_delivered_certificates[@]}" ; do
+
+      if [[ -f "$i" ]] ; then
+
+        ssl_delivered_certificates_list+=("$i")
+
+        _logger info \
+          "$_FUNCTION_ID()" \
+          "script param ($i) is a file"
+
+      elif [[ -d "$i" ]] ; then
+
+        ssl_delivered_certificates_list+=("$i")
+
+        _logger info \
+          "$_FUNCTION_ID()" \
+          "script param ($i) is a file"
+
+      fi
+
+    done
 
     # We pass without arguments to the function which processes array
     # directly in a function and assigned to the local array.
