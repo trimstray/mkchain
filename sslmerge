@@ -509,6 +509,11 @@ function __main__() {
         ssl_delivered_certificates+=("$2")
         shift 2 ;;
 
+      -D|--dir)
+
+        ssl_delivered_certificates+=("$2")
+        shift 2 ;;
+
       -o|--output)
 
         _fd="$2"
