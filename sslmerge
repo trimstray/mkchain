@@ -267,7 +267,6 @@ function ssl::info() {
           cut -d "=" -f2 | \
           sed 's/  *//g')
 
-    sprintf "warn" "adding new elements to the array" && \
     _logger info \
       "$_FUNCTION_ID()" \
       "adding new elements to the array"
@@ -354,7 +353,7 @@ function ssl::chain::last() {
       # Very important variables that set the beginning of the chain ;
       # it contain 'Server/Owner Certificate' info.
       _last_issuer="$_key_issuer"
-      _last_subject=$(echo "$_key_subject" | awk -F/ '{print $3')
+      _last_subject=$(echo "$_key_subject" | awk -F '/' '{print $1}')
 
       _logger info \
         "$_FUNCTION_ID()" \
