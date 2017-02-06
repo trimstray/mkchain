@@ -312,7 +312,7 @@ function ssl::chain() {
   local _last_issuer=""
   local _last_subject=""
 
-  sprintf "warn" "creating a chain of delivered certificates (scanning certificates)"
+  sprintf "warn" "creating a chain of delivered certificates"
 
   # Looking for a server certificate (last certificate of the chain).
   ssl::chain::last
