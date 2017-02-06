@@ -169,14 +169,12 @@ function _help_() {
     $__init_name --help
     $__init_name --cert Root.crt --cert Intermediate1.crt --cert Server.crt
     $__init_name --debug --cert 01.crt --cert XX.crt --output nginx_bundle.crt
-    $__init_name --dir /tmp/certs --output nginx_bundle.crt
 
   Options:
     -h, --help                  show this message
     -v, --version               show script version
     -d, --debug                 display information on the screen (debug mode)
     -c, --cert                  stores a certificate (ex. root certificate, intermediate certificate and other)
-    -D, --cert-dir              specifies the directory with certificates
     -o, --output                saves the result (chain) to file
 
 
@@ -480,8 +478,8 @@ function __main__() {
 
   cd "$__init_directory"
 
-  local _short_opt="hvdc:D:o:"
-  local _long_opt="help,version,debug,cert:,cert-dir:,output:"
+  local _short_opt="hvdc:o:"
+  local _long_opt="help,version,debug,cert:,output:"
 
   _GETOPT_PARAMS=$(getopt -o "$_short_opt" --long "$_long_opt" \
                   -n "${__init_name}" -- "${__script_params[@]}")
@@ -507,11 +505,6 @@ function __main__() {
         shift ;;
 
       -c|--cert)
-
-        ssl_delivered_certificates+=("$2")
-        shift 2 ;;
-
-      -D|--cert-dir)
 
         ssl_delivered_certificates+=("$2")
         shift 2 ;;
