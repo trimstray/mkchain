@@ -564,7 +564,7 @@ function __main__() {
 
         for j in $(ls -p "$i" | grep -v /) ; do
 
-          local _ssl_path_plus_name="${i}/${j}"
+          local _ssl_path_plus_name="${i}${j}"
           ssl_delivered_certificates_list+=("$_ssl_path_plus_name")
 
           _logger info \
