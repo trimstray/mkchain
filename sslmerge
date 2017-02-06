@@ -7,7 +7,7 @@
 #   fname......"sslmerge"
 #   cdate......"28.01.2017"
 #   mdate......"06.02.2017"
-#   version...."1.1a"
+#   version...."1.1b"
 #   author....."Michał Żurawski <michal.zurawski@bxlab.pl>, <contact@bxlab.pl>"
 #
 # Description:
@@ -45,7 +45,7 @@ umask 022
 __init_params=()
 __script_params=("$@")
 
-readonly __master_version="1.1a"
+readonly __master_version="1.1b"
 
 readonly __init_name="$(basename "$0")"
 readonly __init_directory="$(dirname "$(readlink -f "$0")")"
