@@ -169,12 +169,13 @@ function _help_() {
     $__init_name --help
     $__init_name --cert Root.crt --cert Intermediate1.crt --cert Server.crt
     $__init_name --debug --cert 01.crt --cert XX.crt --output nginx_bundle.crt
+    $__init_name --cert /tmp/certs --output nginx_bundle.crt
 
   Options:
     -h, --help                  show this message
     -v, --version               show script version
     -d, --debug                 display information on the screen (debug mode)
-    -c, --cert                  stores a certificate (ex. root certificate, intermediate certificate and other)
+    -c, --cert                  stores a cert single file or directory with certs (without last '/')
     -o, --output                saves the result (chain) to file
 
 
@@ -543,7 +544,7 @@ function __main__() {
 
   if [[ "${#ssl_delivered_certificates[@]}" -ne "0" ]] ; then
 
-    ssl_delivered_certificates_list=()
+    local ssl_delivered_certificates_list=()
 
     # For better control of the log file (do not use sprintf).
     for i in "${ssl_delivered_certificates[@]}" ; do
@@ -558,11 +559,20 @@ function __main__() {
 
       elif [[ -d "$i" ]] ; then
 
-        ssl_delivered_certificates_list+=("$i")
-
         _logger info \
           "$_FUNCTION_ID()" \
           "script param '$i' is a directory"
+
+        for j in $(ls $i) ; do
+
+          local _ssl_path_plus_name="${i}/${j}"
+          ssl_delivered_certificates_list+=("$_ssl_path_plus_name")
+
+          _logger info \
+            "$_FUNCTION_ID()" \
+            "$i directory contains $_ssl_path_plus_name cert file"
+
+        done
 
       fi
 
