@@ -11,13 +11,7 @@ sslmerge
 
 ### Version
 
-<<<<<<< HEAD
-| LATEST | DEVEL |
-|----|----|
-|**1.1b**|**devel-1.1b**|
-=======
 Latest: **1.1b**
->>>>>>> devel-1.1b
 
 ### Usage
 
