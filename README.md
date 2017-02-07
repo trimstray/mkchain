@@ -11,7 +11,7 @@ sslmerge
 
 ### Version
 
-Latest: **1.1b**
+Latest: **devel-1.1b**
 
 ### Usage
 
