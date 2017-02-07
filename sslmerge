@@ -221,6 +221,46 @@ function sprintf() {
 
 }
 
+function ssl::check() {
+
+  local _FUNCTION_ID="ssl::check"
+  local _STATE=0
+
+  local _ssl_delivered_certificates_file="$1"
+  local _ssl_delivered_certificates_list=()
+  local _state="0"
+
+  # Check the correct certificate.
+  $openssl_bin x509 -text -noout -in "$_ssl_delivered_certificates_file" &>/dev/null && \
+  _state="0" || _state="1"
+
+  if [[ "$_state" -eq "0" ]] ; then
+
+    sprintf "warn" "correct certificate: $_ssl_delivered_certificates_file"
+
+    _logger info \
+      "$_FUNCTION_ID()" \
+      "correct certificate: $_ssl_delivered_certificates_file"
+
+    _ssl_delivered_certificates_list+=("$_ssl_delivered_certificates_file")
+
+  else
+
+    sprintf "error" "bad certificate (maybe broken): $_ssl_delivered_certificates_file"
+
+    # We stop the script using the passed argument 'stop' to _logger() function.
+    _logger stop \
+      "$_FUNCTION_ID()" \
+      "bad certificate (maybe broken): $_ssl_delivered_certificates_file"
+
+  fi
+
+  ssl_delivered_certificates_list+=("${_ssl_delivered_certificates_list[@]}")
+
+  return $_STATE
+
+}
+
 # Extract information about certificates needed to make a proper chain.
 function ssl::info() {
 
@@ -550,7 +590,7 @@ function __main__() {
 
       if [[ -f "$i" ]] ; then
 
-        ssl_delivered_certificates_list+=("$i")
+        ssl::check "$i"
 
         _logger info \
           "$_FUNCTION_ID()" \
@@ -565,11 +605,12 @@ function __main__() {
         for j in $(ls -p "$i" | grep -v /) ; do
 
           local _ssl_path_plus_name="${i}${j}"
-          ssl_delivered_certificates_list+=("$_ssl_path_plus_name")
+
+          ssl::check "$_ssl_path_plus_name"
 
           _logger info \
             "$_FUNCTION_ID()" \
-            "$i directory contains $_ssl_path_plus_name cert file"
+            "script param '$i' is a file"
 
         done
 
