@@ -127,6 +127,9 @@ function _logger() {
   # unexpectedly interrupted by his INFO before).
   chmod o-r "$log_file_full_path"
 
+  # _logger() lets you exit the program with the parameter 'stop'
+  # and '255' exit code.
+  #
   # Three states of info:
   #   INFO - normal information log (doesn't perform _exit_ function)
   #   WARN - warning information log (doesn't perform _exit_ function)
