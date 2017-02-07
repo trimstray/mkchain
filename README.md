@@ -39,11 +39,9 @@ Examples of ways to use:
 
 ### Todos
 
-  - add error handling mechanism
-  - set the directory with certificates (automatically search)
+  - add better error handling mechanism
   - in the case of detecting different certificate .crt it must be converted to this format
-  - add a mechanism for informing the format of the certificate
-  - search only domain names from the field CN (without unnecessary garbage)
+  - adding a mechanism for informing the format of the certificate
 
 ### Problems
 
