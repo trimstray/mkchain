@@ -56,6 +56,8 @@ readonly log_file="${__init_name}.${tdate}.log"
 readonly log_file_directory="/var/log/${__init_name}"
 readonly log_file_full_path="${log_file_directory}/${log_file}"
 
+stdout=""
+
 # Define output file and default filename.
 _fd=""
 _fd_default="chain.out"
