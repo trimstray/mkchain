@@ -211,8 +211,8 @@ function sprintf() {
 
   # Determine the type of character and color for each type of output information.
   if [[ $_type == "info" ]] ; then _char="-" ; _tcolor="0;33"
-  elif [[ $_type == "warn" ]] ; then _char="+" ; _tcolor="1;32"
-  elif [[ $_type == "error" ]] ; then _char="!" ; _tcolor="1;31"
+  elif [[ $_type == "head" ]] ; then _char="+" ; _tcolor="1;32"
+  elif [[ $_type == "stop" ]] ; then _char="!" ; _tcolor="1;31"
   else _char="-" ; _tcolor="0;37"
   fi
 
@@ -242,7 +242,7 @@ function ssl::check() {
 
   if [[ "$_state" -eq "0" ]] ; then
 
-    sprintf "warn" "correct certificate: $_ssl_delivered_certificates_file"
+    sprintf "head" "correct certificate: $_ssl_delivered_certificates_file"
 
     _logger info \
       "$_FUNCTION_ID()" \
@@ -252,7 +252,7 @@ function ssl::check() {
 
   else
 
-    sprintf "error" "bad certificate (maybe broken): $_ssl_delivered_certificates_file"
+    sprintf "stop" "bad certificate (maybe broken): $_ssl_delivered_certificates_file"
 
     # We stop the script using the passed argument 'stop' to _logger() function.
     _logger stop \
@@ -296,7 +296,7 @@ function ssl::info() {
     _key_path="$i"
     _key_path_name="$(basename "$i")"
 
-    sprintf "warn" "get information from the $_key_path_name" && \
+    sprintf "head" "get information from the $_key_path_name" && \
     _logger info \
       "$_FUNCTION_ID()" \
       "get information from the $_key_path_name"
@@ -358,7 +358,7 @@ function ssl::chain() {
   local _last_issuer=""
   local _last_subject=""
 
-  sprintf "warn" "creating a chain of delivered certificates"
+  sprintf "head" "creating a chain of delivered certificates"
 
   # Looking for a server certificate (last certificate of the chain).
   ssl::chain::last
@@ -489,7 +489,7 @@ function ssl::chain::gen() {
   local _FUNCTION_ID="ssl::chain::gen"
   local _STATE=0
 
-  sprintf "warn" "generating $_fd file with the correct chain"
+  sprintf "head" "generating $_fd file with the correct chain"
 
   # The mechanism involved in the location of sorted items.
   for i in "${ssl_attr_sorted[@]}" ; do
@@ -623,7 +623,7 @@ function __main__() {
       else
 
         # If the file/directory is not valid.
-        sprintf "error" "incorrect file/directory: $i"
+        sprintf "stop" "incorrect file/directory: $i"
 
         _logger stop \
           "$_FUNCTION_ID()" \
