@@ -614,6 +614,15 @@ function __main__() {
 
         done
 
+      else
+
+        # If the file/directory is not valid.
+        sprintf "error" "incorrect file/directory: $i"
+
+        _logger stop \
+          "$_FUNCTION_ID()" \
+          "incorrect file/directory: $i"
+
       fi
 
     done
