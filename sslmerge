@@ -6,7 +6,7 @@
 #
 #   fname......"sslmerge"
 #   cdate......"28.01.2017"
-#   mdate......"07.02.2017"
+#   mdate......"08.02.2017"
 #   version...."devel-1.1c"
 #   author....."Michał Żurawski <michal.zurawski@bxlab.pl>"
 #
@@ -219,7 +219,26 @@ function sprintf() {
   # If you run the tool in verbose mode do not display output using sprintf.
   if [[ "$stdout" != "debug" ]] ; then
 
-    printf '[\e['$_tcolor'm%s\e[m] %s\n' "$_char" "$_info"
+    if [[ "$_type" == "spin" ]] && [[ ! -z "$_info" ]] ; then
+
+      # Process id of the previous running command.
+      _pid="$_info"
+
+      _schar='-\|/' ; n=0
+
+      while kill -0 $_pid 2>/dev/null ; do
+        n=$(( (n+1) %4 ))
+        printf "\r[${_schar:$n:1}]"
+        sleep 0.1
+      done
+
+      printf "\r"
+
+    else
+
+      printf '[\e['$_tcolor'm%s\e[m] %s\n' "$_char" "$_info"
+
+    fi
 
   fi
 
