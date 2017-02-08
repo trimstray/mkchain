@@ -230,7 +230,7 @@ function sprintf() {
       local n=0
       while kill -0 $_pid 2>/dev/null ; do
 
-        n=$(( (n+1) %4 ))
+        n=$(( ( n + 1 ) % 4 ))
         printf "\r[${_sc:$n:1}]"
         sleep 0.1
 
