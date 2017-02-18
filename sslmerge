@@ -109,7 +109,8 @@ ssl_delivered_certificates=() ; ssl_attr=() ; ssl_attr_sorted=()
 ################################################################################
 
 # We place here used commands at script runtime.
-readonly __commands=(tar gzip stat date openssl)
+readonly __commands=(basename dirname stat date \
+                     grep egrep cut sed gzip tar openssl)
 
 # Stores the names of the missing commands.
 missing_hash=()
