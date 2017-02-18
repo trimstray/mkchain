@@ -148,7 +148,19 @@ fi
 ####################### Definitions of global functions ########################
 ################################################################################
 
-# Saving the states of operation to a log file.
+# ``````````````````````````````````````````````````````````````````````````````
+# Function name: _logger()
+#
+# Description:
+#   Saving the states of operation to a log file.
+#
+# Usage:
+#   _logger type "()" "message"
+#
+# Examples:
+#   _logger info "()" "load config file properly"
+#   _logger stop "()" "not connected"
+#
 function _logger() {
 
   local _FUNCTION_ID="_logger"
@@ -157,26 +169,27 @@ function _logger() {
   local type_log_info="$1"
   local info_to_log=$(shift ; echo "$@")
 
-  local log_file_size=0
-  local log_file_max_size=10485760
+  local logfile_size=0
+  local logfile_max_size=10485760
 
-  local convert_type_to_upper=$(echo "$type_log_info" | tr '[:lower:]' '[:upper:]')
+  local convert_type_to_upper=$(echo "$type_log_info" | \
+                              tr '[:lower:]' '[:upper:]')
 
-  if [ ! -d "$log_file_directory" ] ; then
-    mkdir -m 0750 "$log_file_directory" ; fi
+  if [ ! -d "$__logdir" ] ; then
+    mkdir -m 0750 "$__logdir" ; fi
 
   # Checking the log file exceeds the set max size,
   # if the max size is exceeded, the log file will be archived.
-  if [ -e "$log_file_full_path" ] ; then
-    log_file_size=$(stat -c%s "$log_file_full_path") ; fi
+  if [ -e "$__logpath" ] ; then
+    logfile_size=$(stat -c%s "$__logpath") ; fi
 
-  if [ "$log_file_size" -gt "$log_file_max_size" ] ; then
+  if [ "$logfile_size" -gt "$logfile_max_size" ] ; then
 
-    local gzip_log_file="${log_file}.${tdate}.tgz"
+    local gzip_logfile="${__logfile}.${__date}.tgz"
 
-    tar czfp "$gzip_log_file" -C "$log_file_directory" "$log_file" && \
-    mv "$gzip_log_file" "$log_file_directory" && \
-    >"$log_file_full_path"
+    tar czfp "$gzip_logfile" -C "$__logdir" "$__logfile" && \
+    mv "$gzip_logfile" "$__logdir" && \
+    >"$__logpath"
 
   fi
 
@@ -189,7 +202,7 @@ function _logger() {
            "$__init_name" \
            "$convert_type_to_upper" \
            "$info_to_log" \
-           >>"$log_file_full_path"
+           >>"$__logpath"
 
   elif [ "$stdout" == "debug" ] ; then
 
@@ -198,13 +211,13 @@ function _logger() {
            "$__init_name" \
            "$convert_type_to_upper" \
            "$info_to_log" \
-           | tee -a "$log_file_full_path"
+           | tee -a "$__logpath"
 
   fi
 
   # Change permissions to the log file (for security here if the script
   # unexpectedly interrupted by his INFO before).
-  chmod o-r "$log_file_full_path"
+  chmod o-r "$__logpath"
 
   # _logger() lets you exit the program with the parameter 'stop'
   # and '255' exit code.
@@ -214,17 +227,40 @@ function _logger() {
   #   WARN - warning information log (doesn't perform _exit_ function)
   #   STOP - interrupts script execution (does perform _exit_ function)
   #   EXIT - interrupts script execution (doesn't perform _exit_ function)
-  if [ "$type_log_info" == "stop" ] ; then _exit_ 255 ; fi
+  if [ "" == "stop" ] ; then _exit_ 255 ; fi
 
   return $_STATE
 
 }
 
-# Covers the default exit command.
+# ``````````````````````````````````````````````````````````````````````````````
+# Function name: _exit_()
+#
+# Description:
+#   Covers the default exit command.
+#
+# Usage:
+#   _exit_ value
+#
+# Examples:
+#   _exit_ 0
+#
 function _exit_() { _STATUS="$1" ; exit "$_STATUS" ; }
 
-# Ensuring they always perform necessary cleanup operations,
-# even when something unexpected goes wrong.
+
+# ``````````````````````````````````````````````````````````````````````````````
+# Function name: get_trap_SIG()
+#
+# Description:
+#   Ensuring they always perform necessary cleanup operations,
+#   even when something unexpected goes wrong.
+#
+# Usage:
+#   trap get_trap_SIG SIGNAL
+#
+# Examples:
+#   trap get_trap_SIG EXIT
+#
 function get_trap_SIG() {
 
   local _FUNCTION_ID="get_trap_SIG"
@@ -239,48 +275,21 @@ function get_trap_SIG() {
 
 }
 
-# Should be consistent with the contents of the file README.md.
-function _help_() {
+# ``````````````````````````````````````````````````````````````````````````````
+# Function name: _sprintf()
+#
+# Description:
+#   Function designed to output to the screen in a clear format.
+#
+# Usage:
+#   _sprintf "type" "message"
+#
+# Examples:
+#   _sprintf "head" "correct certificate: $_ssl_delivered_certificates_file"
+#
+function _sprintf() {
 
-  local _FUNCTION_ID="_help_"
-  local _STATE=0
-
-  printf "%s" "\
-
-  Usage:
-    $__init_name [option|long-option]
-
-  Examples:
-    $__init_name --help
-    $__init_name --cert Root.crt --cert Intermediate1.crt --cert Server.crt
-    $__init_name --debug --cert 01.crt --cert XX.crt --output nginx_bundle.crt
-    $__init_name --cert /tmp/certs/ --output nginx_bundle.crt
-
-  Options:
-    -h, --help                  show this message
-    -v, --version               show script version
-    -d, --debug                 display information on the screen (debug mode)
-    -c, --cert                  stores a cert single file or directory with certs (with last '/')
-    -o, --output                saves the result (chain) to file
-
-
-  $__init_name, Copyright (C) 2016  Michał Żurawski
-
-  This program comes with ABSOLUTELY NO WARRANTY.
-  This is free software, and you are welcome to redistribute it
-  under certain conditions; for more details please see
-  <http://www.gnu.org/licenses/>.
-
-"
-
-  return $_STATE
-
-}
-
-# Function designed to output to the screen in a clear format.
-function sprintf() {
-
-  local _FUNCTION_ID="sprintf"
+  local _FUNCTION_ID="_sprintf"
   local _STATE=0
 
   local _type="$1"
@@ -288,14 +297,15 @@ function sprintf() {
 
   local _char="" ; local _tcolor=""
 
-  # Determine the type of character and color for each type of output information.
+  # Determine the type of character and color for each type
+  # of output information.
   if [[ $_type == "info" ]] ; then _char="-" ; _tcolor="0;33"
   elif [[ $_type == "head" ]] ; then _char="+" ; _tcolor="1;32"
   elif [[ $_type == "stop" ]] ; then _char="!" ; _tcolor="1;31"
   else _char="-" ; _tcolor="0;37"
   fi
 
-  # If you run the tool in verbose mode do not display output using sprintf.
+  # If you run the tool in verbose mode do not display output using _sprintf.
   if [[ "$stdout" != "debug" ]] ; then
 
     if [[ "$_type" == "spin" ]] && [[ ! -z "$_info" ]] ; then
@@ -328,6 +338,163 @@ function sprintf() {
     fi
 
   fi
+
+  return $_STATE
+
+}
+
+# ``````````````````````````````````````````````````````````````````````````````
+# Function name: _config()
+#
+# Description:
+#   Responsible for loading the configuration file, $main_config variable
+#   parameter is defined in the script call.
+#
+# Usage:
+#   _config "path_to_config_file"
+#
+# Examples:
+#   _config "$main_config"
+#
+function _config() {
+
+  local _FUNCTION_ID="_config"
+  local _STATE=0
+
+  local _config="$1"
+
+  if [ -e "$_config" ] ; then
+
+    _sprintf "head" "load $_config properly"
+
+    # If the file exists is loaded.
+    . "$_config" && \
+    _logger info \
+      "$_FUNCTION_ID()" \
+      "load $_config properly"
+
+  elif [ -z "$_config" ] ; then
+
+    _sprintf "stop" "load config error (use -c|--config option)"
+
+    _logger stop \
+      "$_FUNCTION_ID()" \
+      "load config error (use -c|--config option)"
+
+  else
+
+    _sprintf "stop" "load $_config error (does not exist?)"
+
+    _logger stop \
+      "$_FUNCTION_ID()" \
+      "load $_config error (does not exist?)"
+
+  fi
+
+  return $_STATE
+
+}
+
+
+################################################################################
+################# Definitions of user variables and functions ##################
+################################################################################
+
+# ``````````````````````````````````````````````````````````````````````````````
+# Function name: _before_init()
+#
+# Description:
+#   INFOs performed before calling the __main__ function, eg.
+#   attaching files, cleaning logs (if you need a function that will deal
+#   with it, put it here).
+#
+# Usage:
+#   _before_init
+#
+# Examples:
+#   _before_init
+#
+function _before_init() {
+
+  local _FUNCTION_ID="_before_init"
+  local _STATE=0
+
+  cd $__init_directory
+
+  return $_STATE
+
+}
+
+# ``````````````````````````````````````````````````````````````````````````````
+# Function name: _after_init()
+#
+# Description:
+#   INFOs performed after calling the __main__ function, eg.
+#   cleaning logs (if you need a function that will deal with it,
+#   put it here).
+#
+# Usage:
+#   _after_init
+#
+# Examples:
+#   _after_init
+#
+function _after_init() {
+
+  local _FUNCTION_ID="_after_init"
+  local _STATE=0
+
+  cd $__init_directory
+
+  return $_STATE
+
+}
+
+# ``````````````````````````````````````````````````````````````````````````````
+# Function name: _help_()
+#
+# Description:
+#   Help message. Should be consistent with the contents of the file README.md.
+#
+# Usage:
+#   _help_
+#
+# Examples:
+#   _help_
+#
+function _help_() {
+
+  local _FUNCTION_ID="_help_"
+  local _STATE=0
+
+  printf "%s" "\
+
+  Usage:
+    $__init_name [option|long-option]
+
+  Examples:
+    $__init_name --help
+    $__init_name --cert Root.crt --cert Intermediate1.crt --cert Server.crt
+    $__init_name --debug --cert 01.crt --cert XX.crt --output nginx_bundle.crt
+    $__init_name --cert /tmp/certs/ --output nginx_bundle.crt
+
+  Options:
+    -h, --help                  show this message
+    -v, --version               show script version
+    -d, --debug                 display information on the screen (debug mode)
+    -a, --attach                attach an external file to the script
+    -c, --cert                  stores a cert single file or directory with certs (with last '/')
+    -o, --output                saves the result (chain) to file
+
+
+  $__init_name, Copyright (C) 2016  Michał Żurawski
+
+  This program comes with ABSOLUTELY NO WARRANTY.
+  This is free software, and you are welcome to redistribute it
+  under certain conditions; for more details please see
+  <http://www.gnu.org/licenses/>.
+
+"
 
   return $_STATE
 
@@ -631,8 +798,8 @@ function __main__() {
 
   cd "$__init_directory"
 
-  local _short_opt="hvdc:o:"
-  local _long_opt="help,version,debug,cert:,output:"
+  local _short_opt="hvdac:o:"
+  local _long_opt="help,version,debug,attach,cert:,output:"
 
   _GETOPT_PARAMS=$(getopt -o "$_short_opt" --long "$_long_opt" \
                   -n "${__init_name}" -- "${__script_params[@]}")
@@ -657,6 +824,11 @@ function __main__() {
         stdout="debug"
         shift ;;
 
+      -a|--attach)
+
+        main_config="$2"
+        shift 2 ;;
+
       -c|--cert)
 
         ssl_delivered_certificates+=("$2")
@@ -674,6 +846,15 @@ function __main__() {
     esac
 
   done
+
+  ################################# USER SPACE #################################
+  # ````````````````````````````````````````````````````````````````````````````
+  # Put here all your variable declarations, function calls
+  # and all the other code blocks.
+
+  # Without the specified file configuration script fails to execute.
+  # uncomment if you are using the main configuration file.
+  # _config "$main_config"
 
   # Set the default file name if it is not given with option -o|--output.
   if [[ -z $_fd ]] ; then
@@ -749,6 +930,8 @@ function __main__() {
     ssl::chain
 
   fi
+
+  # ````````````````````````````````````````````````````````````````````````````
 
   return $_STATE
 
