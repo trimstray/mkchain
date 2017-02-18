@@ -39,9 +39,28 @@
 ### END SCRIPT INFO
 
 
+################################################################################
+################## The configuration parameters of the script ##################
+################################################################################
+
+# Bash 'Strict Mode'.
+set -o errexit
+set -o pipefail
+# set -o nounset
+# set -o xtrace
+
+# Internal field separator (more flexible).
+IFS_ORIG="$IFS"
+IFS=$'\n\t'
+
+# PATH environment variable setup.
 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
-umask 022
+# Setting permissions in the script environment:
+#   0022 - less restrictive settings (default value)
+#   0027 - for better security
+#   0077 - only for root access (more restrictive)
+umask 0027
 
 
 # Global variables.
