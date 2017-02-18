@@ -32,6 +32,7 @@ Examples of ways to use:
     -h, --help                  show this message
     -v, --version               show script version
     -d, --debug                 display information on the screen (debug mode)
+    -a, --attach                attach an external file to the script
     -c, --cert                  stores a cert single file or directory with certs (with last '/')
     -o, --output                saves the result (chain) to file
 ```
