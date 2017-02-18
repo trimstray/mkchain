@@ -71,7 +71,7 @@ umask 0027
 __init_params=()
 __script_params=("$@")
 
-readonly __master_version="v1.0"
+readonly __master_version="v1.1b"
 
 # Store the name of the script and directory call.
 readonly __init_name="$(basename "$0")"
