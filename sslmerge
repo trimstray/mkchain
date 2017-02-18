@@ -501,9 +501,9 @@ function _help_() {
 
 }
 
-function ssl::check() {
+function sslCheck() {
 
-  local _FUNCTION_ID="ssl::check"
+  local _FUNCTION_ID="sslCheck"
   local _STATE=0
 
   local _ssl_delivered_certificates_file="$1"
@@ -542,9 +542,9 @@ function ssl::check() {
 }
 
 # Extract information about certificates needed to make a proper chain.
-function ssl::info() {
+function sslInfo() {
 
-  local _FUNCTION_ID="ssl::info"
+  local _FUNCTION_ID="sslInfo"
   local _STATE=0
 
   local _ssl_ident_issuer_string="Issuer:"
@@ -617,9 +617,9 @@ function ssl::info() {
 }
 
 # It makes a proper chain of delivered certificates.
-function ssl::chain() {
+function sslChain() {
 
-  local _FUNCTION_ID="ssl::chain"
+  local _FUNCTION_ID="sslChain"
   local _STATE=0
 
   # In the initial phase is empty, it will be filled with the sorted items
@@ -636,22 +636,22 @@ function ssl::chain() {
   _sprintf "head" "creating a chain of delivered certificates"
 
   # Looking for a server certificate (last certificate of the chain).
-  ssl::chain::last
+  sslChain::last
 
   # Looking for the relationship between certificates.
-  ssl::chain::rel
+  sslChainRelation
 
   # Generate the correct chain.
-  ssl::chain::gen
+  sslChainGenerate
 
   return $_STATE
 
 }
 
 # Responsible for establishing the Server/Owner Certificate.
-function ssl::chain::last() {
+function sslChain::last() {
 
-  local _FUNCTION_ID="ssl::chain::last"
+  local _FUNCTION_ID="sslChain::last"
   local _STATE=0
 
   # Extracting data for each element of the array.
@@ -696,9 +696,9 @@ function ssl::chain::last() {
 }
 
 # Set relationship between certificates.
-function ssl::chain::rel() {
+function sslChainRelation() {
 
-  local _FUNCTION_ID="ssl::chain::rel"
+  local _FUNCTION_ID="sslChainRelation"
   local _STATE=0
 
   local _ssl_attr_num="0"
@@ -759,9 +759,9 @@ function ssl::chain::rel() {
 }
 
 # It generate a proper chain of delivered certificates.
-function ssl::chain::gen() {
+function sslChainGenerate() {
 
-  local _FUNCTION_ID="ssl::chain::gen"
+  local _FUNCTION_ID="sslChainGenerate"
   local _STATE=0
 
   _sprintf "head" "generating $_fd file with the correct chain"
@@ -903,7 +903,7 @@ function __main__() {
 
       if [[ -f "$i" ]] ; then
 
-        ssl::check "$i"
+        sslCheck "$i"
 
         _logger info \
           "$_FUNCTION_ID()" \
@@ -919,7 +919,7 @@ function __main__() {
 
           local _ssl_path_plus_name="${i}${j}"
 
-          ssl::check "$_ssl_path_plus_name"
+          sslCheck "$_ssl_path_plus_name"
 
           _logger info \
             "$_FUNCTION_ID()" \
@@ -942,11 +942,11 @@ function __main__() {
 
     # We pass without arguments to the function which processes array
     # directly in a function and assigned to the local array.
-    ssl::info
+    sslInfo
 
     # We call the function responsible for creating the chain. Here when calling
     # anything special but inside the function refers to external array.
-    ssl::chain
+    sslChain
 
   fi
 
