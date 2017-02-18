@@ -63,23 +63,38 @@ PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 umask 0027
 
 
-# Global variables.
+################################################################################
+############################### Global variables ###############################
+################################################################################
+
+# The tables that store call parameters.
 __init_params=()
 __script_params=("$@")
 
-readonly __master_version="v1.1b"
+readonly __master_version="v1.0"
 
+# Store the name of the script and directory call.
 readonly __init_name="$(basename "$0")"
 readonly __init_directory="$(dirname "$(readlink -f "$0")")"
 
-readonly tdate=$(date +%Y%m%d)
+readonly __date=$(date +%Y%m%d)
 
-readonly log_file="${__init_name}.${tdate}.log"
-readonly log_file_directory="/var/log/${__init_name}"
-readonly log_file_full_path="${log_file_directory}/${log_file}"
+# Variables related to the log file. Divided into three parts due
+# to the better possibility of manipulation for the user.
+readonly __logfile="${__init_name}.${__date}.log"
+readonly __logdir="/var/log/${__init_name}"
+readonly __logpath="${__logdir}/${__logfile}"
 
-# Define global vars with empty values.
+# The definition of the variable responsible for displaying information
+# on the screen. By default, stores the empty value.
+#   ""    - default messages (without debug mode)
+#   debug - show debug messages
 stdout=""
+
+# The variable that holds the main (external) configuration file.
+# Initially accepts an empty value which is changed when calling
+# the script with the parameter -c|--config "value".
+main_config=""
 
 # Define output file and default filename.
 _fd=""
@@ -88,8 +103,50 @@ _fd_default="chain.out"
 # Define array with empty values.
 ssl_delivered_certificates=() ; ssl_attr=() ; ssl_attr_sorted=()
 
-openssl_bin=$(which openssl)
 
+################################################################################
+############################ Used external commands ############################
+################################################################################
+
+# We place here used commands at script runtime.
+readonly __commands=(tar gzip stat date openssl)
+
+# Stores the names of the missing commands.
+missing_hash=()
+
+missing_counter=0
+
+if [[ -n "${missing_hash[@]}" ]] ; then
+
+  for i in "${__commands[@]}" ; do
+
+    # If the command was not found put it in the array.
+    if ! hash "$i" >/dev/null 2>&1 ; then
+
+      missing_hash+=("$i")
+
+      ((missing_counter++))
+
+    fi
+
+  done ; unset i
+
+  if [[ "$missing_counter" -gt "0" ]] ; then
+
+    printf "Commands not found in PATH: %s\n" "${missing_hash[@]}" >&2
+    exit 1
+
+  fi
+
+fi
+
+# If you intend to specify the full path to the command we do it like:
+#   readonly _tar="/bin/tar"
+
+
+################################################################################
+####################### Definitions of global functions ########################
+################################################################################
 
 # Saving the states of operation to a log file.
 function _logger() {
@@ -286,7 +343,7 @@ function ssl::check() {
   local _state="0"
 
   # Check the correct certificate.
-  $openssl_bin x509 -text -noout -in "$_ssl_delivered_certificates_file" &>/dev/null && \
+  openssl x509 -text -noout -in "$_ssl_delivered_certificates_file" &>/dev/null && \
   _state="0" || _state="1"
 
   if [[ "$_state" -eq "0" ]] ; then
@@ -352,12 +409,12 @@ function ssl::info() {
 
     # Responsible for search 'Issuer' and 'Subject' strings defining the relationship between certificates ;
     # removes all whitespace found in strings => (sed 's/  *//g').
-    _key_issuer=$($openssl_bin x509 -text -noout -in "$_key_path" | \
+    _key_issuer=$(openssl x509 -text -noout -in "$_key_path" | \
           grep "$_ssl_ident_issuer_string" | egrep -o "$_ssl_regexp_string" | \
           cut -d "=" -f2 | \
           sed 's/  *//g')
 
-    _key_subject=$($openssl_bin x509 -text -noout -in "$_key_path" | \
+    _key_subject=$(openssl x509 -text -noout -in "$_key_path" | \
           grep "$_ssl_ident_subject_string" | egrep -o "$_ssl_regexp_string" | \
           cut -d "=" -f2 | \
           sed 's/  *//g' | \
