@@ -7,7 +7,7 @@
 #         fname : "sslmerge"
 #         cdate : "28.01.2017"
 #         mdate : "18.02.2017"
-#       version : "v1.1b"
+#       version : "v1.1b-12"
 #        author : "Michał Żurawski <michal.zurawski@bxlab.pl>"
 #          site : "https://jb-public.github.io/sslmerge"
 #      tab_size : "2"
@@ -71,7 +71,7 @@ umask 0027
 __init_params=()
 __script_params=("$@")
 
-readonly __version="v1.1b"
+readonly __version="v1.1b-12"
 
 # Store the name of the script and directory call.
 readonly __init_name="$(basename "$0")"
