@@ -227,7 +227,7 @@ function _logger() {
   #   WARN - warning information log (doesn't perform _exit_ function)
   #   STOP - interrupts script execution (does perform _exit_ function)
   #   EXIT - interrupts script execution (doesn't perform _exit_ function)
-  if [ "" == "stop" ] ; then _exit_ 255 ; fi
+  if [ "$type_log_info" == "stop" ] ; then _exit_ 255 ; fi
 
   return $_STATE
 
@@ -515,7 +515,7 @@ function ssl::check() {
 
   if [[ "$_state" -eq "0" ]] ; then
 
-    sprintf "head" "correct certificate: $_ssl_delivered_certificates_file"
+    _sprintf "head" "correct certificate: $_ssl_delivered_certificates_file"
 
     _logger info \
       "$_FUNCTION_ID()" \
@@ -525,7 +525,7 @@ function ssl::check() {
 
   else
 
-    sprintf "stop" "bad certificate (maybe broken): $_ssl_delivered_certificates_file"
+    _sprintf "stop" "bad certificate (maybe broken): $_ssl_delivered_certificates_file"
 
     # We stop the script using the passed argument 'stop' to _logger() function.
     _logger stop \
@@ -569,7 +569,7 @@ function ssl::info() {
     _key_path="$i"
     _key_path_name="$(basename "$i")"
 
-    sprintf "head" "get information from the $_key_path_name" && \
+    _sprintf "head" "get information from the $_key_path_name" && \
     _logger info \
       "$_FUNCTION_ID()" \
       "get information from the $_key_path_name"
@@ -594,9 +594,9 @@ function ssl::info() {
     # Assign an element to the array with 'paht:issuer:subject' notation.
     _ssl_attr+=("${_key_path}:${_key_issuer}:${_key_subject}")
 
-    sprintf "info" " path: ${_key_path_name}"
-    sprintf "info" " issuer: ${_key_issuer}"
-    sprintf "info" " subject: ${_key_subject}"
+    _sprintf "info" " path: ${_key_path_name}"
+    _sprintf "info" " issuer: ${_key_issuer}"
+    _sprintf "info" " subject: ${_key_subject}"
 
     _logger info \
       "$_FUNCTION_ID()" \
@@ -632,7 +632,7 @@ function ssl::chain() {
   local _last_issuer=""
   local _last_subject=""
 
-  sprintf "head" "creating a chain of delivered certificates"
+  _sprintf "head" "creating a chain of delivered certificates"
 
   # Looking for a server certificate (last certificate of the chain).
   ssl::chain::last
@@ -679,8 +679,8 @@ function ssl::chain::last() {
         "$_FUNCTION_ID()" \
         "found server certificate: ${_key_subject}"
 
-      sprintf "info" " found server certificate: ${_key_subject}"
-      # sprintf "info" " last relationship: ${_key_subject} <==> ${_key_issuer}"
+      _sprintf "info" " found server certificate: ${_key_subject}"
+      # _sprintf "info" " last relationship: ${_key_subject} <==> ${_key_issuer}"
 
       _logger info \
         "$_FUNCTION_ID()" \
@@ -725,9 +725,9 @@ function ssl::chain::rel() {
       # on the last field 'Subject' of the previous certificate.
       if [[ "$_key_subject" == "$_last_subject" ]] ; then
 
-        sprintf "info" " found relationship: $_key_subject <==> $_key_issuer"
+        _sprintf "info" " found relationship: $_key_subject <==> $_key_issuer"
 
-        sprintf "info" " cert file: $_key_path"
+        _sprintf "info" " cert file: $_key_path"
 
         # Assign an element to the array with 'paht:issuer:subject' notation.
         _ssl_attr_sorted+=("${_key_path}:${_key_issuer}:${_last_subject}")
@@ -763,7 +763,7 @@ function ssl::chain::gen() {
   local _FUNCTION_ID="ssl::chain::gen"
   local _STATE=0
 
-  sprintf "head" "generating $_fd file with the correct chain"
+  _sprintf "head" "generating $_fd file with the correct chain"
 
   # The mechanism involved in the location of sorted items.
   for i in "${ssl_attr_sorted[@]}" ; do
@@ -775,7 +775,7 @@ function ssl::chain::gen() {
       "$_FUNCTION_ID()" \
       "add $_path"
 
-    sprintf "info" " add: $_path"
+    _sprintf "info" " add: $_path"
 
     (cat "$_absolute_path" ; echo) >> "$_fd"
 
@@ -879,7 +879,7 @@ function __main__() {
 
     local ssl_delivered_certificates_list=()
 
-    # For better control of the log file (do not use sprintf).
+    # For better control of the log file (do not use _sprintf).
     for i in "${ssl_delivered_certificates[@]}" ; do
 
       if [[ -f "$i" ]] ; then
@@ -911,7 +911,7 @@ function __main__() {
       else
 
         # If the file/directory is not valid.
-        sprintf "stop" "incorrect file/directory: $i"
+        _sprintf "stop" "incorrect file/directory: $i"
 
         _logger stop \
           "$_FUNCTION_ID()" \
