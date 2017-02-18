@@ -71,7 +71,7 @@ umask 0027
 __init_params=()
 __script_params=("$@")
 
-readonly __master_version="v1.1b"
+readonly __version="v1.1b"
 
 # Store the name of the script and directory call.
 readonly __init_name="$(basename "$0")"
@@ -816,7 +816,7 @@ function __main__() {
 
       -v|--version)
 
-        printf "%s, %s\n" "$__init_name" "$__master_version"
+        printf "%s, %s\n" "$__init_name" "$__version"
         shift ; _exit_ 0 ;;
 
       -d|--debug)
