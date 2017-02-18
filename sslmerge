@@ -856,24 +856,42 @@ function __main__() {
   # uncomment if you are using the main configuration file.
   # _config "$main_config"
 
-  # Set the default file name if it is not given with option -o|--output.
-  if [[ -z $_fd ]] ; then
+  # Check whether a file exists.
+  if [[ -f "$_fd" ]] ; then
+
+    # Set the default file name if it is not given with option -o|--output.
+    if [[ -z "$_fd" ]] ; then
 
     _fd="$_fd_default"
 
+      _logger info \
+        "$_FUNCTION_ID()" \
+        "set output filename to (default filename)'$_fd'"
+
+    else
+
+      _logger info \
+        "$_FUNCTION_ID()" \
+        "set output filename to '$_fd'"
+
+    fi
+
     _logger info \
       "$_FUNCTION_ID()" \
-      "set output filename to (default filename)'$_fd'"
+      "clear the contents of the '$_fd' properly"
+      
+    >$_fd
 
   else
 
-    _logger info \
+    # If the file path is incorrect.
+    _sprintf "stop" "$_fd file path is incorrect (maybe directory?)"
+
+    _logger stop \
       "$_FUNCTION_ID()" \
-      "set output filename to '$_fd'"
+      "$_fd file path is incorrect (maybe directory?)"
 
   fi
-
-  >$_fd
 
   if [[ "${#ssl_delivered_certificates[@]}" -ne "0" ]] ; then
 
