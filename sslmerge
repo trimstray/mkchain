@@ -352,7 +352,7 @@ function _sprintf() {
 #   parameter is defined in the script call.
 #
 # Usage:
-#   loadConfig "path_toloadConfig_file"
+#   loadConfig "path_to_config_file"
 #
 # Examples:
 #   loadConfig "$main_config"
@@ -362,19 +362,19 @@ function loadConfig() {
   local _FUNCTION_ID="loadConfig"
   local _STATE=0
 
-  local loadConfig="$1"
+  local _config="$1"
 
-  if [ -e "$loadConfig" ] ; then
+  if [ -e "$_config" ] ; then
 
-    _sprintf "head" "load $loadConfig properly"
+    _sprintf "head" "load $_config properly"
 
     # If the file exists is loaded.
-    . "$loadConfig" && \
+    . "$_config" && \
     _logger info \
       "$_FUNCTION_ID()" \
-      "load $loadConfig properly"
+      "load $_config properly"
 
-  elif [ -z "$loadConfig" ] ; then
+  elif [ -z "$_config" ] ; then
 
     _sprintf "stop" "load config error (use -c|--config option)"
 
@@ -384,11 +384,11 @@ function loadConfig() {
 
   else
 
-    _sprintf "stop" "load $loadConfig error (does not exist?)"
+    _sprintf "stop" "load $_config error (does not exist?)"
 
     _logger stop \
       "$_FUNCTION_ID()" \
-      "load $loadConfig error (does not exist?)"
+      "load $_config error (does not exist?)"
 
   fi
 
@@ -636,7 +636,7 @@ function sslChain() {
   _sprintf "head" "creating a chain of delivered certificates"
 
   # Looking for a server certificate (last certificate of the chain).
-  sslChain::last
+  sslChainLast
 
   # Looking for the relationship between certificates.
   sslChainRelation
@@ -649,9 +649,9 @@ function sslChain() {
 }
 
 # Responsible for establishing the Server/Owner Certificate.
-function sslChain::last() {
+function sslChainLast() {
 
-  local _FUNCTION_ID="sslChain::last"
+  local _FUNCTION_ID="sslChainLast"
   local _STATE=0
 
   # Extracting data for each element of the array.
@@ -785,6 +785,11 @@ function sslChainGenerate() {
   return $_STATE
 
 }
+
+
+################################################################################
+######################### Main function (script init) ##########################
+################################################################################
 
 function __main__() {
 
