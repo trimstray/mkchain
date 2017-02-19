@@ -345,36 +345,36 @@ function _sprintf() {
 }
 
 # ``````````````````````````````````````````````````````````````````````````````
-# Function name: _config()
+# Function name: loadConfig()
 #
 # Description:
 #   Responsible for loading the configuration file, $main_config variable
 #   parameter is defined in the script call.
 #
 # Usage:
-#   _config "path_to_config_file"
+#   loadConfig "path_toloadConfig_file"
 #
 # Examples:
-#   _config "$main_config"
+#   loadConfig "$main_config"
 #
-function _config() {
+function loadConfig() {
 
-  local _FUNCTION_ID="_config"
+  local _FUNCTION_ID="loadConfig"
   local _STATE=0
 
-  local _config="$1"
+  local loadConfig="$1"
 
-  if [ -e "$_config" ] ; then
+  if [ -e "$loadConfig" ] ; then
 
-    _sprintf "head" "load $_config properly"
+    _sprintf "head" "load $loadConfig properly"
 
     # If the file exists is loaded.
-    . "$_config" && \
+    . "$loadConfig" && \
     _logger info \
       "$_FUNCTION_ID()" \
-      "load $_config properly"
+      "load $loadConfig properly"
 
-  elif [ -z "$_config" ] ; then
+  elif [ -z "$loadConfig" ] ; then
 
     _sprintf "stop" "load config error (use -c|--config option)"
 
@@ -384,11 +384,11 @@ function _config() {
 
   else
 
-    _sprintf "stop" "load $_config error (does not exist?)"
+    _sprintf "stop" "load $loadConfig error (does not exist?)"
 
     _logger stop \
       "$_FUNCTION_ID()" \
-      "load $_config error (does not exist?)"
+      "load $loadConfig error (does not exist?)"
 
   fi
 
@@ -855,7 +855,7 @@ function __main__() {
 
   # Without the specified file configuration script fails to execute.
   # uncomment if you are using the main configuration file.
-  # _config "$main_config"
+  # loadConfig "$main_config"
 
   # Check whether a file exists.
   if [[ -f "$_fd" ]] ; then
