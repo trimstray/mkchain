@@ -373,50 +373,57 @@ function _sprintf() {
 }
 
 # ``````````````````````````````````````````````````````````````````````````````
-# Function name: loadConfig()
+# Function name: _load()
 #
 # Description:
-#   Responsible for loading the configuration file, $main_config variable
+#   Responsible for loading the configuration file, $config variable
 #   parameter is defined in the script call.
 #
 # Usage:
-#   loadConfig "path_to_config_file"
+#   _load "type" "path_to_config_file"
 #
 # Examples:
-#   loadConfig "$main_config"
+#   _load "info" "$config"
+#   _load "info" "/tmp/file.cfg"
 #
-function loadConfig() {
 
-  local _FUNCTION_ID="loadConfig"
+function _load() {
+
+  local _FUNCTION_ID="_load"
   local _STATE=0
 
-  local _config="$1"
+  local _type="$1"
+  local _filename="$2"
 
-  if [ -e "$_config" ] ; then
+  if [[ -e "$_filename" ]] ; then
 
-    _sprintf "head" "load $_config properly"
+    if [[ "$_type" == "info" ]] ; then
+
+      _sprintf "head" "load $_filename properly"
+
+    fi
 
     # If the file exists is loaded.
-    . "$_config" && \
-    _logger info \
+    . "$_filename" && \
+    _logger "info" \
       "$_FUNCTION_ID()" \
-      "load $_config properly"
+      "load $_filename properly"
 
-  elif [ -z "$_config" ] ; then
+  elif [ -z "$_filename" ] ; then
 
-    _sprintf "stop" "load config error (use -c|--config option)"
+    _sprintf "stop" "load file error (incorrect filename)"
 
-    _logger stop \
+    _logger "stop" \
       "$_FUNCTION_ID()" \
-      "load config error (use -c|--config option)"
+      "load file error (incorrect filename)"
 
   else
 
-    _sprintf "stop" "load $_config error (does not exist?)"
+    _sprintf "stop" "load $_filename file error (does not exist?)"
 
-    _logger stop \
+    _logger "stop" \
       "$_FUNCTION_ID()" \
-      "load $_config error (does not exist?)"
+      "load $_filename file error (does not exist?)"
 
   fi
 
