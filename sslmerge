@@ -158,80 +158,75 @@ fi
 # Description:
 #   Saving the states of operation to a log file.
 #
+#   Three states of message type:
+#     INFO - normal information
+#     WARN - warning information
+#     STOP - interrupts script execution
+#     EXIT - interrupts script execution
+#
 # Usage:
-#   _logger type "()" "message"
+#   _logger "type" "message"
 #
 # Examples:
-#   _logger info "()" "load config file properly"
-#   _logger stop "()" "not connected"
+#   _logger "info" "load config file properly"
+#   _logger "stop" "not connected"
 #
+
 function _logger() {
 
   local _FUNCTION_ID="_logger"
   local _STATE=0
 
-  local type_log_info="$1"
-  local info_to_log=$(shift ; echo "$@")
+  ### Variable declarations and definitions.
+  local info_type=""
+  local info_to_log=""
+  local converts_type=""
 
-  local logfile_size=0
-  local logfile_max_size=10485760
+  ### Assigning values to variables
+  info_type="$1"
+  info_to_log=$(shift ; echo "$@")
+  converts_type=$(echo "$info_type" | tr '[:lower:]' '[:upper:]')
 
-  local convert_type_to_upper=$(echo "$type_log_info" | \
-                              tr '[:lower:]' '[:upper:]')
+  if [[ ! -d "$logdir" && ! -L "$logdir" ]] ; then
+    mkdir "$logdir" ; fi
 
-  if [ ! -d "$__logdir" ] ; then
-    mkdir -m 0750 "$__logdir" ; fi
+  IFS="$IFS_ORIG"
 
-  # Checking the log file exceeds the set max size,
-  # if the max size is exceeded, the log file will be archived.
-  if [ -e "$__logpath" ] ; then
-    logfile_size=$(stat -c%s "$__logpath") ; fi
+  if [[ "$stdout" == "debug" ]] ; then
 
-  if [ "$logfile_size" -gt "$logfile_max_size" ] ; then
+    # Verbose mode for debug (like a 'bash -x').
+    if [[ "$stdopt" -eq 7 ]] ; then
 
-    local gzip_logfile="${__logfile}.${__date}.tgz"
+      set -o xtrace
 
-    tar czfp "$gzip_logfile" -C "$__logdir" "$__logfile" && \
-    mv "$gzip_logfile" "$__logdir" && \
-    >"$__logpath"
+    # Normal debug mode (output the same as the contents of the log file).
+    else
+    # elif [[ "$stdopt" -eq 0 ]] ; then
 
-  fi
+      printf "%s  %s:  [%s] %s\n" \
+             "$(date +"%d/%m/%y %X")" \
+             "$_init_name" \
+             "$converts_type" \
+             "$info_to_log" \
+             | tee -a "$logpath"   
+
+    fi
 
   # The decision whether an INFO is to be only log to a file
   # or to a file and to standard output.
-  if [ "$stdout" == "" ] ; then
+  else
+  # if [[ "$stdout" == "" ]] ; then
 
     printf "%s  %s:  [%s] %s\n" \
            "$(date +"%d/%m/%y %X")" \
-           "$__init_name" \
-           "$convert_type_to_upper" \
+           "$_init_name" \
+           "$converts_type" \
            "$info_to_log" \
-           >>"$__logpath"
-
-  elif [ "$stdout" == "debug" ] ; then
-
-    printf "%s  %s:  [%s] %s\n" \
-           "$(date +"%d/%m/%y %X")" \
-           "$__init_name" \
-           "$convert_type_to_upper" \
-           "$info_to_log" \
-           | tee -a "$__logpath"
+           >>"$logpath"
 
   fi
 
-  # Change permissions to the log file (for security here if the script
-  # unexpectedly interrupted by his INFO before).
-  chmod o-r "$__logpath"
-
-  # _logger() lets you exit the program with the parameter 'stop'
-  # and '255' exit code.
-  #
-  # Three states of info:
-  #   INFO - normal information log (doesn't perform _exit_ function)
-  #   WARN - warning information log (doesn't perform _exit_ function)
-  #   STOP - interrupts script execution (does perform _exit_ function)
-  #   EXIT - interrupts script execution (doesn't perform _exit_ function)
-  if [ "$type_log_info" == "stop" ] ; then _exit_ 255 ; fi
+  IFS="$IFS_HACK"
 
   return $_STATE
 
