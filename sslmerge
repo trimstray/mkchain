@@ -705,7 +705,7 @@ function sslChainLast() {
 
       # Very important variables that set the beginning of the chain ;
       # it contain 'Server/Owner Certificate' info.
-      _last_issuer="$_key_issuer"
+      # _last_issuer="$_key_issuer"
       _last_subject="$_key_subject"
 
       _logger "info" \
