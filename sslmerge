@@ -98,13 +98,6 @@ readonly version="v1.1b-21"
 # Default configuration file.
 config="${_src}/_config"
 
-# Define output file and default filename.
-_fd=""
-_fd_default="bundle_chain.crt"
-
-# Define array with empty values.
-ssl_delivered_certificates=() ; ssl_attr=() ; ssl_attr_sorted=()
-
 
 ################################################################################
 ############################## External commands ###############################
@@ -397,17 +390,17 @@ function _load() {
 
   if [[ -e "$_filename" ]] ; then
 
-    if [[ "$_type" == "info" ]] ; then
-
-      _sprintf "head" "load $_filename properly"
-
-    fi
-
     # If the file exists is loaded.
     . "$_filename" && \
     _logger "info" \
       "$_FUNCTION_ID()" \
       "load $_filename properly"
+
+    if [[ "$_type" == "info" ]] ; then
+
+      _sprintf "head" "load $_filename properly"
+
+    fi
 
   elif [ -z "$_filename" ] ; then
 
@@ -567,7 +560,6 @@ function sslCheck() {
 
     _sprintf "stop" "bad certificate (maybe broken): $_ssl_delivered_certificates_file"
 
-    # We stop the script using the passed argument 'stop' to _logger() function.
     _logger "stop" \
       "$_FUNCTION_ID()" \
       "bad certificate (maybe broken): $_ssl_delivered_certificates_file" && \
@@ -905,7 +897,7 @@ function __main__() {
 
   # Without the specified file configuration script fails to execute.
   # uncomment if you are using the main configuration file.
-  #   _load "$config"
+  #   _load "info" "$config"
 
   # Running tasks before start user functions.
   _before_init
