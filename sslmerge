@@ -450,12 +450,13 @@ function _load() {
 # Examples:
 #   _before_init
 #
+
 function _before_init() {
 
   local _FUNCTION_ID="_before_init"
   local _STATE=0
 
-  cd $__init_directory
+  cd "$_init_directory"
 
   return $_STATE
 
@@ -475,12 +476,13 @@ function _before_init() {
 # Examples:
 #   _after_init
 #
+
 function _after_init() {
 
   local _FUNCTION_ID="_after_init"
   local _STATE=0
 
-  cd $__init_directory
+  cd "$_init_directory"
 
   return $_STATE
 
@@ -498,6 +500,7 @@ function _after_init() {
 # Examples:
 #   _help_
 #
+
 function _help_() {
 
   local _FUNCTION_ID="_help_"
@@ -506,24 +509,25 @@ function _help_() {
   printf "%s" "\
 
   Usage:
-    $__init_name [option|long-option]
+    $_init_name [option|long-option]
 
   Examples:
-    $__init_name --help
-    $__init_name --cert Root.crt --cert Intermediate1.crt --cert Server.crt
-    $__init_name --debug --cert 01.crt --cert XX.crt --output nginx_bundle.crt
-    $__init_name --cert /tmp/certs/ --output nginx_bundle.crt
+    $_init_name --help
+    $_init_name --version
+    $_init_name --cert Root.crt --cert Intermediate1.crt --cert Server.crt
+    $_init_name --debug --cert 01.crt --cert XX.crt --output nginx_bundle.crt
+    $_init_name --cert /tmp/certs/ --output nginx_bundle.crt
 
   Options:
     -h, --help                  show this message
     -v, --version               show script version
-    -d, --debug                 display information on the screen (debug mode)
-    -a, --attach                attach an external file to the script
-    -c, --cert                  stores a cert single file or directory with certs (with last '/')
+    -d, --debug {0,7}           display information on the screen (debug mode)
+    -c, --config [file]         attach an external file to the script
+    -e, --cert                  stores a cert single file or directory with certs (with last '/')
     -o, --output                saves the result (chain) to file
 
 
-  $__init_name, Copyright (C) 2017  Michał Żurawski
+  $_init_name, Copyright (C) 2017  Michał Żurawski
 
   This program comes with ABSOLUTELY NO WARRANTY.
   This is free software, and you are welcome to redistribute it
@@ -831,19 +835,22 @@ function __main__() {
   local _FUNCTION_ID="__main__"
   local _STATE=0
 
-  _logger init \
-    "init '${__init_name}' in ${__init_directory}" && \
-  _logger info \
+  _logger "init" \
+    "init '${_init_name}' in ${_init_directory}" && \
+  _logger "info" \
     "__init_params[] = (${__init_params[*]})," \
     "__script_params[] = (${__script_params[*]})"
 
-  cd "$__init_directory"
+  # Include src/_functions file.
+  _load "null" "$_functions"
 
-  local _short_opt="hvdac:o:"
-  local _long_opt="help,version,debug,attach,cert:,output:"
+  # Specifies the call parameters of the script, the exact description
+  # can be found in _help_ and file README.md.
+  local _short_opt="hvd::a:c:o:"
+  local _long_opt="help,version,debug::,config:,cert:,output:"
 
-  _GETOPT_PARAMS=$(getopt -o "$_short_opt" --long "$_long_opt" \
-                  -n "${__init_name}" -- "${__script_params[@]}")
+ _GETOPT_PARAMS=$(getopt -o "$_short_opt" --long "$_long_opt" \
+                  -n "${_init_name}" -- "${__script_params[@]}")
 
   eval set -- "$_GETOPT_PARAMS"
   while true ; do
@@ -853,21 +860,26 @@ function __main__() {
       -h|--help)
 
         _help_
+
         shift ; _exit_ 0 ;;
 
       -v|--version)
 
-        printf "%s, %s\n" "$__init_name" "$__version"
+        printf "%s, %s\n" "$_init_name" "$version"
+
         shift ; _exit_ 0 ;;
 
       -d|--debug)
 
-        stdout="debug"
+        stdout=${1:+"debug"}
+        stdopt="${4:-0}"
+
         shift ;;
 
-      -a|--attach)
+      -a|--config)
 
-        main_config="$2"
+        config=${2:-"$config"}
+
         shift 2 ;;
 
       -c|--cert)
@@ -888,14 +900,17 @@ function __main__() {
 
   done
 
+  # Without the specified file configuration script fails to execute.
+  # uncomment if you are using the main configuration file.
+  #   _load "$config"
+
+  # Running tasks before start user functions.
+  _before_init
+
   ################################# USER SPACE #################################
   # ````````````````````````````````````````````````````````````````````````````
   # Put here all your variable declarations, function calls
   # and all the other code blocks.
-
-  # Without the specified file configuration script fails to execute.
-  # uncomment if you are using the main configuration file.
-  # loadConfig "$main_config"
 
   # Check whether a file exists.
   if [[ -f "$_fd" ]] ; then
@@ -992,11 +1007,14 @@ function __main__() {
 
   # ````````````````````````````````````````````````````````````````````````````
 
+  # Running tasks before the end of the script.
+  _after_init
+
   return $_STATE
 
 }
 
-trap get_trap_SIG EXIT
+trap _get_trap_SIG EXIT
 
 # An array as an argument to a function call __main__,
 # is required if we want to operate on arguments of type $1, $2, ...
