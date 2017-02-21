@@ -810,7 +810,8 @@ function sslChainGenerate() {
 
     _sprintf "info" " add: $_path"
 
-    (cat "$_absolute_path" ; echo) >> "$_fd"
+    # alternative: (cat "$_absolute_path" ; echo) >> "$_fd"
+    cat "$_absolute_path" >> "$_fd"
 
   done
 
@@ -931,7 +932,7 @@ function __main__() {
       "$_FUNCTION_ID()" \
       "clear the contents of the '$_fd' properly"
       
-    >$_fd
+    >"$_fd"
 
   else
 
