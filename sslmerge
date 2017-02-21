@@ -853,6 +853,8 @@ function __main__() {
  _GETOPT_PARAMS=$(getopt -o "$_short_opt" --long "$_long_opt" \
                   -n "${_init_name}" -- "${__script_params[@]}")
 
+  if [[ -z "${__script_params[@]}" ]] ; then _exit_ 0 ; fi
+
   eval set -- "$_GETOPT_PARAMS"
   while true ; do
 
@@ -946,7 +948,8 @@ function __main__() {
 
     _logger "stop" \
       "$_FUNCTION_ID()" \
-      "$_fd file path is incorrect (maybe directory?)" && _exit_ 1
+      "$_fd file path is incorrect (maybe directory or create a file)" && \
+      _exit_ 1
 
   fi
 
