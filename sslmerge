@@ -415,7 +415,7 @@ function _load() {
 
     _logger "stop" \
       "$_FUNCTION_ID()" \
-      "load file error (incorrect filename)"
+      "load file error (incorrect filename)" && _exit_ 1
 
   else
 
@@ -423,7 +423,7 @@ function _load() {
 
     _logger "stop" \
       "$_FUNCTION_ID()" \
-      "load $_filename file error (does not exist?)"
+      "load $_filename file error (does not exist?)" && _exit_ 1
 
   fi
 
@@ -557,7 +557,7 @@ function sslCheck() {
 
     _sprintf "head" "correct certificate: $_ssl_delivered_certificates_file"
 
-    _logger info \
+    _logger "info" \
       "$_FUNCTION_ID()" \
       "correct certificate: $_ssl_delivered_certificates_file"
 
@@ -568,9 +568,10 @@ function sslCheck() {
     _sprintf "stop" "bad certificate (maybe broken): $_ssl_delivered_certificates_file"
 
     # We stop the script using the passed argument 'stop' to _logger() function.
-    _logger stop \
+    _logger "stop" \
       "$_FUNCTION_ID()" \
-      "bad certificate (maybe broken): $_ssl_delivered_certificates_file"
+      "bad certificate (maybe broken): $_ssl_delivered_certificates_file" && \
+      _exit_ 1
 
   fi
 
@@ -600,7 +601,7 @@ function sslInfo() {
   # Temporary table for storing data in the form path:issuer:subject.
   local _ssl_attr=()
 
-  _logger info \
+  _logger "info" \
     "$_FUNCTION_ID()" \
     "initialization of variables with initial values"
 
@@ -610,7 +611,7 @@ function sslInfo() {
     _key_path_name="$(basename "$i")"
 
     _sprintf "head" "get information from the $_key_path_name" && \
-    _logger info \
+    _logger "info" \
       "$_FUNCTION_ID()" \
       "get information from the $_key_path_name"
 
@@ -627,7 +628,7 @@ function sslInfo() {
           sed 's/  *//g' | \
           awk -F '/' '{print $1}')
 
-    _logger info \
+    _logger "info" \
       "$_FUNCTION_ID()" \
       "adding new elements to the array"
 
@@ -638,7 +639,7 @@ function sslInfo() {
     _sprintf "info" " issuer: ${_key_issuer}"
     _sprintf "info" " subject: ${_key_subject}"
 
-    _logger info \
+    _logger "info" \
       "$_FUNCTION_ID()" \
       "init _ssl_attr=() 'path':'issuer':'subject' notation, _ssl_attr=('${_ssl_attr[-1]}')"
 
@@ -647,7 +648,7 @@ function sslInfo() {
   # Copy the contents of the temporary (local) array to the global array.
   ssl_attr=("${_ssl_attr[@]}")
 
-  _logger info \
+  _logger "info" \
     "$_FUNCTION_ID()" \
     "copy the contents of local _ssl_attr=() to global ssl_attr=()"
 
@@ -703,7 +704,7 @@ function sslChainLast() {
     # for _key_issuer ;
     _key_issuer=$(echo "$i" | awk -v FS="(:|:)" '{print $2}')
 
-    _logger info \
+    _logger "info" \
       "$_FUNCTION_ID()" \
       "extracting items from ${i} => 0:${_key_path}, 1:${_key_issuer}, 2:${_key_subject}"
 
@@ -715,14 +716,14 @@ function sslChainLast() {
       _last_issuer="$_key_issuer"
       _last_subject="$_key_subject"
 
-      _logger info \
+      _logger "info" \
         "$_FUNCTION_ID()" \
         "found server certificate: ${_key_subject}"
 
       _sprintf "info" " found server certificate: ${_key_subject}"
       # _sprintf "info" " last relationship: ${_key_subject} <==> ${_key_issuer}"
 
-      _logger info \
+      _logger "info" \
         "$_FUNCTION_ID()" \
         "found last relationship: ${_key_subject} <==> ${_key_issuer}"
 
@@ -757,7 +758,7 @@ function sslChainRelation() {
       # for _key_issuer ;
       _key_issuer=$(echo "$i" | awk -v FS="(:|:)" '{print $2}')
 
-      _logger info \
+      _logger "info" \
         "$_FUNCTION_ID()" \
         "extracting items from ${i} => 0:${_key_path}, 1:${_key_issuer}, 2:${_key_subject}"
 
@@ -772,7 +773,7 @@ function sslChainRelation() {
         # Assign an element to the array with 'paht:issuer:subject' notation.
         _ssl_attr_sorted+=("${_key_path}:${_key_issuer}:${_last_subject}")
 
-        _logger info \
+        _logger "info" \
           "$_FUNCTION_ID()" \
           "found relationship: $_last_subject <==> $_key_issuer"
 
@@ -811,7 +812,7 @@ function sslChainGenerate() {
     _absolute_path="${i%%:*}"
     _path="$(basename "$_absolute_path")"
 
-    _logger info \
+    _logger "info" \
       "$_FUNCTION_ID()" \
       "add $_path"
 
@@ -920,19 +921,19 @@ function __main__() {
 
       _fd="$_fd_default"
 
-      _logger info \
+      _logger "info" \
         "$_FUNCTION_ID()" \
         "set output filename to (default filename) '$_fd'"
 
     else
 
-      _logger info \
+      _logger "info" \
         "$_FUNCTION_ID()" \
         "set output filename to '$_fd'"
 
     fi
 
-    _logger info \
+    _logger "info" \
       "$_FUNCTION_ID()" \
       "clear the contents of the '$_fd' properly"
       
@@ -943,9 +944,9 @@ function __main__() {
     # If the file path is incorrect.
     _sprintf "stop" "$_fd file path is incorrect (maybe directory or create a file)"
 
-    _logger stop \
+    _logger "stop" \
       "$_FUNCTION_ID()" \
-      "$_fd file path is incorrect (maybe directory?)"
+      "$_fd file path is incorrect (maybe directory?)" && _exit_ 1
 
   fi
 
@@ -960,13 +961,13 @@ function __main__() {
 
         sslCheck "$i"
 
-        _logger info \
+        _logger "info" \
           "$_FUNCTION_ID()" \
           "script param '$i' is a file"
 
       elif [[ -d "$i" ]] ; then
 
-        _logger info \
+        _logger "info" \
           "$_FUNCTION_ID()" \
           "script param '$i' is a directory"
 
@@ -976,7 +977,7 @@ function __main__() {
 
           sslCheck "$_ssl_path_plus_name"
 
-          _logger info \
+          _logger "info" \
             "$_FUNCTION_ID()" \
             "script param '$i' is a file"
 
@@ -987,9 +988,9 @@ function __main__() {
         # If the file/directory is not valid.
         _sprintf "stop" "incorrect file/directory: $i"
 
-        _logger stop \
+        _logger "stop" \
           "$_FUNCTION_ID()" \
-          "incorrect file/directory: $i"
+          "incorrect file/directory: $i" && _exit_ 1
 
       fi
 
