@@ -51,9 +51,10 @@ set -o pipefail
 
 # Internal field separator (more flexible).
 IFS_ORIG="$IFS"
-IFS=$'\n\t'
+IFS_HACK=$'\n\t'
+IFS="$IFS_HACK"
 
-# PATH environment variable setup.
+# PATH env variable setup.
 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
 # Setting permissions in the script environment:
@@ -71,34 +72,35 @@ umask 0027
 __init_params=()
 __script_params=("$@")
 
-readonly __version="v1.1b-21"
-
 # Store the name of the script and directory call.
-readonly __init_name="$(basename "$0")"
-readonly __init_directory="$(dirname "$(readlink -f "$0")")"
+readonly _init_name="$(basename "$0")"
+readonly _init_directory="$(dirname "$(readlink -f "$0")")"
 
-readonly __date=$(date +%Y%m%d)
+# Directory structure.
+readonly _src="${_init_directory}/src"
+readonly _doc="${_init_directory}/doc"
+
+# File with external (user) functions and variables.
+readonly _functions="${_src}/_functions"
 
 # Variables related to the log file. Divided into three parts due
 # to the better possibility of manipulation for the user.
-readonly __logfile="${__init_name}.${__date}.log"
-readonly __logdir="/var/log/${__init_name}"
-readonly __logpath="${__logdir}/${__logfile}"
+readonly logfile="${_init_name}.${cdate}.log"
+readonly logdir="/var/log/${_init_name}"
+readonly logpath="${logdir}/${logfile}"
 
-# The definition of the variable responsible for displaying information
-# on the screen. By default, stores the empty value.
-#   ""    - default messages (without debug mode)
-#   debug - show debug messages
-stdout=""
+# Stores the current date.
+readonly cdate=$(date +%Y%m%d)
 
-# The variable that holds the main (external) configuration file.
-# Initially accepts an empty value which is changed when calling
-# the script with the parameter -c|--config "value".
-main_config=""
+# Script version (master branch).
+readonly version="v1.1b-21"
+
+# Default configuration file.
+config="${_src}/_config"
 
 # Define output file and default filename.
 _fd=""
-_fd_default="chain.out"
+_fd_default="bundle_chain.crt"
 
 # Define array with empty values.
 ssl_delivered_certificates=() ; ssl_attr=() ; ssl_attr_sorted=()
