@@ -293,40 +293,63 @@ function _get_trap_SIG() {
 # Examples:
 #   _sprintf "head" "correct certificate: $_ssl_delivered_certificates_file"
 #
+
 function _sprintf() {
 
   local _FUNCTION_ID="_sprintf"
   local _STATE=0
 
-  local _type="$1"
-  local _info="$2"
+  ### Variable declarations and definitions.
+  local s_type=""
+  local s_info=""
+  local s_char=""
+  local s_trgb=""
 
-  local _char="" ; local _tcolor=""
+  ### Assigning values to variables
+  s_type="$1"
+  s_info="$2"
 
   # Determine the type of character and color for each type
   # of output information.
-  if [[ $_type == "info" ]] ; then _char="-" ; _tcolor="0;33"
-  elif [[ $_type == "head" ]] ; then _char="+" ; _tcolor="1;32"
-  elif [[ $_type == "stop" ]] ; then _char="!" ; _tcolor="1;31"
-  else _char="-" ; _tcolor="0;37"
+  if [[ "$s_type" == "info" ]] ; then
+
+    s_char="-"
+    s_trgb="0;33"
+
+  elif [[ "$s_type" == "head" ]] ; then
+
+    s_char="+"
+    s_trgb="1;32"
+
+  elif [[ "$s_type" == "stop" ]] ; then
+
+    s_char="!"
+    s_trgb="1;31"
+
+  else
+
+    s_char="-"
+    s_trgb="0;37"
+
   fi
 
   # If you run the tool in verbose mode do not display output using _sprintf.
   if [[ "$stdout" != "debug" ]] ; then
 
-    if [[ "$_type" == "spin" ]] && [[ ! -z "$_info" ]] ; then
+    if [[ "$s_type" == "spin" ]] && [[ ! -z "$s_info" ]] ; then
 
       # Process id of the previous running command.
-      local _pid="$_info"
+      local _pid="$s_info"
 
       local _sc='-\|/'
 
       # Verify that the process is still running.
       local n=0
-      while kill -0 $_pid 2>/dev/null ; do
+
+      while [[ $(kill -0 "$_pid" 2>/dev/null) ]] ; do
 
         n=$(( ( n + 1 ) % 4 ))
-        printf "\r[${_sc:$n:1}]"
+        printf "\r[%s]" "${_sc:n:1}"
         sleep 0.1
 
       done
@@ -339,7 +362,7 @@ function _sprintf() {
       # Normal execution if:
       # - spinner has not been called
       # - spinner completed
-      printf '[\e['$_tcolor'm%s\e[m] %s\n' "$_char" "$_info"
+      printf '[\e['$s_trgb'm%s\e[m] %s\n' "$s_char" "$s_info"
 
     fi
 
