@@ -244,30 +244,37 @@ function _logger() {
 # Examples:
 #   _exit_ 0
 #
+
 function _exit_() { _STATUS="$1" ; exit "$_STATUS" ; }
 
 
 # ``````````````````````````````````````````````````````````````````````````````
-# Function name: get_trap_SIG()
+# Function name: _get_trap_SIG()
 #
 # Description:
 #   Ensuring they always perform necessary cleanup operations,
 #   even when something unexpected goes wrong.
 #
 # Usage:
-#   trap get_trap_SIG SIGNAL
+#   trap _get_trap_SIG SIGNAL
 #
 # Examples:
-#   trap get_trap_SIG EXIT
+#   trap _get_trap_SIG EXIT
 #
-function get_trap_SIG() {
 
-  local _FUNCTION_ID="get_trap_SIG"
+function _get_trap_SIG() {
+
+  local _FUNCTION_ID="_get_trap_SIG"
   local _STATE="$_STATUS"
+
+  # Unset variables (e.g. global).
+  local __vars=("$IFS_ORIG" "$IFS_HACK" "$IFS" "$PATH")
+
+  for i in "${__vars[@]}" ; do unset i ; done
 
   if [ -z "$_STATE" ] ; then _STATE=255 ; fi
 
-  _logger exit \
+  _logger "exit" \
     "${_FUNCTION_ID} exit > signal ${_STATE}"
 
   return $_STATE
