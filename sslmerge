@@ -6,7 +6,7 @@
 #
 #         fname : "sslmerge"
 #         cdate : "28.01.2017"
-#         mdate : "21.02.2017"
+#         mdate : "22.02.2017"
 #       version : "v1.1b-21"
 #        author : "Michał Żurawski <michal.zurawski@bxlab.pl>"
 #          site : "https://jb-public.github.io/sslmerge"
@@ -83,14 +83,14 @@ readonly _doc="${_init_directory}/doc"
 # File with external (user) functions and variables.
 readonly _functions="${_src}/_functions"
 
+# Stores the current date.
+readonly cdate=$(date +%Y%m%d)
+
 # Variables related to the log file. Divided into three parts due
 # to the better possibility of manipulation for the user.
 readonly logfile="${_init_name}.${cdate}.log"
 readonly logdir="/var/log/${_init_name}"
 readonly logpath="${logdir}/${logfile}"
-
-# Stores the current date.
-readonly cdate=$(date +%Y%m%d)
 
 # Script version (master branch).
 readonly version="v1.1b-21"
