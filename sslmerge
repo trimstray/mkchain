@@ -107,24 +107,24 @@ ssl_delivered_certificates=() ; ssl_attr=() ; ssl_attr_sorted=()
 
 
 ################################################################################
-############################ Used external commands ############################
+############################## External commands ###############################
 ################################################################################
 
-# We place here used commands at script runtime.
-readonly __commands=(basename dirname stat date \
-                     grep egrep cut sed gzip tar openssl)
+# We place here used commands at script runtime, as strings to anything
+# unnecessarily run.
+readonly commands=(basename dirname stat date grep egrep cut sed gzip tar \
+                  openssl)
 
 # Stores the names of the missing commands.
 missing_hash=()
-
 missing_counter=0
 
 if [[ -n "${missing_hash[@]}" ]] ; then
 
-  for i in "${__commands[@]}" ; do
+  for i in "${commands[@]}" ; do
 
     # If the command was not found put it in the array.
-    if ! hash "$i" >/dev/null 2>&1 ; then
+    if [[ $(hash "$i" >/dev/null 2>&1) ]] ; then
 
       missing_hash+=("$i")
 
@@ -132,11 +132,12 @@ if [[ -n "${missing_hash[@]}" ]] ; then
 
     fi
 
-  done ; unset i
+  done
 
+  # Stop the script if you do not find at least one command.
   if [[ "$missing_counter" -gt "0" ]] ; then
 
-    printf "Commands not found in PATH: %s\n" "${missing_hash[@]}" >&2
+    printf "ERROR -> not found in PATH: %s\n" "${missing_hash[@]}" >&2
     exit 1
 
   fi
@@ -144,7 +145,7 @@ if [[ -n "${missing_hash[@]}" ]] ; then
 fi
 
 # If you intend to specify the full path to the command we do it like:
-#   readonly _tar="/bin/tar"
+#   readonly exec_gzip="/bin/gzip"
 
 
 ################################################################################
