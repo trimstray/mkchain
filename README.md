@@ -24,6 +24,7 @@ Examples of ways to use:
 
   Examples:
     sslmerge --help
+    sslmerge --version
     sslmerge --cert Root.crt --cert Intermediate1.crt --cert Server.crt
     sslmerge --debug --cert 01.crt --cert XX.crt --output nginx_bundle.crt
     sslmerge --cert /tmp/certs/ --output nginx_bundle.crt
@@ -31,8 +32,8 @@ Examples of ways to use:
   Options:
     -h, --help                  show this message
     -v, --version               show script version
-    -d, --debug                 display information on the screen (debug mode)
-    -a, --attach                attach an external file to the script
+    -d, --debug {0,7}           display information on the screen (debug mode)
+    -a, --config [file]         attach an external file to the script
     -c, --cert                  stores a cert single file or directory with certs (with last '/')
     -o, --output                saves the result (chain) to file
 ```
