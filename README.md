@@ -26,7 +26,7 @@ Examples of ways to use:
     sslmerge --help
     sslmerge --version
     sslmerge --cert Root.crt --cert Intermediate1.crt --cert Server.crt
-    sslmerge --debug --cert 01.crt --cert XX.crt --output nginx_bundle.crt
+    sslmerge --cert 01.crt --cert XX.crt --output nginx_bundle.crt --debug
     sslmerge --cert /tmp/certs/ --output nginx_bundle.crt
 
   Options:
