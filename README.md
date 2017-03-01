@@ -3,7 +3,7 @@ sslmerge
 
 [![bash_logotype_new_2.png](https://s29.postimg.org/lgglyiqif/bash_logotype_new_2.png)](https://www.gnu.org/software/bash/)
 
-[**sslmerge**](https://jb-public.github.io/sslmerge/) is a tool to help create the correct chain of SSL certificates delivered.
+[**sslmerge**](https://jboowie.github.io/sslmerge/) is a tool to help create the correct chain of SSL certificates delivered.
 
   - simple to use
   - does not send the certificates to the outside (running locally)
