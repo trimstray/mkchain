@@ -6,7 +6,7 @@
 #
 #         fname : "sslmerge"
 #         cdate : "28.01.2017"
-#         mdate : "22.02.2017"
+#         mdate : "02.03.2017"
 #       version : "v1.1b-38"
 #        author : "Michał Żurawski <michal.zurawski@bxlab.pl>"
 #          site : "https://jb-public.github.io/sslmerge"
@@ -109,7 +109,7 @@ readonly commands=(basename dirname stat date grep egrep cut sed gzip tar \
                   openssl)
 
 # Stores the names of the missing commands.
-missing_hash=()
+missing_hash=
 missing_counter=0
 
 if [[ -n "${missing_hash[@]}" ]] ; then
