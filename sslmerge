@@ -170,13 +170,13 @@ function _logger() {
   local _FUNCTION_ID="_logger"
   local _STATE=0
 
-  ### Variable declarations and definitions.
+  ### Block of declarations
   local info_type=""
   local info_to_log=""
   local converts_type=""
   local stdout=""
 
-  ### Assigning values to variables
+  ### Block of definitions
   info_type="$1"
   info_to_log=$(shift ; echo "$@")
   converts_type=$(echo "$info_type" | tr '[:lower:]' '[:upper:]')
@@ -293,13 +293,13 @@ function _sprintf() {
   local _FUNCTION_ID="_sprintf"
   local _STATE=0
 
-  ### Variable declarations and definitions.
+  ### Block of declarations
   local s_type=""
   local s_info=""
   local s_char=""
   local s_trgb=""
 
-  ### Assigning values to variables
+  ### Block of definitions
   s_type="$1"
   s_info="$2"
 
