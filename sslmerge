@@ -69,7 +69,7 @@ umask 0027
 ################################################################################
 
 # The tables that store call parameters.
-__init_params=()
+__init_params=
 __script_params=("$@")
 
 # Store the name of the script and directory call.
