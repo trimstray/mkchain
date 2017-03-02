@@ -174,6 +174,7 @@ function _logger() {
   local info_type=""
   local info_to_log=""
   local converts_type=""
+  local stdout=""
 
   ### Assigning values to variables
   info_type="$1"
