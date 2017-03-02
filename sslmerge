@@ -429,7 +429,7 @@ function _load() {
 # Function name: _before_init()
 #
 # Description:
-#   INFOs performed before calling the __main__ function, eg.
+#   INFOs performed before calling the __main__ function, e.g.
 #   attaching files, cleaning logs (if you need a function that will deal
 #   with it, put it here).
 #
@@ -455,7 +455,7 @@ function _before_init() {
 # Function name: _after_init()
 #
 # Description:
-#   INFOs performed after calling the __main__ function, eg.
+#   INFOs performed after calling the __main__ function, e.g.
 #   cleaning logs (if you need a function that will deal with it,
 #   put it here).
 #

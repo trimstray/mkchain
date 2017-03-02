@@ -181,7 +181,7 @@ function sslChainLast() {
       "$_FUNCTION_ID()" \
       "extracting items from ${i} => 0:${_key_path}, 1:${_key_issuer}, 2:${_key_subject}"
 
-    # If the box contains CN period (eg. domain.com)
+    # If the box contains CN period (e.g. domain.com)
     if [[ "$_key_subject" == *"."* ]] ; then
 
       # Very important variables that set the beginning of the chain ;
