@@ -259,7 +259,7 @@ function _exit_() { _STATUS="$1" ; exit "$_STATUS" ; }
 function _get_trap_SIG() {
 
   local _FUNCTION_ID="_get_trap_SIG"
-  local _STATE="$_STATUS"
+  local _STATE="${_STATUS:-}"
 
   # Unset variables (e.g. global).
   local __vars=("$IFS_ORIG" "$IFS_HACK" "$IFS" "$PATH")
