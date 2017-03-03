@@ -648,11 +648,11 @@ function __main__() {
   else
 
     # If the file path is incorrect.
-    _sprintf "stop" "$_fd file path is incorrect (maybe directory or create a file)"
+    _sprintf "stop" "$_fd file path is incorrect (check path or file name)"
 
     _logger "stop" \
       "$_FUNCTION_ID()" \
-      "$_fd file path is incorrect (maybe directory or create a file)" && \
+      "$_fd file path is incorrect (check path or file name)" && \
       _exit_ 1
 
   fi
