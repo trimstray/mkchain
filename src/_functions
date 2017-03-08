@@ -62,7 +62,7 @@ function sslInfo() {
 
   local _ssl_ident_issuer_string="Issuer:"
   local _ssl_ident_subject_string="Subject:"
-  local _ssl_regexp_string="CN=.*"
+  local _ssl_regexp_string="CN.*=.*"
 
   local _ssl_delivered_certificates=("${ssl_delivered_certificates_list[@]}")
 
