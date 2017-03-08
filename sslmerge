@@ -619,43 +619,22 @@ function __main__() {
   # Put here all your variable declarations, function calls
   # and all the other code blocks.
 
-  # Check whether a file exists.
-  if [[ -f "$_fd" ]] ; then
+  # Set the default file name if it is not given with option -o|--output.
+  if [[ -z "$_fd" ]] ; then
 
-    # Set the default file name if it is not given with option -o|--output.
-    if [[ -z "$_fd" ]] ; then
-
-      _fd="$_fd_default"
-
-      _logger "info" \
-        "$_FUNCTION_ID()" \
-        "set output filename to (default filename) '$_fd'"
-
-    else
-
-      _logger "info" \
-        "$_FUNCTION_ID()" \
-        "set output filename to '$_fd'"
-
-    fi
+    _fd="$_fd_default"
 
     _logger "info" \
       "$_FUNCTION_ID()" \
-      "clear the contents of the '$_fd' properly"
-      
-    >"$_fd"
-
-  else
-
-    # If the file path is incorrect.
-    _sprintf "stop" "$_fd file path is incorrect (check path or file name)"
-
-    _logger "stop" \
-      "$_FUNCTION_ID()" \
-      "$_fd file path is incorrect (check path or file name)" && \
-      _exit_ 1
+      "set output filename to (default filename) '$_fd'"
 
   fi
+
+  _logger "info" \
+    "$_FUNCTION_ID()" \
+    "clear the contents of the '$_fd' properly"
+
+  >"$_fd"
 
   if [[ "${#ssl_delivered_certificates[@]}" -ne "0" ]] ; then
 
