@@ -106,7 +106,7 @@ config="${_src}/_config"
 # We place here used commands at script runtime, as strings to anything
 # unnecessarily run.
 readonly commands=(basename dirname stat date grep egrep cut sed gzip tar \
-                  openssl)
+                  openssl tr)
 
 # Stores the names of the missing commands.
 missing_hash=
