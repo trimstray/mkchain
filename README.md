@@ -7,7 +7,6 @@ sslmerge
 
   - simple to use
   - does not send the certificates to the outside (running locally)
-  - allows for quick modification of code (bash)
 
 ### Version
 
