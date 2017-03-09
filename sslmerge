@@ -300,7 +300,6 @@ function _sprintf() {
   local s_info=""
   local s_char=""
   local s_trgb=""
-  local stdout=""
 
   ### Block of definitions
   s_type="$1"
