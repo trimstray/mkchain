@@ -6,7 +6,7 @@
 #
 #         fname : "sslmerge"
 #         cdate : "28.01.2017"
-#         mdate : "08.03.2017"
+#         mdate : "09.03.2017"
 #       version : "v1.1b-38"
 #        author : "Michał Żurawski <michal.zurawski@bxlab.pl>"
 #          site : "https://jboowie.github.io/sslmerge"
@@ -98,6 +98,10 @@ readonly version="v1.1b-38"
 # Default configuration file.
 config="${_src}/_config"
 
+# Declaration of output variables.
+stdout=""
+stdopt=""
+
 
 ################################################################################
 ############################## External commands ###############################
@@ -174,7 +178,6 @@ function _logger() {
   local info_type=""
   local info_to_log=""
   local converts_type=""
-  local stdout=""
 
   ### Block of definitions
   info_type="$1"
@@ -225,6 +228,7 @@ function _logger() {
   return $_STATE
 
 }
+
 
 # ``````````````````````````````````````````````````````````````````````````````
 # Function name: _exit_()
