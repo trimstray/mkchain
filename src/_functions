@@ -2,9 +2,8 @@
 ######################## Definitions of user variables #########################
 ################################################################################
 
-# Define output file and default filename.
+# Define output file handler.
 _fd=""
-_fd_default="bundle_chain.crt"
 
 # Define array with empty values.
 ssl_delivered_certificates=() ; ssl_attr=() ; ssl_attr_sorted=()
