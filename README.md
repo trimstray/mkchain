@@ -49,7 +49,7 @@ Examples of ways to use:
 
 ### Problems
 
-In versions 1.x does not detect correctly all certificates. There were also problems with the removal of the new line between the end of one certificate and the start of the second of the output file.
+See on the *Issues* page.
 
 ### License
 
