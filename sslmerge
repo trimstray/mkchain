@@ -630,71 +630,86 @@ function __main__() {
       "$_FUNCTION_ID()" \
       "not specified -o|--output param" && _exit_ 1
 
-  fi
+  else
 
-  _logger "info" \
-    "$_FUNCTION_ID()" \
-    "clear the contents of the '$_fd' properly"
+    >"$_fd" && \
+    _state="0" || _state="1"
 
-  >"$_fd"
+    if [[ "$_state" -eq "0" ]] ; then
 
-  if [[ "${#ssl_delivered_certificates[@]}" -ne "0" ]] ; then
+      _logger "info" \
+        "$_FUNCTION_ID()" \
+        "clear the contents of the '$_fd' properly"
 
-    local ssl_delivered_certificates_list=()
+      if [[ "${#ssl_delivered_certificates[@]}" -ne "0" ]] ; then
 
-    # For better control of the log file (do not use _sprintf).
-    for i in "${ssl_delivered_certificates[@]}" ; do
+        local ssl_delivered_certificates_list=()
 
-      if [[ -f "$i" ]] ; then
+        # For better control of the log file (do not use _sprintf).
+        for i in "${ssl_delivered_certificates[@]}" ; do
 
-        sslSetRowSize "$i"
+          if [[ -f "$i" ]] ; then
 
-        sslCheck "$i"
+            sslSetRowSize "$i"
 
-        _logger "info" \
-          "$_FUNCTION_ID()" \
-          "script param '$i' is a file"
+            sslCheck "$i"
 
-      elif [[ -d "$i" ]] ; then
+            _logger "info" \
+              "$_FUNCTION_ID()" \
+              "script param '$i' is a file"
 
-        _logger "info" \
-          "$_FUNCTION_ID()" \
-          "script param '$i' is a directory"
+          elif [[ -d "$i" ]] ; then
 
-        for j in $(ls -p "$i" | grep -v /) ; do
+            _logger "info" \
+              "$_FUNCTION_ID()" \
+              "script param '$i' is a directory"
 
-          local _ssl_path_plus_name="${i}${j}"
+            for j in $(ls -p "$i" | grep -v /) ; do
 
-          sslSetRowSize "$_ssl_path_plus_name"
+              local _ssl_path_plus_name="${i}${j}"
 
-          sslCheck "$_ssl_path_plus_name"
+              sslSetRowSize "$_ssl_path_plus_name"
 
-          _logger "info" \
-            "$_FUNCTION_ID()" \
-            "script param '$i' is a file"
+              sslCheck "$_ssl_path_plus_name"
+
+              _logger "info" \
+                "$_FUNCTION_ID()" \
+                "script param '$i' is a file"
+
+            done
+
+          else
+
+            # If the file/directory is not valid.
+            _sprintf "stop" "incorrect file/directory: $i"
+
+            _logger "stop" \
+              "$_FUNCTION_ID()" \
+              "incorrect file/directory: $i" && _exit_ 1
+
+          fi
 
         done
 
-      else
+        # We pass without arguments to the function which processes array
+        # directly in a function and assigned to the local array.
+        sslInfo
 
-        # If the file/directory is not valid.
-        _sprintf "stop" "incorrect file/directory: $i"
-
-        _logger "stop" \
-          "$_FUNCTION_ID()" \
-          "incorrect file/directory: $i" && _exit_ 1
+        # We call the function responsible for creating the chain. Here when
+        # calling anything special but inside the function refers to external array.
+        sslChain
 
       fi
 
-    done
+    else
 
-    # We pass without arguments to the function which processes array
-    # directly in a function and assigned to the local array.
-    sslInfo
+      _sprintf "stop" "clear the contents of the '$_fd' failed"
 
-    # We call the function responsible for creating the chain. Here when calling
-    # anything special but inside the function refers to external array.
-    sslChain
+      _logger "info" \
+        "$_FUNCTION_ID()" \
+        "clear the contents of the '$_fd' failed"
+
+    fi
 
   fi
 
