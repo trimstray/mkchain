@@ -20,7 +20,7 @@ fixed_row_size="64"
 # Set maximum row size in cert file.
 function sslSetRowSize() {
 
-  local _FUNCTION_ID="sslRowSize"
+  local _FUNCTION_ID="sslSetRowSize"
   local _STATE=0
 
   return $_STATE
