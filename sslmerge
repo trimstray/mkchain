@@ -664,9 +664,12 @@ function __main__() {
               "$_FUNCTION_ID()" \
               "script param '$i' is a directory"
 
+            # Remove last '/' for better compatibility.
+            i=${i%/}
+
             for j in $(ls -p "$i" | grep -v /) ; do
 
-              local _ssl_path_plus_name="${i}${j}"
+              local _ssl_path_plus_name="${i}/${j}"
 
               sslSetRowSize "$_ssl_path_plus_name"
 
