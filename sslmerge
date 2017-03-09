@@ -620,14 +620,15 @@ function __main__() {
   # Put here all your variable declarations, function calls
   # and all the other code blocks.
 
-  # Set the default file name if it is not given with option -o|--output.
+  # If it is not given option -o|--output.
   if [[ -z "$_fd" ]] ; then
 
-    _fd="$_fd_default"
+    # If the file/directory is not valid.
+    _sprintf "stop" "not specified -o|--output param"
 
-    _logger "info" \
+    _logger "stop" \
       "$_FUNCTION_ID()" \
-      "set output filename to (default filename) '$_fd'"
+      "not specified -o|--output param" && _exit_ 1
 
   fi
 
