@@ -17,6 +17,16 @@ fixed_row_size="64"
 ######################## Definitions of user functions #########################
 ################################################################################
 
+# Set maximum row size in cert file.
+function sslSetRowSize() {
+
+  local _FUNCTION_ID="sslRowSize"
+  local _STATE=0
+
+  return $_STATE
+
+}
+
 function sslCheck() {
 
   local _FUNCTION_ID="sslCheck"
