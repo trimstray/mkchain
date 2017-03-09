@@ -645,6 +645,8 @@ function __main__() {
 
       if [[ -f "$i" ]] ; then
 
+        sslSetRowSize "$i"
+
         sslCheck "$i"
 
         _logger "info" \
@@ -660,6 +662,8 @@ function __main__() {
         for j in $(ls -p "$i" | grep -v /) ; do
 
           local _ssl_path_plus_name="${i}${j}"
+
+          sslSetRowSize "$_ssl_path_plus_name"
 
           sslCheck "$_ssl_path_plus_name"
 
