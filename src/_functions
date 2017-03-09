@@ -9,6 +9,9 @@ _fd_default="bundle_chain.crt"
 # Define array with empty values.
 ssl_delivered_certificates=() ; ssl_attr=() ; ssl_attr_sorted=()
 
+# Define the maximum row size in certificate file.
+fixed_row_size="64"
+
 
 ################################################################################
 ######################## Definitions of user functions #########################
