@@ -25,8 +25,6 @@ function sslSetRowSize() {
 
   local _ssl_delivered_certificates_file="$1"
 
-  _sprintf "head" "row size [$fixed_row_size]: $_ssl_delivered_certificates_file"
-
   grep -v "CERTIFICATE" ${_ssl_delivered_certificates_file} | \
   tr -d '\n' | \
   sed -e "s/.\{$fixed_row_size\}/&\n/g" | \
