@@ -24,15 +24,16 @@ function sslSetRowSize() {
 
   local _ssl_delivered_certificates_file="$1"
 
-  grep -v "CERTIFICATE" ${_ssl_delivered_certificates_file} | \
+  grep -v "CERTIFICATE" "${_ssl_delivered_certificates_file}" | \
   tr -d '\n' | \
   sed -e "s/.\{$fixed_row_size\}/&\n/g" | \
   sed -e '1s/^/-----BEGIN CERTIFICATE-----\n/' | \
   sed -e "\$a-----END CERTIFICATE-----" \
-  > ${_ssl_delivered_certificates_file}.fixed
+  > "${_ssl_delivered_certificates_file}.fixed"
 
-  cat ${_ssl_delivered_certificates_file}.fixed > ${_ssl_delivered_certificates_file} && \
-  rm -fr ${_ssl_delivered_certificates_file}.fixed
+  cat "${_ssl_delivered_certificates_file}.fixed" > "${_ssl_delivered_certificates_file}" && \
+  rm -fr "${_ssl_delivered_certificates_file}.fixed"
+
   return $_STATE
 
 }
