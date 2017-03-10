@@ -41,6 +41,17 @@ Examples of ways to use:
 
   - openssl package
 
+### Project architecture
+
+    |--- sslmerge               # main file (init)
+    |--- README.md              # this simple documentation
+    |--- LICENSE.md             # GNU GENERAL PUBLIC LICENSE, Version 3, 29 June 2007
+    |--- CHANGELOG.md           # notable changes for each version of a project
+    |--- _config.yml            # jekyll’s configuration file
+    |--- src                    # functions, variables and all other attached files to the script
+            |--- _config        # external configuration file
+            |--- _functions     # includes a set of external functions (including the user)
+
 ### Todos
 
   - add better error handling mechanism
