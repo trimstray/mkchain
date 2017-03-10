@@ -166,7 +166,7 @@ function sslChain() {
   local _key_issuer=""
   local _key_subject=""
 
-  local _last_issuer=""
+  # local _last_issuer=""
   local _last_subject=""
 
   _sprintf "head" "creating a chain of delivered certificates"
