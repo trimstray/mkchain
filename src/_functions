@@ -6,7 +6,7 @@
 _fd=""
 
 # Define array with empty values.
-ssl_delivered_certificates=() ; ssl_attr=() ; ssl_attr_sorted=()
+ssl_delivered_certificates_list=() ; ssl_attr=() ; ssl_attr_sorted=()
 
 # Define the maximum row size in certificate file.
 fixed_row_size="64"
