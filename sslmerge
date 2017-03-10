@@ -6,7 +6,7 @@
 #
 #         fname : "sslmerge"
 #         cdate : "28.01.2017"
-#         mdate : "09.03.2017"
+#         mdate : "10.03.2017"
 #       version : "v1.1b-38"
 #        author : "Michał Żurawski <michal.zurawski@bxlab.pl>"
 #          site : "https://jboowie.github.io/sslmerge"
@@ -642,8 +642,6 @@ function __main__() {
         "clear the contents of the '$_fd' properly"
 
       if [[ "${#ssl_delivered_certificates[@]}" -ne "0" ]] ; then
-
-        local ssl_delivered_certificates_list=()
 
         # For better control of the log file (do not use _sprintf).
         for i in "${ssl_delivered_certificates[@]}" ; do
