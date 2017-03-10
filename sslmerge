@@ -270,6 +270,9 @@ function _get_trap_SIG() {
 
   if [ -z "$_STATE" ] ; then _STATE=255 ; fi
 
+  # Running tasks before the end of the script.
+  _after_init
+
   _logger "exit" \
     "${_FUNCTION_ID} exit > signal ${_STATE}"
 
@@ -715,9 +718,6 @@ function __main__() {
   fi
 
   # ````````````````````````````````````````````````````````````````````````````
-
-  # Running tasks before the end of the script.
-  _after_init
 
   return $_STATE
 
