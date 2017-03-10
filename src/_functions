@@ -11,6 +11,13 @@ ssl_delivered_certificates_list=() ; ssl_attr=() ; ssl_attr_sorted=()
 # Define the maximum row size in certificate file.
 fixed_row_size="64"
 
+# Strings that identifies the certificates.
+ssl_beg_cert_id="-----BEGIN CERTIFICATE-----"
+ssl_end_cert_id="-----END CERTIFICATE-----"
+
+# Temporary file extension.
+fext="tmp"
+
 
 ################################################################################
 ######################## Definitions of user functions #########################
@@ -24,15 +31,24 @@ function sslSetRowSize() {
 
   local _ssl_delivered_certificates_file="$1"
 
+  # The procedure for parsing a file with a certificate:
+  #   - remove the starting string: -----BEGIN CERTIFICATE-----
+  #   - remmove the ending string: -----END CERTIFICATE-----
+  #   - remove all newline characters
+  #   - define the maximum row size in certificate file
+  #   - add strings identifying certificate
+  #   - prepared written certificate to a temporary file
   grep -v "CERTIFICATE" "${_ssl_delivered_certificates_file}" | \
   tr -d '\n' | \
   sed -e "s/.\{$fixed_row_size\}/&\n/g" | \
-  sed -e '1s/^/-----BEGIN CERTIFICATE-----\n/' | \
-  sed -e "\$a-----END CERTIFICATE-----" \
-  > "${_ssl_delivered_certificates_file}.fixed"
+  sed -e "1s/^/$ssl_beg_cert_id\n/" | \
+  sed -e "\$a$ssl_end_cert_id" \
+  > "${_ssl_delivered_certificates_file}.${fext}"
 
-  cat "${_ssl_delivered_certificates_file}.fixed" > "${_ssl_delivered_certificates_file}" && \
-  rm -fr "${_ssl_delivered_certificates_file}.fixed"
+  # Prepared temporary file is written in place of the source file.
+  cat "${_ssl_delivered_certificates_file}.${fext}" \
+  > "${_ssl_delivered_certificates_file}" && \
+  rm -fr "${_ssl_delivered_certificates_file}.${fext}"
 
   return $_STATE
 
