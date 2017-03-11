@@ -6,7 +6,7 @@
 #
 #         fname : "sslmerge"
 #         cdate : "28.01.2017"
-#         mdate : "10.03.2017"
+#         mdate : "11.03.2017"
 #       version : "v1.1c"
 #        author : "Michał Żurawski <michal.zurawski@bxlab.pl>"
 #          site : "https://jboowie.github.io/sslmerge"
@@ -76,10 +76,9 @@ readonly _init_directory="$(dirname "$(readlink -f "$0")")"
 
 # Directory structure.
 readonly _src="${_init_directory}/src"
-readonly _doc="${_init_directory}/doc"
 
 # File with external (user) functions and variables.
-readonly _functions="${_src}/_functions"
+readonly _import_="${_src}/_import_"
 
 # Stores the current date.
 readonly cdate=$(date +%Y%m%d)
@@ -93,8 +92,8 @@ readonly logpath="${logdir}/${logfile}"
 # Script version (master branch).
 readonly version="v1.1c"
 
-# Default configuration file.
-config="${_src}/_config"
+# External configuration file.
+config=""
 
 # Declaration of output variables.
 stdout=""
@@ -550,8 +549,8 @@ function __main__() {
     "__init_params[] = (${__init_params[*]})," \
     "__script_params[] = (${__script_params[*]})"
 
-  # Include src/_functions file.
-  _load "null" "$_functions"
+  # Include src/_import_ file.
+  _load "null" "$_import_"
 
   # Specifies the call parameters of the script, the exact description
   # can be found in _help_ and file README.md.
@@ -611,10 +610,6 @@ function __main__() {
 
   done
 
-  # Without the specified file configuration script fails to execute.
-  # uncomment if you are using the main configuration file.
-  #   _load "info" "$config"
-
   # Running tasks before start user functions.
   _before_init
 
@@ -622,6 +617,9 @@ function __main__() {
   # ````````````````````````````````````````````````````````````````````````````
   # Put here all your variable declarations, function calls
   # and all the other code blocks.
+
+  # Uncomment if you are using the -a|--config script param.
+  _load "info" "$config"
 
   # If it is not given option -o|--output.
   if [[ -z "$_fd" ]] ; then

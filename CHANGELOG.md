@@ -1,4 +1,16 @@
+sslmerge changelog
+===============
+
+## [next-release](https://github.com/jboowie/sslmerge/tree/next-release) (2017-03-11)
+
+- synchronization of template (small fixes)
+
+---------------------------------------------------------------------------------
 ## [v1.1c](https://github.com/jboowie/sslmerge/releases/tag/v1.1c) (2017-03-10)
+
+### News
+
+- last slash of the directory path: **[`#10`](https://github.com/jboowie/bash-template/issues/10)**
 
 ### Bug fixes
 

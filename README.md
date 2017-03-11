@@ -1,5 +1,5 @@
 sslmerge
-----
+===============
 
 [![bash_logotype_new_2.png](https://s29.postimg.org/lgglyiqif/bash_logotype_new_2.png)](https://www.gnu.org/software/bash/)
 
@@ -11,7 +11,9 @@ sslmerge
 ### Version
 
 Latest stable: **v1.1c**  
-Devel branch: **next-release**
+[![Build Status](https://travis-ci.org/jboowie/sslmerge?branch=master)](https://travis-ci.org/jboowie/sslmerge)  
+Devel branch: **next-release**  
+[![Build Status](https://travis-ci.org/jboowie/sslmerge?branch=next-release)](https://travis-ci.org/jboowie/sslmerge)  
 
 ### Usage
 
@@ -24,9 +26,8 @@ Examples of ways to use:
   Examples:
     sslmerge --help
     sslmerge --version
-    sslmerge --cert Root.crt --cert Intermediate1.crt --cert Server.crt
-    sslmerge --cert 01.crt --cert XX.crt --output nginx_bundle.crt --debug
-    sslmerge --cert /tmp/certs/ --output nginx_bundle.crt
+    sslmerge --cert Root.crt --cert Intermediate1.crt --cert Server.crt --output nginx_bundle.crt
+    sslmerge --cert /tmp/certs/ --output /tmp/nginx_bundle.crt
 
   Options:
     -h, --help                  show this message
@@ -41,17 +42,6 @@ Examples of ways to use:
 
   - openssl package
 
-### Project architecture
-
-    |--- sslmerge               # main file (init)
-    |--- README.md              # this simple documentation
-    |--- LICENSE.md             # GNU GENERAL PUBLIC LICENSE, Version 3, 29 June 2007
-    |--- CHANGELOG.md           # notable changes for each version of a project
-    |--- _config.yml            # jekyll’s configuration file
-    |--- src                    # functions, variables and all other attached files to the script
-            |--- _config        # external configuration file
-            |--- _functions     # includes a set of external functions (including the user)
-
 ### Todos
 
   - add better error handling mechanism
@@ -61,6 +51,17 @@ Examples of ways to use:
 ### Problems
 
 See on the *Issues* page.
+
+### Project architecture
+
+    |-- sslmerge               	# main file (init)
+    |-- CHANGELOG.md            # notable changes for each version of a project
+    |-- LICENSE.md              # GNU GENERAL PUBLIC LICENSE, Version 3, 29 June 2007
+    |-- README.md               # this simple documentation
+    |-- _config.yml             # jekyll’s configuration file
+    |-- .travis.yml             # travis-ci configuration for project
+    |-- src                     # includes external project files
+        |-- _import_            # functions, variables and all other attached files to the script
 
 ### License
 
