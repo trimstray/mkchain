@@ -505,11 +505,10 @@ function _help_() {
     $_init_name [option|long-option]
 
   Examples:
-    $_init_name --help
-    $_init_name --version
-    $_init_name --cert Root.crt --cert Intermediate1.crt --cert Server.crt
-    $_init_name --cert 01.crt --cert XX.crt --output nginx_bundle.crt --debug
-    $_init_name --cert /tmp/certs/ --output nginx_bundle.crt
+    sslmerge --help
+    sslmerge --version
+    sslmerge --cert Root.crt --cert Intermediate1.crt --cert Server.crt --output nginx_bundle.crt
+    sslmerge --cert /tmp/certs/ --output /tmp/nginx_bundle.crt
 
   Options:
     -h, --help                  show this message
