@@ -585,7 +585,7 @@ function __main__() {
 
         shift ;;
 
-      -a|--config)
+      -a|--attach)
 
         config=${2:-"$config"}
 
@@ -617,7 +617,7 @@ function __main__() {
   # Put here all your variable declarations, function calls
   # and all the other code blocks.
 
-  # Uncomment if you are using the -a|--config script param.
+  # Uncomment if you are using the -a|--attach script param.
   _load "info" "$config"
 
   # If it is not given option -o|--output.
