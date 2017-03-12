@@ -651,6 +651,9 @@ function __main__() {
 
       if [[ "${#ssl_delivered_certificates[@]}" -ne "0" ]] ; then
 
+        # Stores certificates.
+        _ssl_cert_stack=""
+
         # For better control of the log file (do not use _sprintf).
         for i in "${ssl_delivered_certificates[@]}" ; do
 
@@ -673,7 +676,9 @@ function __main__() {
             # Remove last '/' for better compatibility.
             i=${i%/}
 
-            for j in $(ls -p "$i" | grep -v /) ; do
+            _ssl_cert_stack=($(find "$i" -maxdepth 1 -type f))
+
+            for j in "${_ssl_cert_stack[@]}" ; do
 
               local _ssl_path_plus_name="${i}/${j}"
 
