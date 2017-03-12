@@ -10,7 +10,7 @@ __**sslmerge**__ is a GPLv3 tool to help create the correct chain of SSL certifi
 
 ### Version
 
-Latest stable: **v1.1c**  
+Latest stable: **v1.1d**  
 [![Build Status](https://travis-ci.org/jboowie/sslmerge.svg?branch=master)](https://travis-ci.org/jboowie/sslmerge)  
 Devel branch: **next-release**  
 [![Build Status](https://travis-ci.org/jboowie/sslmerge.svg?branch=next-release)](https://travis-ci.org/jboowie/sslmerge)  

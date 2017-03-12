@@ -3,15 +3,11 @@ sslmerge changelog
 
 ## [next-release](https://github.com/jboowie/sslmerge/tree/next-release) (2017-03-12)
 
+---------------------------------------------------------------------------------
+## [v1.1c](https://github.com/jboowie/sslmerge/releases/tag/v1.1c) (2017-03-12)
+
 - update travis-ci configuration
 - synchronization of template (small fixes)
-
-### Bug fixes
-
-- ls with grep **[`#11`](https://github.com/jboowie/sslmerge/issues/11)**
-
----------------------------------------------------------------------------------
-## [v1.1c](https://github.com/jboowie/sslmerge/releases/tag/v1.1c) (2017-03-10)
 
 ### News
 
@@ -19,6 +15,8 @@ sslmerge changelog
 
 ### Bug fixes
 
+- not found cert file, incorrect directory path **[`#15`](https://github.com/jboowie/sslmerge/issues/15)**
+- ls with grep **[`#11`](https://github.com/jboowie/sslmerge/issues/11)**
 - last slash of the directory path **[`#10`](https://github.com/jboowie/sslmerge/issues/10)**
 - call with -d, --debug param creates an output file **[`#9`](https://github.com/jboowie/sslmerge/issues/9)**
 - -d, --debug options not working **[`#8`](https://github.com/jboowie/sslmerge/issues/8)**

@@ -7,7 +7,7 @@
 #         fname : "sslmerge"
 #         cdate : "28.01.2017"
 #         mdate : "12.03.2017"
-#       version : "v1.1c"
+#       version : "v1.1d"
 #        author : "Michał Żurawski <michal.zurawski@bxlab.pl>"
 #          site : "https://jboowie.github.io/sslmerge"
 #      tab_size : "2"
@@ -90,7 +90,7 @@ readonly logdir="${_init_directory}/log"
 readonly logpath="${logdir}/${logfile}"
 
 # Script version.
-readonly version="v1.1c"
+readonly version="v1.1d"
 
 # External configuration file.
 config=""
