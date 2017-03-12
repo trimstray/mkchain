@@ -27,4 +27,5 @@ after_success:
   - test $TRAVIS_PULL_REQUEST = false && git push
 
 script:
- - bash -c 'shellcheck -s bash -x src/_import_ sslmerge'
+  - shellcheck --version
+  - shellcheck -s bash -e 1090 -x src/_import_ sslmerge'
