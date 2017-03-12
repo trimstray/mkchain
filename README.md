@@ -59,7 +59,7 @@ See on the *Issues* page.
     |-- LICENSE.md              # GNU GENERAL PUBLIC LICENSE, Version 3, 29 June 2007
     |-- README.md               # this simple documentation
     |-- _config.yml             # jekyll’s configuration file
-    |-- .gitignore				# ignore untracked files e.g.log/ directory
+    |-- .gitignore				# ignore untracked files e.g. log/ directory
     |-- .travis.yml             # travis-ci configuration for project
     |-- src                     # includes external project files
         |-- _import_            # functions, variables and all other attached files to the script
