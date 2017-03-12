@@ -676,7 +676,7 @@ function __main__() {
             # Remove last '/' for better compatibility.
             i=${i%/}
 
-            _ssl_cert_stack=($(find "$i" -maxdepth 1 -type f))
+            _ssl_cert_stack=($(find "$i" -maxdepth 1 -type f -printf "%f\n"))
 
             for j in "${_ssl_cert_stack[@]}" ; do
 
