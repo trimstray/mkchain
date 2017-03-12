@@ -6,6 +6,10 @@ sslmerge changelog
 - update travis-ci configuration
 - synchronization of template (small fixes)
 
+### Bug fixes
+
+- ls with grep **[`#11`](https://github.com/jboowie/sslmerge/issues/11)**
+
 ---------------------------------------------------------------------------------
 ## [v1.1c](https://github.com/jboowie/sslmerge/releases/tag/v1.1c) (2017-03-10)
 
