@@ -16,21 +16,19 @@ language: bash
 matrix:
     include:
       - os: linux
-        dist: trusty
-        sudo: required
+        dist: debian-sid
+        sudo: false
 
 addons:
   apt:
+    sources:
+      - debian-sid
     packages:
+      - shellcheck
       - openssl
-
-before_install:
-  - sudo apt-add-repository "deb http://archive.ubuntu.com/ubuntu trusty-backports main restricted universe multiverse"
-  - sudo apt-get -qq update
-  - sudo apt-get -t trusty-backports install shellcheck
 
 after_success:
   - test $TRAVIS_PULL_REQUEST = false && git push
 
 script:
-  - shellcheck sslmerge
+ - bash -c 'shellcheck -s bash -x src/_import_ sslmerge'
