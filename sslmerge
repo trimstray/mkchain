@@ -94,6 +94,7 @@ readonly version="v1.1c"
 
 # External configuration file.
 config=""
+load_state=0
 
 # Declaration of output variables.
 stdout=""
@@ -587,6 +588,8 @@ function __main__() {
 
       -a|--attach)
 
+        load_state="1"
+
         config=${2:-"$config"}
 
         shift 2 ;;
@@ -617,8 +620,13 @@ function __main__() {
   # Put here all your variable declarations, function calls
   # and all the other code blocks.
 
-  # Uncomment if you are using the -a|--attach script param.
-  _load "info" "$config"
+  # In this section we add all external files (for -a|--attach script param).
+  if [[ "$load_state" == "1" ]] ; then
+  
+    # _load "info" "/tmp/file.cfg"
+    _load "info" "$config"
+    
+  fi
 
   # If it is not given option -o|--output.
   if [[ -z "$_fd" ]] ; then
