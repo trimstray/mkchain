@@ -1,9 +1,9 @@
 sslmerge
 ===============
 
-[![bash_logotype_new_2.png](https://s29.postimg.org/lgglyiqif/bash_logotype_new_2.png)](https://www.gnu.org/software/bash/)
+[![bash_logotype](doc/bash_logotype.png)](https://www.gnu.org/software/bash/)
 
-[**sslmerge**](https://jboowie.github.io/sslmerge) is a tool to help create the correct chain of SSL certificates delivered.
+__**sslmerge**__ is a GPLv3 tool to help create the correct chain of SSL certificates delivered.
 
   - simple to use
   - does not send the certificates to the outside (running locally)
@@ -59,10 +59,12 @@ See on the *Issues* page.
     |-- LICENSE.md              # GNU GENERAL PUBLIC LICENSE, Version 3, 29 June 2007
     |-- README.md               # this simple documentation
     |-- _config.yml             # jekyll’s configuration file
-    |-- .gitignore				# ignore untracked files e.g. log/ directory
+    |-- .gitignore              # ignore untracked files e.g. log/ directory
     |-- .travis.yml             # travis-ci configuration for project
     |-- src                     # includes external project files
         |-- _import_            # functions, variables and all other attached files to the script
+    |-- doc                     # includes documentation, images and manuals
+        |-- bash_logotype.png   # bash logo (added to README.md)
 
 ### License
 
