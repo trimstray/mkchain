@@ -28,4 +28,4 @@ after_success:
 
 script:
   - shellcheck --version
-  - shellcheck -s bash -e 1090 -x src/_import_ sslmerge'
+  - shellcheck -s bash -e 1090 -x src/_import_ sslmerge
