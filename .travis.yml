@@ -9,6 +9,7 @@ branches:
   only:
     - master
     - next-release
+    - travis-ci
 
 language: bash
 
