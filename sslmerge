@@ -6,7 +6,7 @@
 #
 #         fname : "sslmerge"
 #         cdate : "28.01.2017"
-#         mdate : "11.03.2017"
+#         mdate : "12.03.2017"
 #       version : "v1.1c"
 #        author : "Michał Żurawski <michal.zurawski@bxlab.pl>"
 #          site : "https://jboowie.github.io/sslmerge"
@@ -393,7 +393,7 @@ function _load() {
   local _type="$1"
   local _filename="$2"
 
-  if [[ -e "$_filename" ]] ; then
+  if [[ ! -z "$_filename" ]] && [[ -e "$_filename" ]] ; then
 
     # If the file exists is loaded.
     . "$_filename" && \
@@ -514,7 +514,7 @@ function _help_() {
     -h, --help                  show this message
     -v, --version               show script version
     -d, --debug {0,7}           display information on the screen (debug mode)
-    -a, --config [file]         attach an external file to the script
+    -a, --attach [file]         attach an external file to the script
     -c, --cert                  stores a cert single file or directory with certs
     -o, --output                saves the result (chain) to file
 
@@ -554,7 +554,7 @@ function __main__() {
   # Specifies the call parameters of the script, the exact description
   # can be found in _help_ and file README.md.
   local _short_opt="hvd::a:c:o:"
-  local _long_opt="help,version,debug::,config:,cert:,output:"
+  local _long_opt="help,version,debug::,attach:,cert:,output:"
 
  _GETOPT_PARAMS=$(getopt -o "$_short_opt" --long "$_long_opt" \
                   -n "${_init_name}" -- "${__script_params[@]}")
