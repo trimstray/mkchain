@@ -22,7 +22,6 @@ addons:
   apt:
     packages:
       - openssl
-      - curl
 
 before_install:
   - sudo apt-add-repository "deb http://archive.ubuntu.com/ubuntu trusty-backports main restricted universe multiverse"
