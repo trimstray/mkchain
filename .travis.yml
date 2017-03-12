@@ -13,11 +13,7 @@ branches:
 
 language: bash
 
-matrix:
-    include:
-      - os: linux
-        dist: debian-sid
-        sudo: false
+sudo: false
 
 addons:
   apt:
