@@ -1,8 +1,9 @@
 sslmerge changelog
 ===============
 
-## [next-release](https://github.com/jboowie/sslmerge/tree/next-release) (2017-03-11)
+## [next-release](https://github.com/jboowie/sslmerge/tree/next-release) (2017-03-12)
 
+- update travis-ci configuration
 - synchronization of template (small fixes)
 
 ---------------------------------------------------------------------------------

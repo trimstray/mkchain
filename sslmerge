@@ -86,10 +86,10 @@ readonly cdate=$(date +%Y%m%d)
 # Variables related to the log file. Divided into three parts due
 # to the better possibility of manipulation for the user.
 readonly logfile="${_init_name}.${cdate}.log"
-readonly logdir="/var/log/${_init_name}"
+readonly logdir="${_init_directory}/log"
 readonly logpath="${logdir}/${logfile}"
 
-# Script version (master branch).
+# Script version.
 readonly version="v1.1c"
 
 # External configuration file.

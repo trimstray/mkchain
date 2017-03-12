@@ -1,7 +1,3 @@
-env:
-  - X_NAME=sslmerge
-  - X_SHELL=bash
-
 notifications:
   email:
     recipients:
@@ -14,7 +10,7 @@ branches:
     - master
     - next-release
 
-language: {{X_SHELL}}
+language: bash
 
 matrix:
     include:
@@ -26,17 +22,15 @@ addons:
   apt:
     packages:
       - openssl
+      - curl
 
 before_install:
   - sudo apt-add-repository "deb http://archive.ubuntu.com/ubuntu trusty-backports main restricted universe multiverse"
   - sudo apt-get -qq update
   - sudo apt-get -t trusty-backports install shellcheck
-  - sudo pip install bashate
 
 after_success:
   - test $TRAVIS_PULL_REQUEST = false && git push
 
 script:
-  - shellcheck {{X_NAME}}
-  - bashate {{X_NAME}}
-  - bash {{X_NAME}}
+  - shellcheck sslmerge
