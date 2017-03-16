@@ -339,3 +339,28 @@ function sslChainGenerate() {
   return $_STATE
 
 }
+
+# ``````````````````````````````````````````````````````````````````````````````
+# Function name: sslChainSearch()
+#
+# Description:
+#   This function is responsible for search and adding
+#   the missing certificates.
+#
+# Usage:
+#   sslChainSearch
+#
+# Examples:
+#   sslChainSearch
+#
+
+function sslChainSearch() {
+
+  local _FUNCTION_ID="sslChainSearch"
+  local _STATE=0
+
+  ### Block of declarations
+
+  return $_STATE
+
+}
