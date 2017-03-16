@@ -537,8 +537,8 @@ function __main__() {
 
   # Specifies the call parameters of the script, the exact description
   # can be found in _help_ and file README.md.
-  local _short_opt="hvd::c:o:"
-  local _long_opt="help,version,debug::,cert:,output:"
+  local _short_opt="hvdc:o:"
+  local _long_opt="help,version,debug,cert:,output:"
 
  _GETOPT_PARAMS=$(getopt -o "$_short_opt" --long "$_long_opt" \
                   -n "${_init_name}" -- "${__script_params[@]}")
