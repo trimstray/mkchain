@@ -243,6 +243,15 @@ function sslChainLast() {
         "$_FUNCTION_ID()" \
         "found last relationship: ${_key_subject} <==> ${_key_issuer}"
 
+    else
+
+      _sprintf "stop" "not found server certificate"
+
+      _logger "stop" \
+        "$_FUNCTION_ID()" \
+        "not found server certificate" && \
+        _exit_ 1
+
     fi
 
   done
