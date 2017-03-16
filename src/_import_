@@ -18,6 +18,9 @@ ssl_end_cert_id="-----END CERTIFICATE-----"
 # Temporary file extension.
 fext="tmp"
 
+# Directory with ssl certificate issuers.
+readonly ssl_issuers_db="${_src}/certs"
+
 
 ################################################################################
 ######################## Definitions of user functions #########################
@@ -360,7 +363,7 @@ function sslChainSearch() {
   local _STATE=0
 
   ### Block of declarations
-
+  
   return $_STATE
 
 }
