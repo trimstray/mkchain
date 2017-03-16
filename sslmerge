@@ -6,7 +6,7 @@
 #
 #         fname : "sslmerge"
 #         cdate : "28.01.2017"
-#         mdate : "12.03.2017"
+#         mdate : "16.03.2017"
 #       version : "v1.1d"
 #        author : "Michał Żurawski <michal.zurawski@bxlab.pl>"
 #          site : "https://jboowie.github.io/sslmerge"
@@ -48,9 +48,9 @@ set -o nounset
 # set -o xtrace
 
 # Internal field separator (more flexible).
-IFS_ORIG="$IFS"
-IFS_HACK=$'\n\t'
-IFS="$IFS_HACK"
+#   IFS_ORIG="$IFS"
+#   IFS_HACK=$'\n\t'
+#   IFS="$IFS_HACK"
 
 # PATH env variable setup.
 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
@@ -67,7 +67,7 @@ umask 0027
 ################################################################################
 
 # The tables that store call parameters.
-__init_params=
+__init_params=()
 __script_params=("$@")
 
 # Store the name of the script and directory call.
@@ -98,7 +98,6 @@ load_state=0
 
 # Declaration of output variables.
 stdout=""
-stdopt=""
 
 
 ################################################################################
@@ -185,27 +184,15 @@ function _logger() {
   if [[ ! -d "$logdir" && ! -L "$logdir" ]] ; then
     mkdir "$logdir" ; fi
 
-  IFS="$IFS_ORIG"
-
+  # Normal debug mode (output the same as the contents of the log file).
   if [[ "$stdout" == "debug" ]] ; then
 
-    # Verbose mode for debug (like a 'bash -x').
-    if [[ "$stdopt" -eq 7 ]] ; then
-
-      set -o xtrace
-
-    # Normal debug mode (output the same as the contents of the log file).
-    else
-    # elif [[ "$stdopt" -eq 0 ]] ; then
-
-      printf "%s  %s:  [%s] %s\n" \
-             "$(date +"%d/%m/%y %X")" \
-             "$_init_name" \
-             "$converts_type" \
-             "$info_to_log" \
-             | tee -a "$logpath"   
-
-    fi
+    printf "%s  %s:  [%s] %s\n" \
+           "$(date +"%d/%m/%y %X")" \
+           "$_init_name" \
+           "$converts_type" \
+           "$info_to_log" \
+           | tee -a "$logpath"   
 
   # The decision whether an INFO is to be only log to a file
   # or to a file and to standard output.
@@ -221,12 +208,9 @@ function _logger() {
 
   fi
 
-  IFS="$IFS_HACK"
-
   return $_STATE
 
 }
-
 
 # ``````````````````````````````````````````````````````````````````````````````
 # Function name: _exit_()
@@ -242,7 +226,6 @@ function _logger() {
 #
 
 function _exit_() { _STATUS="$1" ; exit "$_STATUS" ; }
-
 
 # ``````````````````````````````````````````````````````````````````````````````
 # Function name: _get_trap_SIG()
@@ -264,7 +247,8 @@ function _get_trap_SIG() {
   local _STATE="${_STATUS:-}"
 
   # Unset variables (e.g. global).
-  local __vars=("$IFS_ORIG" "$IFS_HACK" "$IFS" "$PATH")
+  # local __vars=("$IFS_ORIG" "$IFS_HACK" "$IFS" "$PATH")
+  local __vars=("$PATH")
 
   for i in "${__vars[@]}" ; do unset i ; done
 
@@ -514,8 +498,7 @@ function _help_() {
   Options:
     -h, --help                  show this message
     -v, --version               show script version
-    -d, --debug {0,7}           display information on the screen (debug mode)
-    -a, --attach [file]         attach an external file to the script
+    -d, --debug                 display information on the screen (debug mode)
     -c, --cert                  stores a cert single file or directory with certs
     -o, --output                saves the result (chain) to file
 
@@ -554,8 +537,8 @@ function __main__() {
 
   # Specifies the call parameters of the script, the exact description
   # can be found in _help_ and file README.md.
-  local _short_opt="hvd::a:c:o:"
-  local _long_opt="help,version,debug::,attach:,cert:,output:"
+  local _short_opt="hvd::c:o:"
+  local _long_opt="help,version,debug::,cert:,output:"
 
  _GETOPT_PARAMS=$(getopt -o "$_short_opt" --long "$_long_opt" \
                   -n "${_init_name}" -- "${__script_params[@]}")
@@ -581,18 +564,9 @@ function __main__() {
 
       -d|--debug)
 
-        stdout=${1:+"debug"}
-        stdopt="${4:-0}"
+        stdout="debug"
 
         shift ;;
-
-      -a|--attach)
-
-        load_state="1"
-
-        config=${2:-"$config"}
-
-        shift 2 ;;
 
       -c|--cert)
 
