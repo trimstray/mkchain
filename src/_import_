@@ -142,7 +142,7 @@ function sslInfo() {
           grep "$_ssl_ident_subject_string" | egrep -o "$_ssl_regexp_string" | \
           cut -d "=" -f2 | \
           sed 's/  *//g' | \
-          awk -F '/' '{print $1}')
+          awk -F '[/,]' '{print $1}')
 
     _logger "info" \
       "$_FUNCTION_ID()" \
