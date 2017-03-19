@@ -491,15 +491,15 @@ function _help_() {
   Examples:
     sslmerge --help
     sslmerge --version
-    sslmerge --cert Root.crt --cert Intermediate1.crt --cert Server.crt --output nginx_bundle.crt
-    sslmerge --cert /tmp/certs/ --output /tmp/nginx_bundle.crt
+    sslmerge --in Root.crt --in Intermediate1.crt --in Server.crt --out nginx_bundle.crt
+    sslmerge --in /tmp/certs/ --out /tmp/nginx_bundle.crt
 
   Options:
     -h, --help                  show this message
     -v, --version               show script version
     -d, --debug                 display information on the screen (debug mode)
-    -c, --cert                  stores a cert single file or directory with certs
-    -o, --output                saves the result (chain) to file
+    -i, --in                    add certificates to merge (multiple files or directory)
+    -o, --out                   saves the result (chain) to file
 
 
   $_init_name, Copyright (C) 2017  Michał Żurawski <git@bxlab.pl>
@@ -536,8 +536,8 @@ function __main__() {
 
   # Specifies the call parameters of the script, the exact description
   # can be found in _help_ and file README.md.
-  local _short_opt="hvdc:o:"
-  local _long_opt="help,version,debug,cert:,output:"
+  local _short_opt="hvdi:o:"
+  local _long_opt="help,version,debug,in:,out:"
 
  _GETOPT_PARAMS=$(getopt -o "$_short_opt" --long "$_long_opt" \
                   -n "${_init_name}" -- "${__script_params[@]}")
@@ -567,14 +567,16 @@ function __main__() {
 
         shift ;;
 
-      -c|--cert)
+      -i|--in)
 
         ssl_delivered_certificates+=("$2")
+
         shift 2 ;;
 
-      -o|--output)
+      -o|--out)
 
         _fd="$2"
+
         shift 2 ;;
 
       '') shift ; break ;;

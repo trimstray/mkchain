@@ -26,15 +26,15 @@ Examples of ways to use:
   Examples:
     sslmerge --help
     sslmerge --version
-    sslmerge --cert Root.crt --cert Intermediate1.crt --cert Server.crt --output nginx_bundle.crt
-    sslmerge --cert /tmp/certs/ --output /tmp/nginx_bundle.crt
+    sslmerge --in Root.crt --in Intermediate1.crt --in Server.crt --out nginx_bundle.crt
+    sslmerge --in /tmp/certs/ --out /tmp/nginx_bundle.crt
 
   Options:
     -h, --help                  show this message
     -v, --version               show script version
     -d, --debug                 display information on the screen (debug mode)
-    -c, --cert                  stores a cert single file or directory with certs
-    -o, --output                saves the result (chain) to file
+    -i, --in                    add certificates to merge (multiple files or directory)
+    -o, --out                   saves the result (chain) to file
 ```
 
 ### Requirements
