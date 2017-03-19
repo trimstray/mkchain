@@ -19,7 +19,7 @@ ssl_end_cert_id="-----END CERTIFICATE-----"
 fext="tmp"
 
 # Directory with ssl certificate issuers.
-readonly ssl_issuers_db="${_src}/certs"
+readonly ssl_issuers_certs="${_src}/certs"
 
 
 ################################################################################
