@@ -1,7 +1,17 @@
 sslmerge changelog
 ===============
 
-## [next-release](https://github.com/zurawsky/sslmerge/tree/next-release) (2017-03-12)
+## [next-release](https://github.com/zurawsky/sslmerge/tree/next-release) (2017-03-20)
+
+### News
+
+- not found server certificate info **[`#21`](https://github.com/zurawsky/sslmerge/issues/21)**
+- synchronization with the template **[`#18`](https://github.com/zurawsky/sslmerge/issues/18)**
+
+### Bug fixes
+
+- carriage return (^M) **[`#22`](https://github.com/zurawsky/sslmerge/issues/22)**
+- -d, --debug problem (useless information) **[`#17`](https://github.com/zurawsky/sslmerge/issues/17)**
 
 ---------------------------------------------------------------------------------
 ## [v1.1c](https://github.com/zurawsky/sslmerge/releases/tag/v1.1c) (2017-03-12)
