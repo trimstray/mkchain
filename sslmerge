@@ -6,10 +6,9 @@
 #
 #         fname : "sslmerge"
 #         cdate : "28.01.2017"
-#         mdate : "16.03.2017"
+#         mdate : "19.03.2017"
 #       version : "v1.1d"
-#        author : "Michał Żurawski <michal.zurawski@bxlab.pl>"
-#          site : "https://jboowie.github.io/sslmerge"
+#        author : "Michał Żurawski <git@bxlab.pl>"
 #      tab_size : "2"
 #     soft_tabs : "YES"
 #
@@ -503,7 +502,7 @@ function _help_() {
     -o, --output                saves the result (chain) to file
 
 
-  $_init_name, Copyright (C) 2017  Michał Żurawski
+  $_init_name, Copyright (C) 2017  Michał Żurawski <git@bxlab.pl>
 
   This program comes with ABSOLUTELY NO WARRANTY.
   This is free software, and you are welcome to redistribute it
