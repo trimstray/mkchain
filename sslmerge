@@ -95,9 +95,10 @@ load_state=0
 # Declaration of output variables (--debug and --verbose params).
 stdout_mode=""
 printf_mode=""
+s_color="true"
 
 # Declaration of total execution time.
-time_mode=0
+time_tracking="true"
 
 
 ################################################################################
@@ -283,7 +284,7 @@ function _sprintf() {
 
   local _s_type="$1"
   local _s_info="$2"
-  local _s_color="true"
+  local s_color="true"
 
   # Determine the type of character and color for each type
   # of output information.
@@ -355,7 +356,7 @@ function _sprintf() {
         # If not, just display only the head, warn or stop string.
         if [[ "$_s_type" == "head" ]] ; then
 
-          if [[ "$_s_color" == "true" ]] ; then
+          if [[ "$s_color" == "true" ]] ; then
 
             c_trgb="1;39"
 
@@ -369,7 +370,7 @@ function _sprintf() {
 
         elif [[ "$_s_type" == "warn" ]] ; then
 
-          if [[ "$_s_color" == "true" ]] ; then
+          if [[ "$s_color" == "true" ]] ; then
 
             c_trgb="1;43"
 
@@ -383,7 +384,7 @@ function _sprintf() {
 
         elif [[ "$_s_type" == "stop" ]] ; then
 
-          if [[ "$_s_color" == "true" ]] ; then
+          if [[ "$s_color" == "true" ]] ; then
 
             c_trgb="1;41"
 
@@ -666,7 +667,8 @@ function __main__() {
     "__init_params[] = (${__init_params[*]})," \
     "__script_params[] = (${__script_params[*]})"
 
-  _begtime=$(date +%s)
+  if [[ "$time_tracking" == "true" ]] ; then
+    _begtime=$(date +%s) ; fi
 
   # Specifies the call parameters of the script, the exact description
   # can be found in _help_ and file README.md.
@@ -850,13 +852,17 @@ function __main__() {
 
   # ````````````````````````````````````````````````````````````````````````````
 
-  # Counting the execution time.
-  _endtime=$(date +%s)
-  _totaltime=$((_endtime - _begtime))
+  if [[ "$time_tracking" == "true" ]] ; then
 
-  # Print time header.
-  printf '\e[m\e[1;39mTOTAL TIME: %dh:%dm:%ds\e[m\n' \
-         $((_totaltime/3600)) $((_totaltime%3600/60)) $((_totaltime%60))
+    # Counting the execution time.
+    _endtime=$(date +%s)
+    _totaltime=$((_endtime - _begtime))
+
+    # Print time header.
+    printf '\e[m\e[1;39mTOTAL TIME: %dh:%dm:%ds\e[m\n' \
+            $((_totaltime/3600)) $((_totaltime%3600/60)) $((_totaltime%60))
+
+  fi
 
   return $_STATE
 
