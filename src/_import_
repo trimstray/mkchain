@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 ################################################################################
 ######################## Definitions of user variables #########################
 ################################################################################
@@ -26,7 +28,19 @@ readonly ssl_issuers_certs="${_src}/certs"
 ######################## Definitions of user functions #########################
 ################################################################################
 
-# Set maximum row size in cert file.
+# ``````````````````````````````````````````````````````````````````````````````
+# Function name: sslSetRowSize()
+#
+# Description:
+#   Set maximum row size in cert file.
+#
+# Usage:
+#   sslSetRowSize
+#
+# Examples:
+#   sslSetRowSize
+#
+
 function sslSetRowSize() {
 
   local _FUNCTION_ID="sslSetRowSize"
@@ -57,6 +71,18 @@ function sslSetRowSize() {
   return $_STATE
 
 }
+
+# ``````````````````````````````````````````````````````````````````````````````
+# Function name: sslCheck()
+#
+# Description:
+#
+# Usage:
+#   sslCheck
+#
+# Examples:
+#   sslCheck
+#
 
 function sslCheck() {
 
@@ -98,7 +124,19 @@ function sslCheck() {
 
 }
 
-# Extract information about certificates needed to make a proper chain.
+# ``````````````````````````````````````````````````````````````````````````````
+# Function name: sslInfo()
+#
+# Description:
+#   Extract information about certificates needed to make a proper chain.
+#
+# Usage:
+#   sslInfo function_name params
+#
+# Examples:
+#   sslInfo "CheckConn 172.20.20.50 22"
+#
+
 function sslInfo() {
 
   local _FUNCTION_ID="sslInfo"
@@ -173,7 +211,19 @@ function sslInfo() {
 
 }
 
-# It makes a proper chain of delivered certificates.
+# ``````````````````````````````````````````````````````````````````````````````
+# Function name: sslChain()
+#
+# Description:
+#   It makes a proper chain of delivered certificates.
+#
+# Usage:
+#   sslChain
+#
+# Examples:
+#   sslChain
+#
+
 function sslChain() {
 
   local _FUNCTION_ID="sslChain"
@@ -205,7 +255,19 @@ function sslChain() {
 
 }
 
-# Responsible for establishing the Server/Owner Certificate.
+# ``````````````````````````````````````````````````````````````````````````````
+# Function name: sslChainLast()
+#
+# Description:
+#   Responsible for establishing the Server/Owner Certificate.
+#
+# Usage:
+#   sslChainLast
+#
+# Examples:
+#   sslChainLast
+#
+
 function sslChainLast() {
 
   local _FUNCTION_ID="sslChainLast"
@@ -267,7 +329,19 @@ function sslChainLast() {
 
 }
 
-# Set relationship between certificates.
+# ``````````````````````````````````````````````````````````````````````````````
+# Function name: sslChainRelation()
+#
+# Description:
+#   Set relationship between certificates.
+#
+# Usage:
+#   sslChainRelation
+#
+# Examples:
+#   sslChainRelation
+#
+
 function sslChainRelation() {
 
   local _FUNCTION_ID="sslChainRelation"
@@ -330,7 +404,19 @@ function sslChainRelation() {
 
 }
 
-# It generate a proper chain of delivered certificates.
+# ``````````````````````````````````````````````````````````````````````````````
+# Function name: sslChainGenerate()
+#
+# Description:
+#   It generate a proper chain of delivered certificates.
+#
+# Usage:
+#   sslChainGenerate
+#
+# Examples:
+#   sslChainGenerate
+#
+
 function sslChainGenerate() {
 
   local _FUNCTION_ID="sslChainGenerate"
@@ -355,31 +441,6 @@ function sslChainGenerate() {
 
   done
 
-  return $_STATE
-
-}
-
-# ``````````````````````````````````````````````````````````````````````````````
-# Function name: sslChainSearch()
-#
-# Description:
-#   This function is responsible for search and adding
-#   the missing certificates.
-#
-# Usage:
-#   sslChainSearch
-#
-# Examples:
-#   sslChainSearch
-#
-
-function sslChainSearch() {
-
-  local _FUNCTION_ID="sslChainSearch"
-  local _STATE=0
-
-  ### Block of declarations
-  
   return $_STATE
 
 }
