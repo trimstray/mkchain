@@ -558,7 +558,7 @@ function _help_() {
   local _FUNCTION_ID="_help_"
   local _STATE=0
 
-  printf "%s" "\                   
+  printf "%s" "\
 
   Usage:
     $_init_name <option|long-option>
