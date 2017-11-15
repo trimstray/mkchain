@@ -93,8 +93,6 @@ function sslCheck() {
 
   if [[ "$_state" -eq "0" ]] ; then
 
-    _sprintf "head" "correct certificate: $_ssl_delivered_certificates_file"
-
     _logger "info" \
       "$_FUNCTION_ID()" \
       "correct certificate: $_ssl_delivered_certificates_file"
@@ -107,8 +105,7 @@ function sslCheck() {
 
     _logger "stop" \
       "$_FUNCTION_ID()" \
-      "bad certificate (maybe broken): $_ssl_delivered_certificates_file" && \
-      _exit_ 1
+      "bad certificate (maybe broken): $_ssl_delivered_certificates_file"
 
   fi
 
@@ -159,7 +156,6 @@ function sslInfo() {
     _key_path="$i"
     _key_path_name="$(basename "$i")"
 
-    _sprintf "head" "get information from the $_key_path_name" && \
     _logger "info" \
       "$_FUNCTION_ID()" \
       "get information from the $_key_path_name"
@@ -183,10 +179,6 @@ function sslInfo() {
 
     # Assign an element to the array with 'paht:issuer:subject' notation.
     _ssl_attr+=("${_key_path}:${_key_issuer}:${_key_subject}")
-
-    _sprintf "info" " path: ${_key_path_name}"
-    _sprintf "info" " issuer: ${_key_issuer}"
-    _sprintf "info" " subject: ${_key_subject}"
 
     _logger "info" \
       "$_FUNCTION_ID()" \
@@ -233,8 +225,6 @@ function sslChain() {
 
   # local _last_issuer=""
   local _last_subject=""
-
-  _sprintf "head" "creating a chain of delivered certificates"
 
   # Looking for a server certificate (last certificate of the chain).
   sslChainLast
@@ -293,13 +283,6 @@ function sslChainLast() {
 
       _logger "info" \
         "$_FUNCTION_ID()" \
-        "found server certificate: ${_key_subject}"
-
-      _sprintf "info" " found server certificate: ${_key_subject}"
-      # _sprintf "info" " last relationship: ${_key_subject} <==> ${_key_issuer}"
-
-      _logger "info" \
-        "$_FUNCTION_ID()" \
         "found last relationship: ${_key_subject} <==> ${_key_issuer}"
 
       _server_cert_state=1
@@ -314,8 +297,7 @@ function sslChainLast() {
 
     _logger "stop" \
       "$_FUNCTION_ID()" \
-      "not found server certificate" && \
-      _exit_ 1
+      "not found server certificate"
 
   fi
 
@@ -366,10 +348,6 @@ function sslChainRelation() {
       # on the last field 'Subject' of the previous certificate.
       if [[ "$_key_subject" == "$_last_subject" ]] ; then
 
-        _sprintf "info" " found relationship: $_key_subject <==> $_key_issuer"
-
-        _sprintf "info" " cert file: $_key_path"
-
         # Assign an element to the array with 'paht:issuer:subject' notation.
         _ssl_attr_sorted+=("${_key_path}:${_key_issuer}:${_last_subject}")
 
@@ -416,8 +394,6 @@ function sslChainGenerate() {
   local _FUNCTION_ID="sslChainGenerate"
   local _STATE=0
 
-  _sprintf "head" "generating $_fd file with the correct chain"
-
   # The mechanism involved in the location of sorted items.
   for i in "${ssl_attr_sorted[@]}" ; do
 
@@ -427,8 +403,6 @@ function sslChainGenerate() {
     _logger "info" \
       "$_FUNCTION_ID()" \
       "add $_path"
-
-    _sprintf "info" " add: $_path"
 
     # alternative: (cat "$_absolute_path" ; echo) >> "$_fd"
     cat "$_absolute_path" >> "$_fd"
