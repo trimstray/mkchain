@@ -753,11 +753,11 @@ function __main__() {
   if [[ -z "$_fd" ]] ; then
 
     # If the file/directory is not valid.
-    _sprintf "stop" "not specified -o|--output param"
+    _sprintf "stop" "not specified -o|--out param"
 
     _logger "stop" \
       "$_FUNCTION_ID()" \
-      "not specified -o|--output param" && _exit_ 1
+      "not specified -o|--out param"
 
   else
 

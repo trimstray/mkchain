@@ -4,9 +4,6 @@
 ######################## Definitions of user variables #########################
 ################################################################################
 
-# Define output file handler.
-_fd=""
-
 # Define array with empty values.
 ssl_delivered_certificates_list=() ; ssl_attr=() ; ssl_attr_sorted=()
 
