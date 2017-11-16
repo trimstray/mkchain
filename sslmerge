@@ -569,10 +569,10 @@ function _help_() {
     $_init_name --in /tmp/certs/ --out /tmp/nginx_bundle.crt
 
   Options:
-        --help                      show this message
-        --debug                     displays information on the screen (debug mode)
-    -i, --in                        add certificates to merge (multiple files or directory)
-    -o, --out                       saves the result (chain) to file
+        --help        show this message
+        --debug       displays information on the screen (debug mode)
+    -i, --in          add certificates to merge (multiple files or directory)
+    -o, --out         saves the result (chain) to file
 
 
   This program comes with ABSOLUTELY NO WARRANTY.
