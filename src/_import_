@@ -281,6 +281,8 @@ function sslChainLast() {
       # _last_issuer="$_key_issuer"
       _last_subject="$_key_subject"
 
+      printf "Subject:(%s) -> Issuer:(%s)\n" "${_key_subject}" "${_key_issuer}"
+
       _logger "info" \
         "$_FUNCTION_ID()" \
         "found last relationship: ${_key_subject} <==> ${_key_issuer}"
@@ -350,6 +352,8 @@ function sslChainRelation() {
 
         # Assign an element to the array with 'paht:issuer:subject' notation.
         _ssl_attr_sorted+=("${_key_path}:${_key_issuer}:${_last_subject}")
+
+        printf "Subject:(%s) -> Issuer:(%s)\n" "${_last_subject}" "${_key_issuer}"
 
         _logger "info" \
           "$_FUNCTION_ID()" \
