@@ -336,6 +336,8 @@ function sslChainRelation() {
   local _ssl_attr_num="0"
   local _ssl_keep_num="0"
 
+  printf "%s %s\n" "--" "-------------"
+
   while [[ "$_ssl_attr_num" -lt "${#ssl_attr[@]}" ]] ; do
 
     # Extracting data for each element of the array.
@@ -361,12 +363,10 @@ function sslChainRelation() {
         # Assign an element to the array with 'paht:issuer:subject' notation.
         _ssl_attr_sorted+=("${_key_path}:${_key_issuer}:${_last_subject}")
 
-        printf "%s" "\
--| Key Info:
- | P:(${_key_path_name})
- | S:(${_last_subject}:${_key_subject_hash})
- | I:(${_key_issuer}:${_key_issuer_hash})
-"
+        printf "  | \t\t (%s)\n" ${_key_path_name}
+        printf "  | S:(\e[1;36m%s\e[m):(\e[1;39m%s\e[m)\n" ${_key_subject_hash} ${_last_subject}
+        printf "  | I:(\e[1;36m%s\e[m):(\e[1;30m%s\e[m)\n" ${_key_issuer_hash} ${_key_issuer}
+        printf "%s %s\n" "--" "-------------"
 
         _logger "info" \
           "$_FUNCTION_ID()" \
