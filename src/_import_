@@ -352,9 +352,10 @@ function sslChainRelation() {
         _ssl_attr_sorted+=("${_key_path}:${_key_issuer}:${_last_subject}")
 
         printf "%s" "\
--| S:(${_last_subject})
-  \\
-   I:(${_key_issuer})
+-| Key Info:
+ | P:(${_key_path})
+ | S:(${_last_subject})
+ | I:(${_key_issuer})
 "
 
         _logger "info" \
