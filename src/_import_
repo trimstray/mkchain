@@ -365,16 +365,24 @@ function sslChainRelation() {
       if [[ "$_key_subject" == "$_last_subject" ]] ; then
 
         if [[ "$_last_subject" == *"."* ]] ; then
+
           _key_type="Identity Certificate"
           _key_type_ident="true"
+
         elif [[ "$_last_subject" == "$_key_issuer" ]] ; then
+
           _key_type="Root Certificate"
           _key_type_root="true"
+
         elif [[ "$_last_subject" != "$_key_issuer" ]] ; then
+
           _key_type="Intermediate Certificate"
           _key_type_inter="true"
+
         else
+
           _key_type="Unknown Certificate"
+
         fi
 
         # Assign an element to the array with 'paht:issuer:subject' notation.
@@ -407,27 +415,27 @@ function sslChainRelation() {
 
   if [[ "$_key_type_ident" == "false" ]] ; then
 
-    _sprintf "warn" "not found identity (end-user, server) certificate"
+    printf "  \e[1;44m%s\e[m\n" "not found identity (end-user, server) certificate"
 
     _logger "warn" \
       "$_FUNCTION_ID()" \
       "not found identity (end-user, server) certificate"
 
-  elif [[ "$_key_type_root" == "false" ]] ; then
-
-    _sprintf "warn" "not found root certificate"
-
-    _logger "warn" \
-      "$_FUNCTION_ID()" \
-      "not found root certificate"
-
   elif [[ "$_key_type_inter" == "false" ]] ; then
 
-    _sprintf "warn" "not found intermediate certificate"
+    printf "  \e[1;44m%s\e[m\n\n" "not found intermediate certificate"
 
     _logger "warn" \
       "$_FUNCTION_ID()" \
       "not found intermediate certificate"
+
+  elif [[ "$_key_type_root" == "false" ]] ; then
+
+    printf "  \e[1;44m%s\e[m\n" "not found root certificate"
+
+    _logger "warn" \
+      "$_FUNCTION_ID()" \
+      "not found root certificate"
 
   fi
 
