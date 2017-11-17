@@ -227,6 +227,7 @@ function sslChain() {
   local _ssl_attr_sorted=()
 
   local _key_path=""
+  local _key_path_name=""
   local _key_issuer=""
   local _key_subject=""
   local _key_issuer_hash=""
@@ -272,6 +273,7 @@ function sslChainLast() {
   for i in "${ssl_attr[@]}" ; do
 
     _key_path=$(echo "$i" | awk -v FS="(:|:)" '{print $1}')
+    _key_path_name="$(basename "$_key_path")"
     _key_issuer=$(echo "$i" | awk -v FS="(:|:)" '{print $2}')
     _key_subject=$(echo "$i" | awk -v FS="(:|:)" '{print $3}')
     _key_issuer_hash=$(echo "$i" | awk -v FS="(:|:)" '{print $4}')
@@ -342,6 +344,7 @@ function sslChainRelation() {
     if [[ "$_ssl_keep_num" -lt "${#ssl_attr[@]}" ]] ; then
 
       _key_path=$(echo "$i" | awk -v FS="(:|:)" '{print $1}')
+      _key_path_name="$(basename "$_key_path")"
       _key_issuer=$(echo "$i" | awk -v FS="(:|:)" '{print $2}')
       _key_subject=$(echo "$i" | awk -v FS="(:|:)" '{print $3}')
       _key_issuer_hash=$(echo "$i" | awk -v FS="(:|:)" '{print $4}')
@@ -360,7 +363,7 @@ function sslChainRelation() {
 
         printf "%s" "\
 -| Key Info:
- | P:(${_key_path})
+ | P:(${_key_path_name})
  | S:(${_last_subject}:${_key_subject_hash})
  | I:(${_key_issuer}:${_key_issuer_hash})
 "
