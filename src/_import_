@@ -271,11 +271,11 @@ function sslChainLast() {
   # Extracting data for each element of the array.
   for i in "${ssl_attr[@]}" ; do
 
-    _key_path=$(echo "$i" | awk -v FS="(:|:)" '{print $0}')
-    _key_subject=$(echo "$i" | awk -v FS="(:|:)" '{print $1}')
+    _key_path=$(echo "$i" | awk -v FS="(:|:)" '{print $1}')
     _key_issuer=$(echo "$i" | awk -v FS="(:|:)" '{print $2}')
-    _key_subject_hash=$(echo "$i" | awk -v FS="(:|:)" '{print $3}')
+    _key_subject=$(echo "$i" | awk -v FS="(:|:)" '{print $3}')
     _key_issuer_hash=$(echo "$i" | awk -v FS="(:|:)" '{print $4}')
+    _key_subject_hash=$(echo "$i" | awk -v FS="(:|:)" '{print $5}')
 
     _logger "info" \
       "$_FUNCTION_ID()" \
@@ -341,11 +341,11 @@ function sslChainRelation() {
 
     if [[ "$_ssl_keep_num" -lt "${#ssl_attr[@]}" ]] ; then
 
-      _key_path=$(echo "$i" | awk -v FS="(:|:)" '{print $0}')
-      _key_subject=$(echo "$i" | awk -v FS="(:|:)" '{print $1}')
+      _key_path=$(echo "$i" | awk -v FS="(:|:)" '{print $1}')
       _key_issuer=$(echo "$i" | awk -v FS="(:|:)" '{print $2}')
-      _key_subject_hash=$(echo "$i" | awk -v FS="(:|:)" '{print $3}')
+      _key_subject=$(echo "$i" | awk -v FS="(:|:)" '{print $3}')
       _key_issuer_hash=$(echo "$i" | awk -v FS="(:|:)" '{print $4}')
+      _key_subject_hash=$(echo "$i" | awk -v FS="(:|:)" '{print $5}')
 
       _logger "info" \
         "$_FUNCTION_ID()" \
