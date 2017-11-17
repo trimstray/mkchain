@@ -162,23 +162,28 @@ function sslInfo() {
 
     # Responsible for search 'Issuer' and 'Subject' strings defining the relationship between certificates ;
     # removes all whitespace found in strings => (sed 's/  *//g').
-    _key_issuer=$(openssl x509 -text -noout -in "$_key_path" | \
+    _key_issuer=$(openssl x509 -noout -issuer -in "$_key_path" | \
           grep "$_ssl_ident_issuer_string" | egrep -o "$_ssl_regexp_string" | \
           cut -d "=" -f2 | \
           sed 's/  *//g')
 
-    _key_subject=$(openssl x509 -text -noout -in "$_key_path" | \
+    _key_issuer_hash=$(openssl x509 -noout -issuer_hash -in "$_key_path")
+
+    _key_subject=$(openssl x509 -noout -subject -in "$_key_path" | \
           grep "$_ssl_ident_subject_string" | egrep -o "$_ssl_regexp_string" | \
           cut -d "=" -f2 | \
           sed 's/  *//g' | \
           awk -F '[/,]' '{print $1}')
+
+    _key_subject_hash=$(openssl x509 -noout -subject_hash -in "$_key_path")
 
     _logger "info" \
       "$_FUNCTION_ID()" \
       "adding new elements to the array"
 
     # Assign an element to the array with 'paht:issuer:subject' notation.
-    _ssl_attr+=("${_key_path}:${_key_issuer}:${_key_subject}")
+    _ssl_attr+=(\
+    "${_key_path}:${_key_issuer}:${_key_subject}:${_key_issuer_hash}:${_key_subject_hash}")
 
     _logger "info" \
       "$_FUNCTION_ID()" \
@@ -222,6 +227,8 @@ function sslChain() {
   local _key_path=""
   local _key_issuer=""
   local _key_subject=""
+  local _key_issuer_hash=""
+  local _key_subject_hash=""
 
   # local _last_issuer=""
   local _last_subject=""
@@ -262,17 +269,16 @@ function sslChainLast() {
   # Extracting data for each element of the array.
   for i in "${ssl_attr[@]}" ; do
 
-    # for _key_path ; alternative: echo $i | awk -v FS="(:|:)" '{print $1}'
-    _key_path="${i%%:*}"
-    # for _key_subject ; alternative: echo $i | awk -v FS="(:|:)" '{print $3}'
-    _key_subject="${i##*:}"
-    # for _key_issuer ;
+    _key_path=$(echo "$i" | awk -v FS="(:|:)" '{print $0}')
+    _key_subject=$(echo "$i" | awk -v FS="(:|:)" '{print $1}')
     _key_issuer=$(echo "$i" | awk -v FS="(:|:)" '{print $2}')
+    _key_subject_hash=$(echo "$i" | awk -v FS="(:|:)" '{print $3}')
+    _key_issuer_hash=$(echo "$i" | awk -v FS="(:|:)" '{print $4}')
 
     _logger "info" \
       "$_FUNCTION_ID()" \
-      "extracting items from ${i} => 0:${_key_path}, 1:${_key_issuer}, 2:${_key_subject}"
-
+      "extracting items from ${i} => 0:${_key_path}, 1:${_key_issuer}, 2:${_key_subject}, 3:${_key_issuer_hash}, 4:${_key_subject_hash}"
+ 
     # If the box contains CN period (e.g. domain.com)
     if [[ "$_key_subject" == *"."* ]] ; then
 
@@ -333,16 +339,15 @@ function sslChainRelation() {
 
     if [[ "$_ssl_keep_num" -lt "${#ssl_attr[@]}" ]] ; then
 
-      # for _key_path ; alternative: echo $i | awk -v FS="(:|:)" '{print $1}'
-      _key_path="${i%%:*}"
-      # for _key_subject ; alternative: echo $i | awk -v FS="(:|:)" '{print $3}'
-      _key_subject="${i##*:}"
-      # for _key_issuer ;
+      _key_path=$(echo "$i" | awk -v FS="(:|:)" '{print $0}')
+      _key_subject=$(echo "$i" | awk -v FS="(:|:)" '{print $1}')
       _key_issuer=$(echo "$i" | awk -v FS="(:|:)" '{print $2}')
+      _key_subject_hash=$(echo "$i" | awk -v FS="(:|:)" '{print $3}')
+      _key_issuer_hash=$(echo "$i" | awk -v FS="(:|:)" '{print $4}')
 
       _logger "info" \
         "$_FUNCTION_ID()" \
-        "extracting items from ${i} => 0:${_key_path}, 1:${_key_issuer}, 2:${_key_subject}"
+        "extracting items from ${i} => 0:${_key_path}, 1:${_key_issuer}, 2:${_key_subject}, 3:${_key_issuer_hash}, 4:${_key_subject_hash}"
 
       # Compares the current field 'Subject' certificate processed
       # on the last field 'Subject' of the previous certificate.
@@ -354,8 +359,8 @@ function sslChainRelation() {
         printf "%s" "\
 -| Key Info:
  | P:(${_key_path})
- | S:(${_last_subject})
- | I:(${_key_issuer})
+ | S:(${_last_subject}:${_key_subject_hash})
+ | I:(${_key_issuer}:${_key_issuer_hash})
 "
 
         _logger "info" \
