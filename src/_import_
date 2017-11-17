@@ -303,11 +303,11 @@ function sslChainLast() {
 
   if [[ "$_server_cert_state" -ne 1 ]] ; then
 
-    _sprintf "stop" "not found server certificate"
+    _sprintf "stop" "not found identity (end-user, server) certificate"
 
     _logger "stop" \
       "$_FUNCTION_ID()" \
-      "not found server certificate"
+      "not found identity (end-user, server) certificate"
 
   fi
 
@@ -336,7 +336,11 @@ function sslChainRelation() {
   local _ssl_attr_num="0"
   local _ssl_keep_num="0"
 
-  printf "%s %s\n" "--" "-------------"
+  local _key_type_ident="false"
+  local _key_type_root="false"
+  local _key_type_inter="false"
+
+  echo
 
   while [[ "$_ssl_attr_num" -lt "${#ssl_attr[@]}" ]] ; do
 
@@ -362,10 +366,13 @@ function sslChainRelation() {
 
         if [[ "$_last_subject" == *"."* ]] ; then
           _key_type="Identity Certificate"
+          _key_type_ident="true"
         elif [[ "$_last_subject" == "$_key_issuer" ]] ; then
           _key_type="Root Certificate"
+          _key_type_root="true"
         elif [[ "$_last_subject" != "$_key_issuer" ]] ; then
           _key_type="Intermediate Certificate"
+          _key_type_inter="true"
         else
           _key_type="Unknown Certificate"
         fi
@@ -373,11 +380,10 @@ function sslChainRelation() {
         # Assign an element to the array with 'paht:issuer:subject' notation.
         _ssl_attr_sorted+=("${_key_path}:${_key_issuer}:${_last_subject}")
 
-        printf "  | \t\t (%s)\n" "${_key_path_name}"
-        printf "  | \t\t (\e[0;33m%s\e[m)\n" "${_key_type}"
-        printf "  | S:(\e[1;36m%s\e[m):(\e[1;39m%s\e[m)\n" "${_key_subject_hash}" "${_last_subject}"
-        printf "  | I:(\e[1;36m%s\e[m):(\e[1;30m%s\e[m)\n" "${_key_issuer_hash}" "${_key_issuer}"
-        printf "%s %s\n" "--" "-------------"
+        printf "  \t       (%s)\n" "${_key_path_name}"
+        printf "  \t       (\e[0;33m%s\e[m)\n" "${_key_type}"
+        printf "  S:(\e[1;36m%s\e[m):(\e[1;39m%s\e[m)\n" "${_key_subject_hash}" "${_last_subject}"
+        printf "  I:(\e[1;36m%s\e[m):(\e[1;30m%s\e[m)\n" "${_key_issuer_hash}" "${_key_issuer}"
 
         _logger "info" \
           "$_FUNCTION_ID()" \
@@ -396,6 +402,34 @@ function sslChainRelation() {
     _ssl_attr_num=$((_ssl_attr_num+1))
 
   done
+
+  echo
+
+  if [[ "$_key_type_ident" == "false" ]] ; then
+
+    _sprintf "warn" "not found identity (end-user, server) certificate"
+
+    _logger "warn" \
+      "$_FUNCTION_ID()" \
+      "not found identity (end-user, server) certificate"
+
+  elif [[ "$_key_type_root" == "false" ]] ; then
+
+    _sprintf "warn" "not found root certificate"
+
+    _logger "warn" \
+      "$_FUNCTION_ID()" \
+      "not found root certificate"
+
+  elif [[ "$_key_type_inter" == "false" ]] ; then
+
+    _sprintf "warn" "not found intermediate certificate"
+
+    _logger "warn" \
+      "$_FUNCTION_ID()" \
+      "not found intermediate certificate"
+
+  fi
 
   # Copy the sorted contents of the temporary (local) array to the global array.
   ssl_attr_sorted=("${_ssl_attr_sorted[@]}")
