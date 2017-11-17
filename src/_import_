@@ -133,8 +133,8 @@ function sslInfo() {
   local _FUNCTION_ID="sslInfo"
   local _STATE=0
 
-  local _ssl_ident_issuer_string="Issuer:"
-  local _ssl_ident_subject_string="Subject:"
+  local _ssl_ident_issuer_string="issuer="
+  local _ssl_ident_subject_string="subject="
   local _ssl_regexp_string="CN.*=.*"
 
   local _ssl_delivered_certificates=("${ssl_delivered_certificates_list[@]}")
@@ -143,6 +143,8 @@ function sslInfo() {
   local _key_path_name=""
   local _key_issuer=""
   local _key_subject=""
+  local _key_issuer_hash=""
+  local _key_subject_hash=""
 
   # Temporary table for storing data in the form path:issuer:subject.
   local _ssl_attr=()
@@ -187,7 +189,7 @@ function sslInfo() {
 
     _logger "info" \
       "$_FUNCTION_ID()" \
-      "init _ssl_attr=() 'path':'issuer':'subject' notation, _ssl_attr=('${_ssl_attr[-1]}')"
+      "init _ssl_attr=() 'path':'issuer':'subject':'issuer_hash':'subject_hash' notation, _ssl_attr=('${_ssl_attr[-1]}')"
 
   done
 
