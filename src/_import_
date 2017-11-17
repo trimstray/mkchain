@@ -360,12 +360,23 @@ function sslChainRelation() {
       # on the last field 'Subject' of the previous certificate.
       if [[ "$_key_subject" == "$_last_subject" ]] ; then
 
+        if [[ "$_last_subject" == *"."* ]] ; then
+          _key_type="Identity Certificate"
+        elif [[ "$_last_subject" == "$_key_issuer" ]] ; then
+          _key_type="Root Certificate"
+        elif [[ "$_last_subject" != "$_key_issuer" ]] ; then
+          _key_type="Intermediate Certificate"
+        else
+          _key_type="Unknown Certificate"
+        fi
+
         # Assign an element to the array with 'paht:issuer:subject' notation.
         _ssl_attr_sorted+=("${_key_path}:${_key_issuer}:${_last_subject}")
 
-        printf "  | \t\t (%s)\n" ${_key_path_name}
-        printf "  | S:(\e[1;36m%s\e[m):(\e[1;39m%s\e[m)\n" ${_key_subject_hash} ${_last_subject}
-        printf "  | I:(\e[1;36m%s\e[m):(\e[1;30m%s\e[m)\n" ${_key_issuer_hash} ${_key_issuer}
+        printf "  | \t\t (%s)\n" "${_key_path_name}"
+        printf "  | \t\t (\e[0;33m%s\e[m)\n" "${_key_type}"
+        printf "  | S:(\e[1;36m%s\e[m):(\e[1;39m%s\e[m)\n" "${_key_subject_hash}" "${_last_subject}"
+        printf "  | I:(\e[1;36m%s\e[m):(\e[1;30m%s\e[m)\n" "${_key_issuer_hash}" "${_key_issuer}"
         printf "%s %s\n" "--" "-------------"
 
         _logger "info" \
