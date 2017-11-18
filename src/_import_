@@ -455,7 +455,7 @@ function sslChainGenerate() {
 
   if [[ "$_key_type_inter" == "false" ]] || [[ "$_key_type_root" == "false" ]] ; then
 
-    printf "  Output: \e[0;33m%s\e[m\n" "not found intermediate or root certificate"
+    printf "  Result: \e[0;33m%s\e[m\n" "not found intermediate or root certificate"
 
     _logger "warn" \
       "$_FUNCTION_ID()" \
@@ -463,7 +463,7 @@ function sslChainGenerate() {
 
   else
 
-    printf "  Output: \e[0;32m%s\e[m\n" "chain generated correctly"
+    printf "  Result: \e[0;32m%s\e[m\n" "chain generated correctly"
 
     _logger "warn" \
       "$_FUNCTION_ID()" \
