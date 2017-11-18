@@ -336,9 +336,9 @@ function sslChainRelation() {
   local _ssl_attr_num="0"
   local _ssl_keep_num="0"
 
-  local _key_type_ident="false"
-  local _key_type_root="false"
-  local _key_type_inter="false"
+  _key_type_ident="false"
+  _key_type_root="false"
+  _key_type_inter="false"
 
   echo
 
@@ -413,32 +413,6 @@ function sslChainRelation() {
 
   echo
 
-  if [[ "$_key_type_ident" == "false" ]] ; then
-
-    printf "  \e[1;44m%s\e[m\n" "not found identity (end-user, server) certificate"
-
-    _logger "warn" \
-      "$_FUNCTION_ID()" \
-      "not found identity (end-user, server) certificate"
-
-  elif [[ "$_key_type_inter" == "false" ]] ; then
-
-    printf "  \e[1;44m%s\e[m\n\n" "not found intermediate certificate"
-
-    _logger "warn" \
-      "$_FUNCTION_ID()" \
-      "not found intermediate certificate"
-
-  elif [[ "$_key_type_root" == "false" ]] ; then
-
-    printf "  \e[1;44m%s\e[m\n" "not found root certificate"
-
-    _logger "warn" \
-      "$_FUNCTION_ID()" \
-      "not found root certificate"
-
-  fi
-
   # Copy the sorted contents of the temporary (local) array to the global array.
   ssl_attr_sorted=("${_ssl_attr_sorted[@]}")
 
@@ -478,6 +452,24 @@ function sslChainGenerate() {
     cat "$_absolute_path" >> "$_fd"
 
   done
+
+  if [[ "$_key_type_inter" == "false" ]] || [[ "$_key_type_root" == "false" ]] ; then
+
+    printf "  Output: \e[0;33m%s\e[m\n" "not found intermediate or root certificate"
+
+    _logger "warn" \
+      "$_FUNCTION_ID()" \
+      "not found intermediate or root certificate"
+
+  else
+
+    printf "  Output: \e[0;32m%s\e[m\n" "chain generated correctly"
+
+    _logger "warn" \
+      "$_FUNCTION_ID()" \
+      "chain generated correctly"
+
+  fi
 
   return $_STATE
 
