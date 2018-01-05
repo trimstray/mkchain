@@ -39,8 +39,29 @@ Provides the following options:
 Then an example of starting the tool:
 
 ``````
-sslmerge -i /data/certs -o /data/bundle_chain_certs.crt
+ls
+00.crt	01.crt	03.crt
+sslmerge -i /tmp/google_cert -o /tmp/bundle_chain_google_certs.crt
+
+  	       (03.crt)
+  	       (Identity Certificate)
+  S:(a18bd28a):(*.google.com)
+  I:(c4c7a654):(GoogleInternetAuthorityG2)
+  	       (00.crt)
+  	       (Intermediate Certificate)
+  S:(c4c7a654):(GoogleInternetAuthorityG2)
+  I:(2c543cd1):(GeoTrustGlobalCA)
+  	       (01.crt)
+  	       (Root Certificate)
+  S:(2c543cd1):(GeoTrustGlobalCA)
+  I:(2c543cd1):(GeoTrustGlobalCA)
+
+  Result: chain generated correctly
 ``````
+
+Screen from terminal:
+
+![sslmerge_output](doc/img/sslmerge_output.png)
 
 ## Project architecture
 
