@@ -7,7 +7,7 @@ Testing release: **testing**
 
 ## Description
 
-A tool to help you build a valid SSL certificate chain.
+Is an open source tool to help you build a valid SSL certificate chain.
 
 ## Parameters
 
