@@ -19,6 +19,7 @@ function sslChainGenerate() {
   local _STATE=0
 
   # The mechanism involved in the location of sorted items.
+  # shellcheck disable=SC2154
   for i in "${ssl_attr_sorted[@]}" ; do
 
     _absolute_path="${i%%:*}"
@@ -29,10 +30,12 @@ function sslChainGenerate() {
       "add $_path"
 
     # alternative: (cat "$_absolute_path" ; echo) >> "$_fd"
+    # shellcheck disable=SC2154
     cat "$_absolute_path" >> "$_fd"
 
   done
 
+  # shellcheck disable=SC2154
   if [[ "$_key_type_inter" == "false" ]] || [[ "$_key_type_root" == "false" ]] ; then
 
     printf "  Result: \e[0;33m%s\e[m\n" "not found intermediate or root certificate"

@@ -27,6 +27,7 @@ function sslChainRelation() {
 
   echo
 
+  # shellcheck disable=SC2154
   while [[ "$_ssl_attr_num" -lt "${#ssl_attr[@]}" ]] ; do
 
     # Extracting data for each element of the array.
@@ -51,17 +52,23 @@ function sslChainRelation() {
 
         if [[ "$_last_subject" == *"."* ]] ; then
 
+          # shellcheck disable=SC2034
           _key_type="Identity Certificate"
+          # shellcheck disable=SC2034
           _key_type_ident="true"
 
         elif [[ "$_last_subject" == "$_key_issuer" ]] ; then
 
+          # shellcheck disable=SC2034
           _key_type="Root Certificate"
+          # shellcheck disable=SC2034
           _key_type_root="true"
 
         elif [[ "$_last_subject" != "$_key_issuer" ]] ; then
 
+          # shellcheck disable=SC2034
           _key_type="Intermediate Certificate"
+          # shellcheck disable=SC2034
           _key_type_inter="true"
 
         else
@@ -99,6 +106,7 @@ function sslChainRelation() {
   echo
 
   # Copy the sorted contents of the temporary (local) array to the global array.
+  # shellcheck disable=SC2034
   ssl_attr_sorted=("${_ssl_attr_sorted[@]}")
 
   return $_STATE

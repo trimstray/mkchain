@@ -15,6 +15,7 @@
 
 function sslSetRowSize() {
 
+  # shellcheck disable=SC2034
   local _FUNCTION_ID="sslSetRowSize"
   local _STATE=0
 
@@ -27,6 +28,7 @@ function sslSetRowSize() {
   #   - define the maximum row size in certificate file
   #   - add strings identifying certificate
   #   - prepared written certificate to a temporary file
+  # shellcheck disable=SC2154
   grep -v "CERTIFICATE" "${_ssl_delivered_certificates_file}" | \
   tr -d '\n' | \
   tr -d '\r' | \

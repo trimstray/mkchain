@@ -15,21 +15,30 @@
 
 function sslChain() {
 
+  # shellcheck disable=SC2034
   local _FUNCTION_ID="sslChain"
   local _STATE=0
 
   # In the initial phase is empty, it will be filled with the sorted items
   # forming the correct string.
+  # shellcheck disable=SC2034
   local _ssl_attr_sorted=()
 
+  # shellcheck disable=SC2034
   local _key_path=""
+  # shellcheck disable=SC2034
   local _key_path_name=""
+  # shellcheck disable=SC2034
   local _key_issuer=""
+  # shellcheck disable=SC2034
   local _key_subject=""
+  # shellcheck disable=SC2034
   local _key_issuer_hash=""
+  # shellcheck disable=SC2034
   local _key_subject_hash=""
 
   # local _last_issuer=""
+  # shellcheck disable=SC2034
   local _last_subject=""
 
   # Looking for a server certificate (last certificate of the chain).

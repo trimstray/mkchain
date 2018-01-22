@@ -21,9 +21,12 @@ function sslChainLast() {
   local _server_cert_state=""
 
   # Extracting data for each element of the array.
+  # shellcheck disable=SC2154
   for i in "${ssl_attr[@]}" ; do
 
+    # shellcheck disable=SC2034
     _key_path=$(echo "$i" | awk -v FS="(:|:)" '{print $1}')
+    # shellcheck disable=SC2034
     _key_path_name="$(basename "$_key_path")"
     _key_issuer=$(echo "$i" | awk -v FS="(:|:)" '{print $2}')
     _key_subject=$(echo "$i" | awk -v FS="(:|:)" '{print $3}')
@@ -40,6 +43,7 @@ function sslChainLast() {
       # Very important variables that set the beginning of the chain ;
       # it contain 'Server/Owner Certificate' info.
       # _last_issuer="$_key_issuer"
+      # shellcheck disable=SC2034
       _last_subject="$_key_subject"
 
       _logger "info" \
