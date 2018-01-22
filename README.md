@@ -6,7 +6,7 @@
 | :--------------------------------------: | :--------------------------------------: |
 | [![](https://img.shields.io/badge/Branch-master-green.svg)]() | [![](https://img.shields.io/badge/Branch-testing-orange.svg)]() |
 | [![](https://img.shields.io/badge/Version-v1.3.0-lightgrey.svg)]() | [![](https://img.shields.io/badge/Version-v1.3.0-lightgrey.svg)]() |
-| [![Build Status](https://travis-ci.org/profile/git-template-full.svg?branch=master)](https://travis-ci.org/profile/git-template-full) | [![Build Status](https://travis-ci.org/profile/git-template-full.svg?branch=testing)](https://travis-ci.org/profile/git-template-full) |
+| [![Build Status](https://travis-ci.org/trimstray/sslmerge.svg?branch=master)](https://travis-ci.org/trimstray/sslmergel) | [![Build Status](https://travis-ci.org/trimstray/sslmerge.svg?branch=testing)](https://travis-ci.org/trimstray/sslmerge) |
 
 ## Description
 
