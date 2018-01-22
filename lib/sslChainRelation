@@ -1,3 +1,5 @@
+# shellcheck shell=bash
+
 # ``````````````````````````````````````````````````````````````````````````````
 # Function name: sslChainRelation()
 #
@@ -102,4 +104,3 @@ function sslChainRelation() {
   return $_STATE
 
 }
-

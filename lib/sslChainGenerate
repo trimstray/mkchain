@@ -1,3 +1,5 @@
+# shellcheck shell=bash
+
 # ``````````````````````````````````````````````````````````````````````````````
 # Function name: sslChainGenerate()
 #
@@ -52,4 +54,3 @@ function sslChainGenerate() {
   return $_STATE
 
 }
-

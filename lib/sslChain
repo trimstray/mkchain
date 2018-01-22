@@ -1,3 +1,5 @@
+# shellcheck shell=bash
+
 # ``````````````````````````````````````````````````````````````````````````````
 # Function name: sslChain()
 #
@@ -42,4 +44,3 @@ function sslChain() {
   return $_STATE
 
 }
-

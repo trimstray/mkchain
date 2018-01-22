@@ -1,3 +1,5 @@
+# shellcheck shell=bash
+
 # ``````````````````````````````````````````````````````````````````````````````
 # Function name: sslChainLast()
 #
@@ -63,4 +65,3 @@ function sslChainLast() {
   return $_STATE
 
 }
-

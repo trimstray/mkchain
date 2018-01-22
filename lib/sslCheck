@@ -1,3 +1,5 @@
+# shellcheck shell=bash
+
 # ``````````````````````````````````````````````````````````````````````````````
 # Function name: sslCheck()
 #
@@ -46,4 +48,3 @@ function sslCheck() {
   return $_STATE
 
 }
-

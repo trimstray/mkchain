@@ -1,3 +1,5 @@
+# shellcheck shell=bash
+
 # ``````````````````````````````````````````````````````````````````````````````
 # Function name: sslSetRowSize()
 #
@@ -41,4 +43,3 @@ function sslSetRowSize() {
   return $_STATE
 
 }
-
