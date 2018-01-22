@@ -26,7 +26,9 @@ function __main__() {
   readonly _import_path="${_src}/import"
 
   # External configuration file (-c|--config script param).
+  # shellcheck disable=SC2034
   config=""
+  # shellcheck disable=SC2034
   load_state="0"
 
   # Declaration of output variables (--debug and --verbose params).
@@ -84,6 +86,7 @@ function __main__() {
   if [[ "$time_tracking" == "true" ]] ; then
     _begtime=$(date +%s) ; fi
 
+  # shellcheck disable=SC2154
   _logger "init" \
     "init '${_init_name}' in '${_init_directory}'" && \
   _logger "info" \
@@ -217,19 +220,28 @@ function __main__() {
   fi
 
   # Define array with empty values.
-  ssl_delivered_certificates_list=() ; ssl_attr=() ; ssl_attr_sorted=()
+  # shellcheck disable=SC2034
+  ssl_delivered_certificates_list=()
+  # shellcheck disable=SC2034
+  ssl_attr=()
+  # shellcheck disable=SC2034
+  ssl_attr_sorted=()
 
   # Define the maximum row size in certificate file.
+  # shellcheck disable=SC2034
   fixed_row_size="64"
 
   # Strings that identifies the certificates.
+  # shellcheck disable=SC2034
   ssl_beg_cert_id="-----BEGIN CERTIFICATE-----"
+  # shellcheck disable=SC2034
   ssl_end_cert_id="-----END CERTIFICATE-----"
 
   # Temporary file extension.
+  # shellcheck disable=SC2034
   fext="tmp"
 
-  >"$_fd" && \
+  : >"$_fd" && \
   _state="0" || _state="1"
 
   if [[ "$_state" -eq "0" ]] ; then
