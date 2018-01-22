@@ -107,8 +107,8 @@ function __main__() {
 
   # Specifies the call parameters of the script, the exact description
   # can be found in _help_ and file README.md.
-  local _short_opt="c:"
-  local _long_opt="help,debug,verbose,time,config:"
+  local _short_opt="i:o:"
+  local _long_opt="help,debug,in:,out:"
 
   _GETOPT_PARAMS=$(getopt -o "${_short_opt}" --long "${_long_opt}" \
                    -n "${_init_name}" -- "${__script_params[@]}")
@@ -144,23 +144,15 @@ function __main__() {
 
         shift ;;
 
-      --verbose)
+      -i|--in)
 
-        export printf_mode="verbose"
+        ssl_delivered_certificates+=("$2")
 
-        shift ;;
+        shift 2 ;;
 
-      --time)
+      -o|--out)
 
-        export time_mode="1"
-
-        shift ;;
-
-      -c|--config)
-
-        export load_state="1"
-
-        export config="${2}"
+        _fd="$2"
 
         shift 2 ;;
 
@@ -198,9 +190,6 @@ function __main__() {
   # Put here all your variable declarations, function calls
   # and all the other code blocks.
 
-  # In this section we add external file (for -c|--config script param).
-  if [[ "$load_state" -eq 1 ]] ; then _load "head" "$config" ; fi
-
   # shellcheck disable=SC2034
   # Generate random value.
   _random=$(date +"%s")
@@ -236,6 +225,105 @@ function __main__() {
       fi
 
     done
+
+  fi
+
+  # If it is not given option -o|--output.
+  if [[ -z "$_fd" ]] ; then
+
+    # If the file/directory is not valid.
+    _sprintf "stop" "not specified -o|--out param"
+
+    _logger "stop" \
+      "$_FUNCTION_ID()" \
+      "not specified -o|--out param"
+
+  else
+
+    >"$_fd" && \
+    _state="0" || _state="1"
+
+    if [[ "$_state" -eq "0" ]] ; then
+
+      _logger "info" \
+        "$_FUNCTION_ID()" \
+        "clear the contents of the '$_fd' properly"
+
+      if [[ "${#ssl_delivered_certificates[@]}" -ne "0" ]] ; then
+
+        # Stores certificates.
+        _ssl_cert_stack=""
+
+        # For better control of the log file (do not use _sprintf).
+        for i in "${ssl_delivered_certificates[@]}" ; do
+
+          if [[ -f "$i" ]] ; then
+
+            sslSetRowSize "$i"
+
+            sslCheck "$i"
+
+            _logger "info" \
+              "$_FUNCTION_ID()" \
+              "script param '$i' is a file"
+
+          elif [[ -d "$i" ]] ; then
+
+            _logger "info" \
+              "$_FUNCTION_ID()" \
+              "script param '$i' is a directory"
+
+            # Remove last '/' for better compatibility.
+            i="${i%/}"
+
+            _ssl_cert_stack=($(find "$i" -maxdepth 1 -type f -printf "%f\n"))
+
+            for j in "${_ssl_cert_stack[@]}" ; do
+
+              local _ssl_path_plus_name="${i}/${j}"
+
+              sslSetRowSize "$_ssl_path_plus_name"
+
+              sslCheck "$_ssl_path_plus_name"
+
+              _logger "info" \
+                "$_FUNCTION_ID()" \
+                "script param '$i' is a file"
+
+            done
+
+          else
+
+            # If the file/directory is not valid.
+            _sprintf "stop" "incorrect file/directory: $i"
+
+            _logger "stop" \
+              "$_FUNCTION_ID()" \
+              "incorrect file/directory: $i" && _exit_ "1"
+
+          fi
+
+        done
+
+        # We pass without arguments to the function which processes array
+        # directly in a function and assigned to the local array.
+        sslInfo
+
+        # We call the function responsible for creating the chain. Here when
+        # calling anything special but inside the function refers to external array.
+        sslChain
+
+      fi
+
+    else
+
+      _sprintf "stop" "clear the contents of the '$_fd' failed"
+
+      _logger "info" \
+        "$_FUNCTION_ID()" \
+        "clear the contents of the '$_fd' failed"
+
+    fi
 
   fi
 
