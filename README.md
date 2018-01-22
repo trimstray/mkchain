@@ -84,19 +84,19 @@ See [CONTRIBUTING.md](CONTRIBUTING.md).
     |-- CONTRIBUTING.md            # principles of project support
     |-- .gitignore                 # ignore untracked files
     |-- .travis.yml                # continuous integration with Travis CI
-    |-- setup.sh                   # install git-template-full on the system
+    |-- setup.sh                   # install sslmerge on the system
     |-- bin
         |-- sslmerge               # main script (init)
     |-- doc                        # includes documentation, images and manuals
         |-- man8
-            |-- sslmerge.8         # man page for git-template-full
+            |-- sslmerge.8         # man page for sslmergel
     |-- lib                        # libraries, external functions
     |-- log                        # contains logs, created after init
     |-- src                        # includes external project files
         |-- helpers                # contains core functions
         |-- import                 # appends the contents of the lib directory
         |-- __init__               # contains the __main__ function
-        |-- settings               # contains git-template-full settings
+        |-- settings               # contains sslmergel settings
 
 ## License
 
