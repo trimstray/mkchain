@@ -1,0 +1,55 @@
+# ``````````````````````````````````````````````````````````````````````````````
+# Function name: sslChainGenerate()
+#
+# Description:
+#   It generate a proper chain of delivered certificates.
+#
+# Usage:
+#   sslChainGenerate
+#
+# Examples:
+#   sslChainGenerate
+#
+
+function sslChainGenerate() {
+
+  local _FUNCTION_ID="sslChainGenerate"
+  local _STATE=0
+
+  # The mechanism involved in the location of sorted items.
+  for i in "${ssl_attr_sorted[@]}" ; do
+
+    _absolute_path="${i%%:*}"
+    _path="$(basename "$_absolute_path")"
+
+    _logger "info" \
+      "$_FUNCTION_ID()" \
+      "add $_path"
+
+    # alternative: (cat "$_absolute_path" ; echo) >> "$_fd"
+    cat "$_absolute_path" >> "$_fd"
+
+  done
+
+  if [[ "$_key_type_inter" == "false" ]] || [[ "$_key_type_root" == "false" ]] ; then
+
+    printf "  Result: \e[0;33m%s\e[m\n" "not found intermediate or root certificate"
+
+    _logger "warn" \
+      "$_FUNCTION_ID()" \
+      "not found intermediate or root certificate"
+
+  else
+
+    printf "  Result: \e[0;32m%s\e[m\n" "chain generated correctly"
+
+    _logger "warn" \
+      "$_FUNCTION_ID()" \
+      "chain generated correctly"
+
+  fi
+
+  return $_STATE
+
+}
+

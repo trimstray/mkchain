@@ -1,0 +1,66 @@
+# ``````````````````````````````````````````````````````````````````````````````
+# Function name: sslChainLast()
+#
+# Description:
+#   Responsible for establishing the Server/Owner Certificate.
+#
+# Usage:
+#   sslChainLast
+#
+# Examples:
+#   sslChainLast
+#
+
+function sslChainLast() {
+
+  local _FUNCTION_ID="sslChainLast"
+  local _STATE=0
+
+  local _server_cert_state=""
+
+  # Extracting data for each element of the array.
+  for i in "${ssl_attr[@]}" ; do
+
+    _key_path=$(echo "$i" | awk -v FS="(:|:)" '{print $1}')
+    _key_path_name="$(basename "$_key_path")"
+    _key_issuer=$(echo "$i" | awk -v FS="(:|:)" '{print $2}')
+    _key_subject=$(echo "$i" | awk -v FS="(:|:)" '{print $3}')
+    _key_issuer_hash=$(echo "$i" | awk -v FS="(:|:)" '{print $4}')
+    _key_subject_hash=$(echo "$i" | awk -v FS="(:|:)" '{print $5}')
+
+    _logger "info" \
+      "$_FUNCTION_ID()" \
+      "extracting items from ${i} => 0:${_key_path}, 1:${_key_issuer}, 2:${_key_subject}, 3:${_key_issuer_hash}, 4:${_key_subject_hash}"
+ 
+    # If the box contains CN period (e.g. domain.com)
+    if [[ "$_key_subject" == *"."* ]] ; then
+
+      # Very important variables that set the beginning of the chain ;
+      # it contain 'Server/Owner Certificate' info.
+      # _last_issuer="$_key_issuer"
+      _last_subject="$_key_subject"
+
+      _logger "info" \
+        "$_FUNCTION_ID()" \
+        "found last relationship: ${_key_subject} <==> ${_key_issuer}"
+
+      _server_cert_state=1
+
+    fi
+
+  done
+
+  if [[ "$_server_cert_state" -ne 1 ]] ; then
+
+    _sprintf "stop" "not found identity (end-user, server) certificate"
+
+    _logger "stop" \
+      "$_FUNCTION_ID()" \
+      "not found identity (end-user, server) certificate"
+
+  fi
+
+  return $_STATE
+
+}
+

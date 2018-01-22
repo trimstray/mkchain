@@ -1,0 +1,44 @@
+# ``````````````````````````````````````````````````````````````````````````````
+# Function name: sslSetRowSize()
+#
+# Description:
+#   Set maximum row size in cert file.
+#
+# Usage:
+#   sslSetRowSize
+#
+# Examples:
+#   sslSetRowSize
+#
+
+function sslSetRowSize() {
+
+  local _FUNCTION_ID="sslSetRowSize"
+  local _STATE=0
+
+  local _ssl_delivered_certificates_file="$1"
+
+  # The procedure for parsing a file with a certificate:
+  #   - remove the starting string: -----BEGIN CERTIFICATE-----
+  #   - remmove the ending string: -----END CERTIFICATE-----
+  #   - remove all newline characters
+  #   - define the maximum row size in certificate file
+  #   - add strings identifying certificate
+  #   - prepared written certificate to a temporary file
+  grep -v "CERTIFICATE" "${_ssl_delivered_certificates_file}" | \
+  tr -d '\n' | \
+  tr -d '\r' | \
+  sed -e "s/.\{$fixed_row_size\}/&\n/g" | \
+  sed -e "1s/^/$ssl_beg_cert_id\n/" | \
+  sed -e "\$a$ssl_end_cert_id" \
+  > "${_ssl_delivered_certificates_file}.${fext}"
+
+  # Prepared temporary file is written in place of the source file.
+  cat "${_ssl_delivered_certificates_file}.${fext}" \
+  > "${_ssl_delivered_certificates_file}" && \
+  rm -fr "${_ssl_delivered_certificates_file}.${fext}"
+
+  return $_STATE
+
+}
+

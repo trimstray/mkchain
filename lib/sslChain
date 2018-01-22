@@ -1,0 +1,45 @@
+# ``````````````````````````````````````````````````````````````````````````````
+# Function name: sslChain()
+#
+# Description:
+#   It makes a proper chain of delivered certificates.
+#
+# Usage:
+#   sslChain
+#
+# Examples:
+#   sslChain
+#
+
+function sslChain() {
+
+  local _FUNCTION_ID="sslChain"
+  local _STATE=0
+
+  # In the initial phase is empty, it will be filled with the sorted items
+  # forming the correct string.
+  local _ssl_attr_sorted=()
+
+  local _key_path=""
+  local _key_path_name=""
+  local _key_issuer=""
+  local _key_subject=""
+  local _key_issuer_hash=""
+  local _key_subject_hash=""
+
+  # local _last_issuer=""
+  local _last_subject=""
+
+  # Looking for a server certificate (last certificate of the chain).
+  sslChainLast
+
+  # Looking for the relationship between certificates.
+  sslChainRelation
+
+  # Generate the correct chain.
+  sslChainGenerate
+
+  return $_STATE
+
+}
+

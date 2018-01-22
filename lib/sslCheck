@@ -1,0 +1,49 @@
+# ``````````````````````````````````````````````````````````````````````````````
+# Function name: sslCheck()
+#
+# Description:
+#
+# Usage:
+#   sslCheck
+#
+# Examples:
+#   sslCheck
+#
+
+function sslCheck() {
+
+  local _FUNCTION_ID="sslCheck"
+  local _STATE=0
+
+  local _ssl_delivered_certificates_file="$1"
+  local _ssl_delivered_certificates_list=()
+  local _state="0"
+
+  # Check the correct certificate.
+  openssl x509 -text -noout -in "$_ssl_delivered_certificates_file" &>/dev/null && \
+  _state="0" || _state="1"
+
+  if [[ "$_state" -eq "0" ]] ; then
+
+    _logger "info" \
+      "$_FUNCTION_ID()" \
+      "correct certificate: $_ssl_delivered_certificates_file"
+
+    _ssl_delivered_certificates_list+=("$_ssl_delivered_certificates_file")
+
+  else
+
+    _sprintf "stop" "bad certificate (maybe broken): $_ssl_delivered_certificates_file"
+
+    _logger "stop" \
+      "$_FUNCTION_ID()" \
+      "bad certificate (maybe broken): $_ssl_delivered_certificates_file"
+
+  fi
+
+  ssl_delivered_certificates_list+=("${_ssl_delivered_certificates_list[@]}")
+
+  return $_STATE
+
+}
+
