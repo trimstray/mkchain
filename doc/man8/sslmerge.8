@@ -1,29 +1,23 @@
-.\" Manpage for git-template-full.
+.\" Manpage for sslmerge.
 .\" Contact contact@nslab.at.
-.TH man 8 "00.00.0000" "1.0.0" "git-template-full man page"
+.TH man 8 "22.01.2018" "1.3.0" "sslmerge man page"
 .SH NAME
-git-template-full \- short script description
+sslmerge \- Is an open source tool to help you build a valid SSL certificate chain.
 .SH SYNOPSIS
-git-template-full <option|long-option>
+sslmerge <option|long-option>
 .SH DESCRIPTION
-git-template-full short long description.
+Is an open source tool to help you build a valid SSL certificate chain.
 .SH OPTIONS
 --help
         show this message
-
 --debug
         displays information on the screen (debug mode)
-
---verbose
-        displays 'info' messages on the screen (verbose mode)
-
---time
-        displays execution time, occurs only with --verbose
-
--c, --config <file>
-        attach an external config file to the script
+-i, --in
+        add certificates to merge (multiple files or directory)
+-o, --out
+        saves the result (chain) to file
 .SH SEE ALSO
-https://github.com/trimstray/git-template-full
+https://github.com/trimstray/sslmerge
 .SH BUGS
 No known bugs.
 .SH AUTHOR
