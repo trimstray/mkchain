@@ -1,9 +1,12 @@
 # sslmerge
 
-## Version
+## Releases
 
-Stable release: **v1.2.0**  
-Testing release: **testing**
+|            **STABLE RELEASE**            |           **TESTING RELEASE**            |
+| :--------------------------------------: | :--------------------------------------: |
+| [![](https://img.shields.io/badge/Branch-master-green.svg)]() | [![](https://img.shields.io/badge/Branch-testing-orange.svg)]() |
+| [![](https://img.shields.io/badge/Version-v1.3.0-lightgrey.svg)]() | [![](https://img.shields.io/badge/Version-v1.3.0-lightgrey.svg)]() |
+| [![Build Status](https://travis-ci.org/profile/git-template-full.svg?branch=master)](https://travis-ci.org/profile/git-template-full) | [![Build Status](https://travis-ci.org/profile/git-template-full.svg?branch=testing)](https://travis-ci.org/profile/git-template-full) |
 
 ## Description
 
@@ -63,16 +66,37 @@ Screen from terminal:
 
 ![sslmerge_output](doc/img/sslmerge_output.png)
 
+## Logging
+
+After running the script, the `log/` directory is created and in it the following files with logs:
+
+- `<script_name>.<date>.log` - all `_logger()` function calls are saved in it
+- `stdout.log` - a standard output and errors from the `_init_cmd()` function are written in it. If you want to redirect the output from command, use the following structure: `your_command >>"$_log_stdout" 2>&1 &`
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md).
+
 ## Project architecture
 
-    |-- sslmerge                # main script (init)
-    |-- LICENSE.md              # GNU GENERAL PUBLIC LICENSE, Version 3, 29 June 2007
-    |-- README.md               # this simple documentation
-    |-- .gitignore              # ignore untracked files
-    |-- .gitkeep                # track empty directory
-    |-- src                     # includes external project files
-        |-- _import_            # external variables and functions
-    |-- doc                     # includes documentation, images and manuals
+    |-- LICENSE.md                 # GNU GENERAL PUBLIC LICENSE, Version 3, 29 June 2007
+    |-- README.md                  # this simple documentation
+    |-- CONTRIBUTING.md            # principles of project support
+    |-- .gitignore                 # ignore untracked files
+    |-- .travis.yml                # continuous integration with Travis CI
+    |-- setup.sh                   # install git-template-full on the system
+    |-- bin
+        |-- sslmerge               # main script (init)
+    |-- doc                        # includes documentation, images and manuals
+        |-- man8
+            |-- sslmerge.8         # man page for git-template-full
+    |-- lib                        # libraries, external functions
+    |-- log                        # contains logs, created after init
+    |-- src                        # includes external project files
+        |-- helpers                # contains core functions
+        |-- import                 # appends the contents of the lib directory
+        |-- __init__               # contains the __main__ function
+        |-- settings               # contains git-template-full settings
 
 ## License
 
