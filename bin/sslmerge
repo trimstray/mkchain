@@ -34,13 +34,34 @@
 ### END SCRIPT INFO
 
 
-# shellcheck disable=SC1091
-source src/settings
-source src/helpers
-source src/__init__
+# The array that store call parameters.
+# shellcheck disable=SC2034
+__init_params=()
+__script_params=("$@")
+
+# Store the name of the script and directory call.
+readonly _init_name="$(basename "$0")"
+readonly _init_directory="$(dirname "$(readlink -f "$0")")"
+
+# Set root directory.
+readonly _rel="${_init_directory}/.."
+
+# Directory structure.
+# shellcheck disable=SC2154
+readonly _src="${_rel}/src"
+readonly _lib="${_rel}/lib"
+
+
+# shellcheck disable=SC1090,SC1091
+source "${_src}/settings"
+# shellcheck disable=SC1090
+source "${_src}/helpers"
+# shellcheck disable=SC1090
+source "${_src}/__init__"
+
 
 # We pass arguments to the __main__ function.
 # It is required if you want to run on arguments type $1, $2, ...
-__main__ "$@"
+__main__ "${__script_params[@]}"
 
 _exit_ "0"

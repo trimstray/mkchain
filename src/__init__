@@ -9,33 +9,21 @@ function __main__() {
   local _FUNCTION_ID="__main__"
   local _STATE="0"
 
-  # The tables that store call parameters.
-  __init_params=()
-  __script_params=("$@")
-
-  # Store the name of the script and directory call.
-  readonly _init_name="$(basename "$0")"
-  readonly _init_directory="$(dirname "$(readlink -f "$0")")"
-
-  # Set root directory.
-  readonly _rel_path="${_init_directory}/.."
-
-  # Directory structure.
-  readonly _src_directory="${_rel_path}/src"
-  readonly _lib_directory="${_rel_path}/lib"
-
   # Stores the current date.
   readonly _cdate=$(date +%Y%m%d)
 
   # Variables related to the log file. Divided into three parts due
   # to the better possibility of manipulation for the user.
-  readonly _log_directory="${_rel_path}/log"
+  # shellcheck disable=SC2154
+  readonly _log_directory="${_rel}/log"
+  # shellcheck disable=SC2154
   readonly _log_file="${_init_name}.${_cdate}.log"
   readonly _log_stdout="${_log_directory}/stdout.log"
   readonly _log_path="${_log_directory}/${_log_file}"
 
   # Path to import file.
-  readonly _import_path="${_src_directory}/import"
+  # shellcheck disable=SC2154
+  readonly _import_path="${_src}/import"
 
   # External configuration file (-c|--config script param).
   config=""
@@ -199,7 +187,7 @@ function __main__() {
   # or selected parameters without which the script can not work properly
   # have been used. Do not add the load_state variable to the _opt_values array,
   # which is supported above.
-  _opt_values=()
+  _opt_values=("ssl_delivered_certificates" "_fd")
 
   # Checking the value of the variables (if they are unset or empty):
   #   - variables for call parameters
@@ -228,102 +216,101 @@ function __main__() {
 
   fi
 
-  # If it is not given option -o|--output.
-  if [[ -z "$_fd" ]] ; then
+  # Define array with empty values.
+  ssl_delivered_certificates_list=() ; ssl_attr=() ; ssl_attr_sorted=()
 
-    # If the file/directory is not valid.
-    _sprintf "stop" "not specified -o|--out param"
+  # Define the maximum row size in certificate file.
+  fixed_row_size="64"
 
-    _logger "stop" \
+  # Strings that identifies the certificates.
+  ssl_beg_cert_id="-----BEGIN CERTIFICATE-----"
+  ssl_end_cert_id="-----END CERTIFICATE-----"
+
+  # Temporary file extension.
+  fext="tmp"
+
+  >"$_fd" && \
+  _state="0" || _state="1"
+
+  if [[ "$_state" -eq "0" ]] ; then
+
+    _logger "info" \
       "$_FUNCTION_ID()" \
-      "not specified -o|--out param"
+      "clear the contents of the '$_fd' properly"
 
-  else
+    if [[ "${#ssl_delivered_certificates[@]}" -ne "0" ]] ; then
 
-    >"$_fd" && \
-    _state="0" || _state="1"
+      # Stores certificates.
+      _ssl_cert_stack=""
 
-    if [[ "$_state" -eq "0" ]] ; then
+      # For better control of the log file (do not use _sprintf).
+      for i in "${ssl_delivered_certificates[@]}" ; do
 
-      _logger "info" \
-        "$_FUNCTION_ID()" \
-        "clear the contents of the '$_fd' properly"
+        if [[ -f "$i" ]] ; then
 
-      if [[ "${#ssl_delivered_certificates[@]}" -ne "0" ]] ; then
+          sslSetRowSize "$i"
 
-        # Stores certificates.
-        _ssl_cert_stack=""
+          sslCheck "$i"
 
-        # For better control of the log file (do not use _sprintf).
-        for i in "${ssl_delivered_certificates[@]}" ; do
+          _logger "info" \
+            "$_FUNCTION_ID()" \
+            "script param '$i' is a file"
 
-          if [[ -f "$i" ]] ; then
+        elif [[ -d "$i" ]] ; then
 
-            sslSetRowSize "$i"
+          _logger "info" \
+            "$_FUNCTION_ID()" \
+            "script param '$i' is a directory"
 
-            sslCheck "$i"
+          # Remove last '/' for better compatibility.
+          i="${i%/}"
+
+          _ssl_cert_stack=($(find "$i" -maxdepth 1 -type f -printf "%f\n"))
+
+          for j in "${_ssl_cert_stack[@]}" ; do
+
+            local _ssl_path_plus_name="${i}/${j}"
+
+            sslSetRowSize "$_ssl_path_plus_name"
+
+            sslCheck "$_ssl_path_plus_name"
 
             _logger "info" \
               "$_FUNCTION_ID()" \
               "script param '$i' is a file"
 
-          elif [[ -d "$i" ]] ; then
+          done
 
-            _logger "info" \
-              "$_FUNCTION_ID()" \
-              "script param '$i' is a directory"
+        else
 
-            # Remove last '/' for better compatibility.
-            i="${i%/}"
+          # If the file/directory is not valid.
+          _sprintf "stop" "incorrect file/directory: $i"
 
-            _ssl_cert_stack=($(find "$i" -maxdepth 1 -type f -printf "%f\n"))
+          _logger "stop" \
+            "$_FUNCTION_ID()" \
+            "incorrect file/directory: $i" && _exit_ "1"
 
-            for j in "${_ssl_cert_stack[@]}" ; do
+        fi
 
-              local _ssl_path_plus_name="${i}/${j}"
+      done
 
-              sslSetRowSize "$_ssl_path_plus_name"
+      # We pass without arguments to the function which processes array
+      # directly in a function and assigned to the local array.
+      sslInfo
 
-              sslCheck "$_ssl_path_plus_name"
-
-              _logger "info" \
-                "$_FUNCTION_ID()" \
-                "script param '$i' is a file"
-
-            done
-
-          else
-
-            # If the file/directory is not valid.
-            _sprintf "stop" "incorrect file/directory: $i"
-
-            _logger "stop" \
-              "$_FUNCTION_ID()" \
-              "incorrect file/directory: $i" && _exit_ "1"
-
-          fi
-
-        done
-
-        # We pass without arguments to the function which processes array
-        # directly in a function and assigned to the local array.
-        sslInfo
-
-        # We call the function responsible for creating the chain. Here when
-        # calling anything special but inside the function refers to external array.
-        sslChain
-
-      fi
-
-    else
-
-      _sprintf "stop" "clear the contents of the '$_fd' failed"
-
-      _logger "info" \
-        "$_FUNCTION_ID()" \
-        "clear the contents of the '$_fd' failed"
+      # We call the function responsible for creating the chain. Here when
+      # calling anything special but inside the function refers to external array.
+      sslChain
 
     fi
+
+  else
+
+    _sprintf "stop" "clear the contents of the '$_fd' failed"
+
+    _logger "info" \
+      "$_FUNCTION_ID()" \
+      "clear the contents of the '$_fd' failed"
 
   fi
 
