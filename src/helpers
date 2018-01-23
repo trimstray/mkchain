@@ -564,14 +564,14 @@ function _help_() {
     $_init_name <option|long-option>
 
   Examples:
-    $_init_name --help
+    $_init_name --in Root.crt --in Intermediate1.crt --in Server.crt --out nginx_bundle.crt
+    $_init_name --in /tmp/certs/ --out /tmp/nginx_bundle.crt
 
   Options:
-        --help                      show this message
-        --debug                     displays information on the screen (debug mode)
-        --verbose                   displays 'info' messages on the screen (verbose mode)
-        --time                      displays execution time, occurs only with --verbose
-    -c, --config <file>             attach an external config file to the script
+        --help        show this message
+        --debug       displays information on the screen (debug mode)
+    -i, --in          add certificates to merge (multiple files or directory)
+    -o, --out         saves the result (chain) to file
 
 
   This program comes with ABSOLUTELY NO WARRANTY.
