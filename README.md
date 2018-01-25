@@ -51,7 +51,7 @@ For remove:
 ./setup.sh uninstall
 ```
 
-> - symlink to `bin/sslmergel` is placed in `/usr/local/bin`
+> - symlink to `bin/sslmerge` is placed in `/usr/local/bin`
 > - man page is placed in `/usr/local/man/man8`
 
 ## Use example
