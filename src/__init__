@@ -44,6 +44,14 @@ function __main__() {
   # Add Root Certificate to the certificate chain.
   _with_root="0"
 
+  # Global cert path.
+  _cert_path=""
+
+  # Set main ssl certificates system path.
+  readonly _system_ca_path="/etc/ssl/certs"
+
+  pem_cert_full_path=""
+
   # We place here used commands at script runtime, as strings to anything
   # unnecessarily run.
   readonly commands=("basename" "dirname" "stat" "date" "grep" "cut" \
@@ -262,6 +270,27 @@ function __main__() {
 
       # Stores certificates.
       _ssl_cert_stack=""
+
+      # We do if you provide a server certificate.
+      if [[ "${#ssl_delivered_certificates[@]}" -eq "1" ]] ; then
+
+        for i in "${ssl_delivered_certificates[@]}" ; do
+
+          _uri_path=$(openssl x509 -noout -text -in "$i" | grep "CA Issuers - URI:" | cut -d ":" -f2-)
+
+          _cert_path="$(dirname "$(readlink -f "$i")")"
+
+          sslGetUriCA "$_uri_path" "$i"
+
+          sslGetSha256 "issuer" "$pem_cert_full_path"
+
+          sslGetSysCA
+
+          ssl_delivered_certificates+=("$pem_cert_full_path" "$_root_ca_path")
+
+        done
+
+      fi
 
       # For better control of the log file (do not use _sprintf).
       for i in "${ssl_delivered_certificates[@]}" ; do
