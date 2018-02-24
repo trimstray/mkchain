@@ -62,15 +62,15 @@ Then an example of starting the tool:
 
 ## Result/output
 
-**Sslmerge** displays a lot of useful information on the output:
+At the end of the standard output a lot of useful information is displayed:
 
 - **chain generated correctly**
 
-  Means that the creation of the correct certificate chain has been **completed successfully**. In addition, this means that all required certificates have been found.
+  Means that the correct certificate chain has been **generated successfully**. In addition, this means that all required certificates have been found.
 
 - **not found root certificate**
 
-  The chain was **generated correctly** but it does **not contain the root certificate**.
+  The chain was **generated correctly** but it does **not contain the root certificate**. 
 
   The use of root certificates is not a good practice. They serve no purpose (clients will always ignore them) and they incur a slight performance (latency) penalty because they increase the size of the SSL handshake.
 
@@ -78,6 +78,14 @@ Then an example of starting the tool:
 - **not found intermediate certificate**
 
   The chain was **not created correctly**. Most often it contains only the server certificate in the output file.
+
+- **not found identity (end-user, server) certificate**
+
+  The chain was not created - the server certificate is required for the chain to be created correctly.
+
+## The correct certificates chain
+
+The correct chain should consist of a **server certificate** (it is necessary to generate the correct chain) and at least one **intermediate certificate**. The lack of a root certificate is not an error (see chapter above).
 
 ## Logging
 
