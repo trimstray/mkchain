@@ -74,11 +74,11 @@ function sslChainGenerate() {
   fi
 
   # shellcheck disable=SC2154
-  if [[ "$_key_type_root" == "true" ]] && [[ "$_key_type_inter_count" -eq 1 ]] ; then
+  if [[ "$_key_type_root" == "true" ]] && [[ "$_key_type_root_inter" == "true" ]] ; then
 
     _key_chain_state=0
 
-    printf "    \e[0;31m*\e[m %s\n" "intermediate certificate(s) is missing"
+    printf "    \e[0;31m*\e[m %s\n" "one of intermediate certificate(s) is missing"
 
     _logger "warn" \
       "$_FUNCTION_ID()" \
