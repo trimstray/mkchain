@@ -41,6 +41,9 @@ function __main__() {
   time_tracking="false"
   export _cmdtime_state="0"
 
+  # Add Root Certificate to the certificate chain.
+  _with_root="0"
+
   # We place here used commands at script runtime, as strings to anything
   # unnecessarily run.
   readonly commands=("basename" "dirname" "stat" "date" "grep" "cut" \
@@ -97,7 +100,7 @@ function __main__() {
   # Specifies the call parameters of the script, the exact description
   # can be found in _help_ and file README.md.
   local _short_opt="i:o:"
-  local _long_opt="help,debug,in:,out:"
+  local _long_opt="help,debug,in:,out:,with-root"
 
   _GETOPT_PARAMS=$(getopt -o "${_short_opt}" --long "${_long_opt}" \
                    -n "${_init_name}" -- "${__script_params[@]}")
@@ -144,6 +147,12 @@ function __main__() {
         _fd="$2"
 
         shift 2 ;;
+
+      --with-root)
+
+        _with_root="1"
+
+        shift ;;
 
       *)
 
