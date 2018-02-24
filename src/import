@@ -12,7 +12,8 @@
 #   - lib/kill_process - file with your function
 #   - _fd_stack=("kill_process") - says to include this file in the script
 readonly _fd_stack=("sslChain" "sslChainGenerate" "sslChainLast" \
-                    "sslChainRelation" "sslCheck" "sslInfo" "sslSetRowSize")
+                    "sslChainRelation" "sslCheck" "sslInfo" "sslSetRowSize" \
+                    "sslGetUriCA" "sslConvertToPem" "sslGetSysCA" "sslGetSha256")
 
 if [[ "${#_fd_stack[@]}" -ne 0 ]] ; then
 
