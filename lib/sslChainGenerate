@@ -56,7 +56,7 @@ function sslChainGenerate() {
 
     printf "    \e[0;31m*\e[m %s\n" "not found correct identity (end-user, server) certificate"
 
-    _logger "crit" \
+    _logger "warn" \
       "$_FUNCTION_ID()" \
       "not found correct identity (end-user, server) certificate"
 
@@ -99,6 +99,8 @@ function sslChainGenerate() {
   # shellcheck disable=SC2154
   if [[ "$_key_type_root" == "true" ]] ; then
 
+    _key_chain_state=1
+
     printf "    \e[0;32m*\e[m %s\n" "found correct root certificate"
 
     _logger "warn" \
@@ -106,6 +108,8 @@ function sslChainGenerate() {
       "found correct root certificate"
 
   else
+
+    _key_chain_state=0
 
     printf "    \e[0;34m*\e[m %s\n" "not found correct root certificate"
 
