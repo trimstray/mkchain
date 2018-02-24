@@ -97,6 +97,17 @@ function sslChainRelation() {
 
         _ssl_keep_num=$((_ssl_keep_num+1))
 
+      else
+
+        if [[ "${_key_issuer}" == "${_key_subject}" ]] ; then
+
+          # shellcheck disable=SC2034
+          _key_type="Root Certificate"
+          # shellcheck disable=SC2034
+          _key_type_root="true"
+
+        fi
+
       fi
 
     fi
