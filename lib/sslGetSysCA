@@ -1,0 +1,35 @@
+# shellcheck shell=bash
+
+# ``````````````````````````````````````````````````````````````````````````````
+# Function name: sslGetSysCA()
+#
+# Description:
+#
+# Usage:
+#   sslGetSysCA
+#
+# Examples:
+#   sslGetSysCA
+#
+
+function sslGetSysCA() {
+
+  local _FUNCTION_ID="sslGetSysCA"
+  local _STATE=0
+
+  _root_ca_file="RootCertificate.crt"
+  _root_ca_path="${_cert_path}/${_root_ca_file}"
+
+  for i in $(find /etc/ssl/certs/ -name "*.pem") ; do
+
+    if [[ $(openssl x509 -noout -issuer_hash -in $i | grep "$_hash") ]] ; then
+
+      cp "$i" "$_root_ca_path"
+
+    fi
+
+  done
+
+  return $_STATE
+
+}
