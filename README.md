@@ -5,8 +5,8 @@
 |            **STABLE RELEASE**            |           **TESTING RELEASE**            |
 | :--------------------------------------: | :--------------------------------------: |
 | [![](https://img.shields.io/badge/Branch-master-green.svg)]() | [![](https://img.shields.io/badge/Branch-testing-orange.svg)]() |
-| [![](https://img.shields.io/badge/Version-v1.3.0-lightgrey.svg)]() | [![](https://img.shields.io/badge/Version-v1.3.0-lightgrey.svg)]() |
-| [![Build Status](https://travis-ci.org/trimstray/sslmerge.svg?branch=master)](https://travis-ci.org/trimstray/sslmergel) | [![Build Status](https://travis-ci.org/trimstray/sslmerge.svg?branch=testing)](https://travis-ci.org/trimstray/sslmerge) |
+| [![](https://img.shields.io/badge/Version-v1.3.1-lightgrey.svg)]() | [![](https://img.shields.io/badge/Version-v1.3.1-lightgrey.svg)]() |
+| [![Build Status](https://travis-ci.org/trimstray/sslmerge.svg?branch=master)](https://travis-ci.org/trimstray/sslmerge) | [![Build Status](https://travis-ci.org/trimstray/sslmerge.svg?branch=testing)](https://travis-ci.org/trimstray/sslmerge) |
 
 ## Description
 
@@ -21,7 +21,7 @@ Provides the following options:
     sslmerge <option|long-option>
 
   Examples:
-    sslmerge --in Root.crt --in Intermediate.crt --in Server.crt --out nginx_bundle.crt
+    sslmerge --in Root.crt --in Intermediate1.crt --in Server.crt --out nginx_bundle.crt
     sslmerge --in /tmp/certs/ --out /tmp/nginx_bundle.crt
 
   Options:
@@ -56,36 +56,67 @@ For remove:
 
 ## Use example
 
+Let's start with **ssllabs** certificate chain. First of all get chain structure with **openssl** command:
+
+```bash
+Certificate chain
+ 0 s:/C=US/ST=California/L=Redwood City/O=Qualys, Inc./CN=ssllabs.com
+   i:/C=US/O=Entrust, Inc./OU=See www.entrust.net/legal-terms/OU=(c) 2012 Entrust, Inc. - for authorized use only/CN=Entrust Certification Authority - L1K
+ 1 s:/C=US/O=Entrust, Inc./OU=See www.entrust.net/legal-terms/OU=(c) 2012 Entrust, Inc. - for authorized use only/CN=Entrust Certification Authority - L1K
+   i:/C=US/O=Entrust, Inc./OU=See www.entrust.net/legal-terms/OU=(c) 2009 Entrust, Inc. - for authorized use only/CN=Entrust Root Certification Authority - G2
+ 2 s:/C=US/O=Entrust, Inc./OU=See www.entrust.net/legal-terms/OU=(c) 2009 Entrust, Inc. - for authorized use only/CN=Entrust Root Certification Authority - G2
+   i:/C=US/O=Entrust, Inc./OU=www.entrust.net/CPS is incorporated by reference/OU=(c) 2006 Entrust, Inc./CN=Entrust Root Certification Authority
+```
+
+The above code presents a full chain consisting of:
+
+- **Identity Certificate** (Server Certificate)
+
+  issued for **ssllabs.com** by **Entrust Certification Authority - L1K**
+
+- **Intermediate Certificate**
+
+  issued for **Entrust Certification Authority - L1K** by **Entrust Root Certification Authority - G2**
+
+- **Intermediate Certificate**
+
+  issued for **Entrust Root Certification Authority - G2** by **Entrust Root Certification Authority**
+
+- **Root Certificate** (Self-Signed Certificate)
+
+  issued for **Entrust Root Certification Authority** by **Entrust Root Certification Authority**
+
 Then an example of starting the tool:
 
+``````
+ls example/ssllabs.com
+Intermediate1.crt  Intermediate2.crt  RootCertificate.crt  ServerCertificate.crt
+
+sslmerge -i example/ssllabs.com -o /tmp/bundle_chain_ssllabs_certs.crt
+
+  	           (ServerCertificate.crt)
+  	           (Identity Certificate)
+  S:(18319780):(ssllabs.com)
+  I:(2835d715):(EntrustCertificationAuthority-L1K)
+  	           (Intermediate1.crt)
+  	           (Intermediate Certificate)
+  S:(2835d715):(EntrustCertificationAuthority-L1K)
+  I:(02265526):(EntrustRootCertificationAuthority-G2)
+  	           (Intermediate2.crt)
+  	           (Intermediate Certificate)
+  S:(02265526):(EntrustRootCertificationAuthority-G2)
+  I:(6b99d060):(EntrustRootCertificationAuthority)
+  	           (RootCertificate.crt)
+  	           (Root Certificate)
+  S:(6b99d060):(EntrustRootCertificationAuthority)
+  I:(6b99d060):(EntrustRootCertificationAuthority)
+
+  Result: chain generated correctly
+``````
+
+Output from the terminal:
+
 ![sslmerge_output](doc/img/sslmerge_output.png)
-
-## Result/output
-
-At the end of the standard output a lot of useful information is displayed:
-
-- **chain generated correctly**
-
-  Means that the correct certificate chain has been **generated successfully**. In addition, this means that all required certificates have been found.
-
-- **not found root certificate**
-
-  The chain was **generated correctly** but it does **not contain the root certificate**. 
-
-  The use of root certificates is not a good practice. They serve no purpose (clients will always ignore them) and they incur a slight performance (latency) penalty because they increase the size of the SSL handshake.
-
-
-- **not found intermediate certificate**
-
-  The chain was **not created correctly**. Most often it contains only the server certificate in the output file.
-
-- **not found identity (end-user, server) certificate**
-
-  The chain was not created - the server certificate is required for the chain to be created correctly.
-
-## The correct certificates chain
-
-The correct chain should consist of a **server certificate** (it is necessary to generate the correct chain) and at least one **intermediate certificate**. The lack of a root certificate is not an error (see chapter above).
 
 ## Logging
 
