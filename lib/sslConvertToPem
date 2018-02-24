@@ -1,0 +1,28 @@
+# shellcheck shell=bash
+
+# ``````````````````````````````````````````````````````````````````````````````
+# Function name: sslConvertToPem()
+#
+# Description:
+#
+# Usage:
+#   sslConvertToPem
+#
+# Examples:
+#   sslConvertToPem
+#
+
+function sslConvertToPem() {
+
+  local _FUNCTION_ID="sslConvertToPem"
+  local _STATE=0
+
+  local bin_path="$1"
+
+  pem_cert_full_path="${_cert_path}/Certificate.crt"
+
+  openssl x509 -in "$bin_path" -inform der -outform pem -out "$pem_cert_full_path"
+
+  return $_STATE
+
+}
