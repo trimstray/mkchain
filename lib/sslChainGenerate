@@ -24,16 +24,39 @@ function sslChainGenerate() {
   # shellcheck disable=SC2154
   for i in "${ssl_attr_sorted[@]}" ; do
 
-    _absolute_path="${i%%:*}"
-    _path="$(basename "$_absolute_path")"
+    _absolute_path=$(echo "$i" | awk -v FS="(:|:)" '{print $1}')
+    _root_issuer=$(echo "$i" | awk -v FS="(:|:)" '{print $2}')
+    _root_subject=$(echo "$i" | awk -v FS="(:|:)" '{print $3}')
 
-    _logger "info" \
-      "$_FUNCTION_ID()" \
-      "add $_path"
+    if [[ "$_root_issuer" == "$_root_subject" ]] ; then
 
-    # alternative: (cat "$_absolute_path" ; echo) >> "$_fd"
-    # shellcheck disable=SC2154
-    cat "$_absolute_path" >> "$_fd"
+      if [[ "$_with_root" -eq 1 ]] ; then
+
+        _path="$(basename "$_absolute_path")"
+
+        _logger "info" \
+          "$_FUNCTION_ID()" \
+          "add $_path"
+
+        # alternative: (cat "$_absolute_path" ; echo) >> "$_fd"
+        # shellcheck disable=SC2154
+        cat "$_absolute_path" >> "$_fd"
+
+      fi
+
+    else
+
+      _path="$(basename "$_absolute_path")"
+
+      _logger "info" \
+        "$_FUNCTION_ID()" \
+        "add $_path"
+
+      # alternative: (cat "$_absolute_path" ; echo) >> "$_fd"
+      # shellcheck disable=SC2154
+      cat "$_absolute_path" >> "$_fd"
+
+    fi
 
   done
 
