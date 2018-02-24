@@ -6,16 +6,22 @@ sslmerge \- Is an open source tool to help you build a valid SSL certificate cha
 .SH SYNOPSIS
 sslmerge <option|long-option>
 .SH DESCRIPTION
-Is an open source tool to help you build a valid SSL certificate chain.
+Is an open source tool to help you build a valid SSL certificate chain from the root certificate to the end-user certificate. Also can help you fix the incomplete certificate chain and download all missing CA certificates.
 .SH OPTIONS
 --help
         show this message
+
 --debug
         displays information on the screen (debug mode)
+
 -i, --in
         add certificates to merge (multiple files or directory)
+
 -o, --out
         saves the result (chain) to file
+
+--with-root
+        add root certificate to the certificate chain
 .SH SEE ALSO
 https://github.com/trimstray/sslmerge
 .SH BUGS
