@@ -44,32 +44,32 @@ function sslChainGenerate() {
 
     _key_chain_state=1
 
-    printf "    \e[0;32m*\e[m %s\n" "found identity (end-user, server) certificate"
+    printf "    \e[0;32m*\e[m %s\n" "found correct identity (end-user, server) certificate"
 
     _logger "warn" \
       "$_FUNCTION_ID()" \
-      "found identity (end-user, server) certificate"
+      "found correct identity (end-user, server) certificate"
 
   else
 
     _key_chain_state=0
 
-    printf "    \e[0;31m*\e[m %s\n" "not found identity (end-user, server) certificate"
+    printf "    \e[0;31m*\e[m %s\n" "not found correct identity (end-user, server) certificate"
 
     _logger "crit" \
       "$_FUNCTION_ID()" \
-      "not found identity (end-user, server) certificate"
+      "not found correct identity (end-user, server) certificate"
 
   fi
 
   # shellcheck disable=SC2154
   if [[ "$_key_type_inter" == "true" ]] ; then
 
-    printf "    \e[0;32m*\e[m %s %d %s\n" "found" "$_key_type_inter_count" "intermediate certificate(s)"
+    printf "    \e[0;32m*\e[m %s %d %s\n" "found" "$_key_type_inter_count" "correct intermediate certificate(s)"
 
     _logger "warn" \
       "$_FUNCTION_ID()" \
-      "found intermediate certificate"
+      "found $_key_type_inter_count correct intermediate certificate"
 
   fi
 
@@ -78,40 +78,40 @@ function sslChainGenerate() {
 
     _key_chain_state=0
 
-    printf "    \e[0;31m*\e[m %s\n" "one of intermediate certificate(s) is missing"
+    printf "    \e[0;31m*\e[m %s\n" "not found second intermediate certificate"
 
     _logger "warn" \
       "$_FUNCTION_ID()" \
-      "intermediate certificate is missing"
+      "not found second intermediate certificate"
 
   elif [[ "$_key_type_root" == "true" ]] && [[ "$_key_type_inter_count" -lt 1 ]] ; then
 
     _key_chain_state=0
 
-    printf "    \e[0;31m*\e[m %s\n" "intermediate certificate(s) is missing"
+    printf "    \e[0;31m*\e[m %s\n" "not found first intermediate certificate"
 
     _logger "warn" \
       "$_FUNCTION_ID()" \
-      "intermediate certificate is missing"
+      "not found first intermediate certificate"
 
   fi
 
   # shellcheck disable=SC2154
   if [[ "$_key_type_root" == "true" ]] ; then
 
-    printf "    \e[0;32m*\e[m %s\n" "found root certificate"
+    printf "    \e[0;32m*\e[m %s\n" "found correct root certificate"
 
     _logger "warn" \
       "$_FUNCTION_ID()" \
-      "found root certificate"
+      "found correct root certificate"
 
   else
 
-    printf "    \e[0;34m*\e[m %s\n" "not found root certificate"
+    printf "    \e[0;34m*\e[m %s\n" "not found correct root certificate"
 
     _logger "warn" \
       "$_FUNCTION_ID()" \
-      "not found root certificate"
+      "not found correct root certificate"
 
   fi
 
