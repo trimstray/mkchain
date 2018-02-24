@@ -54,6 +54,7 @@ function sslChainGenerate() {
 
   fi
 
+  # shellcheck disable=SC2154
   if [[ "$_key_empty_value" == "true" ]] ; then
 
     printf "          %s\n" "but an empty CN field was found in one of the certificates"
