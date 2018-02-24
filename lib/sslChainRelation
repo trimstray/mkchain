@@ -25,6 +25,8 @@ function sslChainRelation() {
   _key_type_root="false"
   _key_type_inter="false"
 
+  _key_type_inter_count="0"
+
   echo
 
   # shellcheck disable=SC2154
@@ -70,6 +72,8 @@ function sslChainRelation() {
           _key_type="Intermediate Certificate"
           # shellcheck disable=SC2034
           _key_type_inter="true"
+
+          _key_type_inter_count=$((_key_type_inter_count + 1))
 
         else
 
