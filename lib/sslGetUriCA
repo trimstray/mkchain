@@ -1,0 +1,31 @@
+# shellcheck shell=bash
+
+# ``````````````````````````````````````````````````````````````````````````````
+# Function name: sslGetUriCA()
+#
+# Description:
+#
+# Usage:
+#   sslGetUriCA
+#
+# Examples:
+#   sslGetUriCA
+#
+
+function sslGetUriCA() {
+
+  local _FUNCTION_ID="sslGetUriCA"
+  local _STATE=0
+
+  local uri="$1"
+  local _bin_path="${_tmp}/certificate.bin"
+
+  curl -ks --output "$_bin_path" "$uri"
+
+  sslConvertToPem "$_bin_path" "$_cert_path"
+
+  rm -fr "$_bin_path"
+
+  return $_STATE
+
+}
