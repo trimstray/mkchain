@@ -64,6 +64,12 @@ function sslInfo() {
 
     _key_subject_hash=$(openssl x509 -noout -subject_hash -in "$_key_path")
 
+    if [[ -z "$_key_issuer" ]] || [[ -z "$_key_subject" ]] ; then
+
+      _key_empty_value="true"
+
+    fi
+
     _logger "info" \
       "$_FUNCTION_ID()" \
       "adding new elements to the array"

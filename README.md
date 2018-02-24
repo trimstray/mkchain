@@ -33,7 +33,7 @@ Provides the following options:
 
 ## Requirements
 
-**<u>Sslmerge</u>** uses external utilities to be installed before running:
+**<u>sslmerge</u>** uses external utilities to be installed before running:
 
 - [openssl](https://www.openssl.org/)
 
@@ -56,30 +56,65 @@ For remove:
 
 ## Use example
 
+Let's start with **ssllabs** certificate chain. First of all get chain structure with **openssl** command:
+
+```bash
+Certificate chain
+ 0 s:/C=US/ST=California/L=Redwood City/O=Qualys, Inc./CN=ssllabs.com
+   i:/C=US/O=Entrust, Inc./OU=See www.entrust.net/legal-terms/OU=(c) 2012 Entrust, Inc. - for authorized use only/CN=Entrust Certification Authority - L1K
+ 1 s:/C=US/O=Entrust, Inc./OU=See www.entrust.net/legal-terms/OU=(c) 2012 Entrust, Inc. - for authorized use only/CN=Entrust Certification Authority - L1K
+   i:/C=US/O=Entrust, Inc./OU=See www.entrust.net/legal-terms/OU=(c) 2009 Entrust, Inc. - for authorized use only/CN=Entrust Root Certification Authority - G2
+ 2 s:/C=US/O=Entrust, Inc./OU=See www.entrust.net/legal-terms/OU=(c) 2009 Entrust, Inc. - for authorized use only/CN=Entrust Root Certification Authority - G2
+   i:/C=US/O=Entrust, Inc./OU=www.entrust.net/CPS is incorporated by reference/OU=(c) 2006 Entrust, Inc./CN=Entrust Root Certification Authority
+```
+
+The above code presents a full chain consisting of:
+
+- **Identity Certificate** (Server Certificate)
+
+  issued for **ssllabs.com** by **Entrust Certification Authority - L1K**
+
+- **Intermediate Certificate**
+
+  issued for **Entrust Certification Authority - L1K** by **Entrust Root Certification Authority - G2**
+
+- **Intermediate Certificate**
+
+  issued for **Entrust Root Certification Authority - G2** by **Entrust Root Certification Authority**
+
+- **Root Certificate** (Self-Signed Certificate)
+
+  issued for **Entrust Root Certification Authority** by **Entrust Root Certification Authority**
+
 Then an example of starting the tool:
 
 ``````
-ls
-00.crt	01.crt	03.crt
-sslmerge -i /tmp/google_cert -o /tmp/bundle_chain_google_certs.crt
+ls example/ssllabs.com
+Intermediate1.crt  Intermediate2.crt  RootCertificate.crt  ServerCertificate.crt
 
-  	       (03.crt)
-  	       (Identity Certificate)
-  S:(a18bd28a):(*.google.com)
-  I:(c4c7a654):(GoogleInternetAuthorityG2)
-  	       (00.crt)
-  	       (Intermediate Certificate)
-  S:(c4c7a654):(GoogleInternetAuthorityG2)
-  I:(2c543cd1):(GeoTrustGlobalCA)
-  	       (01.crt)
-  	       (Root Certificate)
-  S:(2c543cd1):(GeoTrustGlobalCA)
-  I:(2c543cd1):(GeoTrustGlobalCA)
+sslmerge -i example/ssllabs.com -o /tmp/bundle_chain_ssllabs_certs.crt
+
+  	           (ServerCertificate.crt)
+  	           (Identity Certificate)
+  S:(18319780):(ssllabs.com)
+  I:(2835d715):(EntrustCertificationAuthority-L1K)
+  	           (Intermediate1.crt)
+  	           (Intermediate Certificate)
+  S:(2835d715):(EntrustCertificationAuthority-L1K)
+  I:(02265526):(EntrustRootCertificationAuthority-G2)
+  	           (Intermediate2.crt)
+  	           (Intermediate Certificate)
+  S:(02265526):(EntrustRootCertificationAuthority-G2)
+  I:(6b99d060):(EntrustRootCertificationAuthority)
+  	           (RootCertificate.crt)
+  	           (Root Certificate)
+  S:(6b99d060):(EntrustRootCertificationAuthority)
+  I:(6b99d060):(EntrustRootCertificationAuthority)
 
   Result: chain generated correctly
 ``````
 
-Screen from terminal:
+Output from the terminal:
 
 ![sslmerge_output](doc/img/sslmerge_output.png)
 
@@ -114,6 +149,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md).
         |-- import                 # appends the contents of the lib directory
         |-- __init__               # contains the __main__ function
         |-- settings               # contains sslmergel settings
+    |-- example                    # examples of certs needed to build a chain
 
 ## License
 
