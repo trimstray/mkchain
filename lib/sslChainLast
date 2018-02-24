@@ -18,7 +18,7 @@ function sslChainLast() {
   local _FUNCTION_ID="sslChainLast"
   local _STATE=0
 
-  local _server_cert_state=""
+  _server_cert_state=""
 
   # Extracting data for each element of the array.
   # shellcheck disable=SC2154
