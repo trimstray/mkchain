@@ -35,28 +35,20 @@ function sslChainGenerate() {
 
   done
 
-  printf "  %s:\n" "Result"
+  printf "  %s: " "Result"
 
   # shellcheck disable=SC2154
-  if [[ "$_key_type_inter" == "false" ]] ; then
+  if [[ "$_key_type_inter" == "false" ]] || [[ "$_key_type_ident" == "false" ]] ; then
 
-    printf "          * \e[1;31m%s\e[m\n" "not found intermediate certificate"
-
-    _logger "warn" \
-      "$_FUNCTION_ID()" \
-      "not found intermediate certificate"
-
-  elif [[ "$_key_type_root" == "false" ]] ; then
-
-    printf "          * \e[1;33m%s\e[m\n" "not found root certificate"
+    printf "\e[1;31m%s\e[m\n\n" "chain not generated correctly"
 
     _logger "warn" \
       "$_FUNCTION_ID()" \
-      "not found root certificate"
+      "chain not generated correctly"
 
   else
 
-    printf "          * \e[1;32m%s\e[m\n" "chain generated correctly"
+    printf "\e[1;32m%s\e[m\n\n" "chain generated correctly"
 
     _logger "warn" \
       "$_FUNCTION_ID()" \
@@ -64,10 +56,12 @@ function sslChainGenerate() {
 
   fi
 
+
+
   # shellcheck disable=SC2154
   if [[ "$_key_empty_value" == "true" ]] ; then
 
-    printf "          * %s\n" "an empty CN field was found in one of the certificates"
+    printf "  * %s\n" "an empty CN field was found in one of the certificates"
 
     _logger "warn" \
       "$_FUNCTION_ID()" \
@@ -78,18 +72,26 @@ function sslChainGenerate() {
   # shellcheck disable=SC2154
   if [[ "$_key_type_ident" == "true" ]] ; then
 
-    printf "          * %s\n" "found identity (end-user, server) certificate"
+    printf "    * %s\n" "found identity (end-user, server) certificate"
 
     _logger "warn" \
       "$_FUNCTION_ID()" \
       "found identity (end-user, server) certificate"
+
+  else
+
+    printf "    * \e[1;31m%s\e[m\n" "not found identity (end-user, server) certificate"
+
+    _logger "crit" \
+      "$_FUNCTION_ID()" \
+      "not found identity (end-user, server) certificate"
 
   fi
 
   # shellcheck disable=SC2154
   if [[ "$_key_type_inter" == "true" ]] ; then
 
-    printf "          * %s %d %s\n" "found" "$_key_type_inter_count" "intermediate certificate"
+    printf "    * %s %d %s\n" "found" "$_key_type_inter_count" "intermediate certificate(s)"
 
     _logger "warn" \
       "$_FUNCTION_ID()" \
@@ -98,15 +100,44 @@ function sslChainGenerate() {
   fi
 
   # shellcheck disable=SC2154
+  if [[ "$_key_type_root" == "true" ]] && [[ "$_key_type_inter_count" -eq 1 ]] ; then
+
+    printf "    * \e[1;31m%s\e[m\n" "one intermediate certificate is missing"
+
+    _logger "warn" \
+      "$_FUNCTION_ID()" \
+      "one intermediate certificate is missing"
+
+  elif [[ "$_key_type_root" == "true" ]] && [[ "$_key_type_inter_count" -lt 1 ]] ; then
+
+    printf "    * \e[1;31m%s\e[m\n" "second intermediate certificate is missing"
+
+    _logger "warn" \
+      "$_FUNCTION_ID()" \
+      "second intermediate certificate is missing"
+
+  fi
+
+  # shellcheck disable=SC2154
   if [[ "$_key_type_root" == "true" ]] ; then
 
-    printf "          * %s\n" "found root certificate"
+    printf "    * %s\n" "found root certificate"
 
     _logger "warn" \
       "$_FUNCTION_ID()" \
       "found root certificate"
 
+  else
+
+    printf "    * \e[1;33m%s\e[m\n" "not found root certificate"
+
+    _logger "warn" \
+      "$_FUNCTION_ID()" \
+      "not found root certificate"
+
   fi
+
+  echo
 
   return $_STATE
 
