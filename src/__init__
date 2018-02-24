@@ -150,6 +150,7 @@ function __main__() {
 
       --with-root)
 
+        # shellcheck disable=SC2034
         _with_root="1"
 
         shift ;;
