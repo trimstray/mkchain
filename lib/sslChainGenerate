@@ -72,7 +72,18 @@ function sslChainGenerate() {
     _logger "warn" \
       "$_FUNCTION_ID()" \
       "an empty CN field was found in one of the certificates"
-      
+
+  fi
+
+  # shellcheck disable=SC2154
+  if [[ "$_server_cert_state" -eq 1 ]] ; then
+
+    printf "          * %s\n" "found identity (end-user, server) certificate"
+
+    _logger "warn" \
+      "$_FUNCTION_ID()" \
+      "found identity (end-user, server) certificate"
+
   fi
 
   return $_STATE
