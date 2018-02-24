@@ -572,6 +572,7 @@ function _help_() {
         --debug       displays information on the screen (debug mode)
     -i, --in          add certificates to merge (multiple files or directory)
     -o, --out         saves the result (chain) to file
+        --with-root   add root certificate to the certificate chain
 
 
   This program comes with ABSOLUTELY NO WARRANTY.
