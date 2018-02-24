@@ -29,6 +29,8 @@ function sslChainRelation() {
 
   echo
 
+  printf "  \e[1;34m%s\e[m:\n\n" "SSL certificate chain"
+
   # shellcheck disable=SC2154
   while [[ "$_ssl_attr_num" -lt "${#ssl_attr[@]}" ]] ; do
 
@@ -84,10 +86,10 @@ function sslChainRelation() {
         # Assign an element to the array with 'paht:issuer:subject' notation.
         _ssl_attr_sorted+=("${_key_path}:${_key_issuer}:${_last_subject}")
 
-        printf "  \t       (%s)\n" "${_key_path_name}"
-        printf "  \t       (\e[0;33m%s\e[m)\n" "${_key_type}"
-        printf "  S:(\e[1;36m%s\e[m):(\e[1;39m%s\e[m)\n" "${_key_subject_hash}" "${_last_subject}"
-        printf "  I:(\e[1;36m%s\e[m):(\e[1;30m%s\e[m)\n" "${_key_issuer_hash}" "${_key_issuer}"
+        printf "  \t         (%s)\n" "${_key_path_name}"
+        printf "  \t         (\e[0;33m%s\e[m)\n" "${_key_type}"
+        printf "    S:(\e[1;36m%s\e[m):(\e[1;39m%s\e[m)\n" "${_key_subject_hash}" "${_last_subject}"
+        printf "    I:(\e[1;36m%s\e[m):(\e[1;30m%s\e[m)\n" "${_key_issuer_hash}" "${_key_issuer}"
 
         _logger "info" \
           "$_FUNCTION_ID()" \
