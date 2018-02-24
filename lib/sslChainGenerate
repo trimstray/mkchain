@@ -76,13 +76,35 @@ function sslChainGenerate() {
   fi
 
   # shellcheck disable=SC2154
-  if [[ "$_server_cert_state" -eq 1 ]] ; then
+  if [[ "$_key_type_ident" == "true" ]] ; then
 
     printf "          * %s\n" "found identity (end-user, server) certificate"
 
     _logger "warn" \
       "$_FUNCTION_ID()" \
       "found identity (end-user, server) certificate"
+
+  fi
+
+  # shellcheck disable=SC2154
+  if [[ "$_key_type_inter" == "true" ]] ; then
+
+    printf "          * %s %d %s\n" "found" "$_key_type_inter_count" "intermediate certificate"
+
+    _logger "warn" \
+      "$_FUNCTION_ID()" \
+      "found intermediate certificate"
+
+  fi
+
+  # shellcheck disable=SC2154
+  if [[ "$_key_type_root" == "true" ]] ; then
+
+    printf "          * %s\n" "found root certificate"
+
+    _logger "warn" \
+      "$_FUNCTION_ID()" \
+      "found root certificate"
 
   fi
 
