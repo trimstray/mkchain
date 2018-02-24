@@ -10,7 +10,7 @@
 
 ## Description
 
-Is an open source tool to help you build a valid SSL certificate chain.
+Is an open source tool to help you build a valid SSL certificate chain from the root certificate to the end-user certificate. Also can help you fix the incomplete certificate chain.
 
 ## Parameters
 
@@ -29,6 +29,7 @@ Provides the following options:
         --debug       displays information on the screen (debug mode)
     -i, --in          add certificates to merge (multiple files or directory)
     -o, --out         saves the result (chain) to file
+        --with-root   add root certificate to the certificate chain
 ```
 
 ## Requirements
@@ -56,7 +57,9 @@ For remove:
 
 ## Use example
 
-Let's start with **ssllabs** certificate chain. First of all get chain structure with **openssl** command:
+Let's start with **ssllabs** certificate chain. They are delivered together with the **sslmerge** and can be found in the `example/ssllabs.com` directory.
+
+The correct chain for the ssllabs.com domain (the result of the **openssl** command):
 
 ```bash
 Certificate chain
@@ -72,51 +75,38 @@ The above code presents a full chain consisting of:
 
 - **Identity Certificate** (Server Certificate)
 
-  issued for **ssllabs.com** by **Entrust Certification Authority - L1K**
+  issued for *ssllabs.com* by *Entrust Certification Authority - L1K*
 
 - **Intermediate Certificate**
 
-  issued for **Entrust Certification Authority - L1K** by **Entrust Root Certification Authority - G2**
+  issued for *Entrust Certification Authority - L1K* by *Entrust Root Certification Authority - G2*
 
 - **Intermediate Certificate**
 
-  issued for **Entrust Root Certification Authority - G2** by **Entrust Root Certification Authority**
+  issued for *Entrust Root Certification Authority - G2* by *Entrust Root Certification Authority*
 
 - **Root Certificate** (Self-Signed Certificate)
 
-  issued for **Entrust Root Certification Authority** by **Entrust Root Certification Authority**
+  issued for *Entrust Root Certification Authority* by *Entrust Root Certification Authority*
 
 Then an example of starting the tool:
 
-``````
-ls example/ssllabs.com
-Intermediate1.crt  Intermediate2.crt  RootCertificate.crt  ServerCertificate.crt
-
-sslmerge -i example/ssllabs.com -o /tmp/bundle_chain_ssllabs_certs.crt
-
-  	           (ServerCertificate.crt)
-  	           (Identity Certificate)
-  S:(18319780):(ssllabs.com)
-  I:(2835d715):(EntrustCertificationAuthority-L1K)
-  	           (Intermediate1.crt)
-  	           (Intermediate Certificate)
-  S:(2835d715):(EntrustCertificationAuthority-L1K)
-  I:(02265526):(EntrustRootCertificationAuthority-G2)
-  	           (Intermediate2.crt)
-  	           (Intermediate Certificate)
-  S:(02265526):(EntrustRootCertificationAuthority-G2)
-  I:(6b99d060):(EntrustRootCertificationAuthority)
-  	           (RootCertificate.crt)
-  	           (Root Certificate)
-  S:(6b99d060):(EntrustRootCertificationAuthority)
-  I:(6b99d060):(EntrustRootCertificationAuthority)
-
-  Result: chain generated correctly
-``````
-
-Output from the terminal:
-
 ![sslmerge_output](doc/img/sslmerge_output.png)
+
+## Correct certificate chain
+
+In order to create a valid chain, you must provide the tool with all the necessary certificates. It will be:
+
+- **Server Certificate**
+- **Intermediate CAs** and **Root CAs**
+
+This is very important because without it you will not be able to determine the beginning and end of the chain.
+
+However, if you look inside the generated chain after generating, you will not find the root certificate there. Why?
+
+Because self-signed root certificates need not/should not be included in web server configuration. They serve no purpose (clients will always ignore them) and they incur a slight performance (latency) penalty because they increase the size of the SSL handshake.
+
+If you want to add a root certificate to the certificate chain, call the utility with the `--with-root` parameter.
 
 ## Logging
 
@@ -150,6 +140,11 @@ See [CONTRIBUTING.md](CONTRIBUTING.md).
         |-- __init__               # contains the __main__ function
         |-- settings               # contains sslmergel settings
     |-- example                    # examples of certs needed to build a chain
+        |-- github.com
+        |-- google.com
+        |-- mozilla.com
+        |-- ssllabs.com
+        |-- vultr.com
 
 ## License
 
