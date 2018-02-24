@@ -564,8 +564,9 @@ function _help_() {
     $_init_name <option|long-option>
 
   Examples:
-    $_init_name --in Root.crt --in Intermediate1.crt --in Server.crt --out nginx_bundle.crt
-    $_init_name --in /tmp/certs/ --out /tmp/nginx_bundle.crt
+    $_init_name --in Root.crt --in Intermediate1.crt --in Server.crt --out bundle_chain_certs.crt
+    $_init_name --in /tmp/certs/ --out bundle_chain_certs.crt --with-root
+    $_init_name -i Server.crt -o bundle_chain_certs.crt
 
   Options:
         --help        show this message
