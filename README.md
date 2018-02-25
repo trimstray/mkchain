@@ -2,15 +2,15 @@
 
 ## Releases
 
-|            **STABLE RELEASE**            |           **TESTING RELEASE**            |
-| :--------------------------------------: | :--------------------------------------: |
+|                      **STABLE RELEASE**                      |                     **TESTING RELEASE**                      |
+| :----------------------------------------------------------: | :----------------------------------------------------------: |
 | [![](https://img.shields.io/badge/Branch-master-green.svg)]() | [![](https://img.shields.io/badge/Branch-testing-orange.svg)]() |
-| [![](https://img.shields.io/badge/Version-v1.3.1-lightgrey.svg)]() | [![](https://img.shields.io/badge/Version-v1.3.1-lightgrey.svg)]() |
+| [![](https://img.shields.io/badge/Version-v1.4.0-lightgrey.svg)]() | [![](https://img.shields.io/badge/Version-v1.4.0-lightgrey.svg)]() |
 | [![Build Status](https://travis-ci.org/trimstray/sslmerge.svg?branch=master)](https://travis-ci.org/trimstray/sslmerge) | [![Build Status](https://travis-ci.org/trimstray/sslmerge.svg?branch=testing)](https://travis-ci.org/trimstray/sslmerge) |
 
 ## Description
 
-Is an open source tool to help you build a valid SSL certificate chain from the root certificate to the end-user certificate. Also can help you fix the incomplete certificate chain.
+Is an open source tool to help you build a valid SSL certificate chain from the root certificate to the end-user certificate. Also can help you fix the incomplete certificate chain and download all missing CA certificates.
 
 ## Parameters
 
@@ -21,8 +21,9 @@ Provides the following options:
     sslmerge <option|long-option>
 
   Examples:
-    sslmerge --in Root.crt --in Intermediate1.crt --in Server.crt --out nginx_bundle.crt
-    sslmerge --in /tmp/certs/ --out /tmp/nginx_bundle.crt
+    sslmerge --in Root.crt --in Intermediate1.crt --in Server.crt --out bundle_chain_certs.crt
+    sslmerge --in /tmp/certs/ --out bundle_chain_certs.crt --with-root
+    sslmerge -i Server.crt -o bundle_chain_certs.crt
 
   Options:
         --help        show this message
@@ -57,7 +58,7 @@ For remove:
 
 ## Use example
 
-Let's start with **ssllabs** certificate chain. They are delivered together with the **sslmerge** and can be found in the `example/ssllabs.com` directory.
+Let's start with **ssllabs** certificate chain. They are delivered together with the **sslmerge** and can be found in the `example/ssllabs.com` directory which additionally contains the `all` directory (containing all the certificates needed to assemble the chain) and the `server_certificate` directory (containing only the server certificate).
 
 The correct chain for the ssllabs.com domain (the result of the **openssl** command):
 
@@ -89,11 +90,19 @@ The above code presents a full chain consisting of:
 
   issued for *Entrust Root Certification Authority* by *Entrust Root Certification Authority*
 
-Then an example of starting the tool:
+### Scenario 1
 
-![sslmerge_output](doc/img/sslmerge_output.png)
+In this scenario, we will chain all delivered certificates. Example of running the tool:
 
-## Correct certificate chain
+![sslmerge_output](doc/img/sslmerge_output_1.png)
+
+### Scenario 2
+
+In this scenario, we only use the server certificate and use it to retrieve the remaining required certificates. Then, as above, we will combine all the provided certificates. Example of running the tool:
+
+![sslmerge_output](doc/img/sslmerge_output_2.png)
+
+## Certificate chain
 
 In order to create a valid chain, you must provide the tool with all the necessary certificates. It will be:
 
@@ -102,11 +111,17 @@ In order to create a valid chain, you must provide the tool with all the necessa
 
 This is very important because without it you will not be able to determine the beginning and end of the chain.
 
-However, if you look inside the generated chain after generating, you will not find the root certificate there. Why?
+However, if you look inside the generated chain after generating with **sslmerge**, you will not find the root certificate there. Why?
 
 Because self-signed root certificates need not/should not be included in web server configuration. They serve no purpose (clients will always ignore them) and they incur a slight performance (latency) penalty because they increase the size of the SSL handshake.
 
 If you want to add a root certificate to the certificate chain, call the utility with the `--with-root` parameter.
+
+## Certification Paths
+
+**Sslmerge** allows the use of two **Certification Paths**:
+
+![sslmerge_output](doc/img/ssllabs_output_1.png)
 
 ## Logging
 
