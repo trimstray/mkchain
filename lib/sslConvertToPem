@@ -14,11 +14,13 @@
 
 function sslConvertToPem() {
 
+  #shellcheck disable=SC2034
   local _FUNCTION_ID="sslConvertToPem"
   local _STATE=0
 
   local bin_path="$1"
 
+  #shellcheck disable=SC2154
   pem_cert_full_path="${_cert_path}/Certificate.crt"
 
   openssl x509 -in "$bin_path" -inform der -outform pem -out "$pem_cert_full_path"

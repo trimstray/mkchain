@@ -14,15 +14,20 @@
 
 function sslGetSysCA() {
 
+  #shellcheck disable=SC2034
   local _FUNCTION_ID="sslGetSysCA"
   local _STATE=0
 
+  #shellcheck disable=SC2154
   _root_ca_file="RootCertificate.crt"
+  #shellcheck disable=SC2154
   _root_ca_path="${_cert_path}/${_root_ca_file}"
 
+  #shellcheck disable=SC2044
   for i in $(find /etc/ssl/certs/ -name "*.pem") ; do
 
-    if [[ $(openssl x509 -noout -issuer_hash -in $i | grep "$_hash") ]] ; then
+    #shellcheck disable=SC2154
+    if openssl x509 -noout -issuer_hash -in "$i" | grep -q "$_hash" ; then
 
       cp "$i" "$_root_ca_path"
 

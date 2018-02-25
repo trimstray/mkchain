@@ -280,6 +280,7 @@ function __main__() {
 
             _uri_path=$(openssl x509 -noout -text -in "$i" | grep "CA Issuers - URI:" | cut -d ":" -f2-)
 
+            #shellcheck disable=SC2034
             _cert_path="$(dirname "$(readlink -f "$i")")"
 
             sslGetUriCA "$_uri_path" "$i"
