@@ -276,17 +276,21 @@ function __main__() {
 
         for i in "${ssl_delivered_certificates[@]}" ; do
 
-          _uri_path=$(openssl x509 -noout -text -in "$i" | grep "CA Issuers - URI:" | cut -d ":" -f2-)
+          if [[ -f "$i" ]] ; then
 
-          _cert_path="$(dirname "$(readlink -f "$i")")"
+            _uri_path=$(openssl x509 -noout -text -in "$i" | grep "CA Issuers - URI:" | cut -d ":" -f2-)
 
-          sslGetUriCA "$_uri_path" "$i"
+            _cert_path="$(dirname "$(readlink -f "$i")")"
 
-          sslGetSha256 "issuer" "$pem_cert_full_path"
+            sslGetUriCA "$_uri_path" "$i"
 
-          sslGetSysCA
+            sslGetSha256 "issuer" "$pem_cert_full_path"
 
-          ssl_delivered_certificates+=("$pem_cert_full_path" "$_root_ca_path")
+            sslGetSysCA
+
+            ssl_delivered_certificates+=("$pem_cert_full_path" "$_root_ca_path")
+
+          fi
 
         done
 
