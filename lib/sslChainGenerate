@@ -18,7 +18,7 @@ function sslChainGenerate() {
   local _FUNCTION_ID="sslChainGenerate"
   local _STATE=0
 
-  local _key_chain_state="0"
+  local _key_chain_state="1"
 
   # The mechanism involved in the location of sorted items.
   # shellcheck disable=SC2154
@@ -65,8 +65,6 @@ function sslChainGenerate() {
   # shellcheck disable=SC2154
   if [[ "$_key_type_ident" == "true" ]] ; then
 
-    _key_chain_state=1
-
     printf "    \e[0;32m*\e[m %s\n" "found correct identity (end-user, server) certificate"
 
     _logger "warn" \
@@ -94,22 +92,19 @@ function sslChainGenerate() {
       "$_FUNCTION_ID()" \
       "found $_key_type_inter_count correct intermediate certificate"
 
-  fi
-
-  # shellcheck disable=SC2154
-  if [[ "$_key_type_root" == "true" ]] && [[ "$_key_type_root_inter" == "true" ]] ; then
+  elif [[ "$_key_type_root_inter" == "false" ]] && \
+       [[ "$_key_type_inter_count" -eq 0 ]] ; then
 
     _key_chain_state=0
+    _key_inter_state=1
 
-    printf "    \e[0;31m*\e[m %s\n" "not found second intermediate certificate"
+    printf "    \e[0;31m*\e[m %s\n" "one or more intermediate certificate not found"
 
     _logger "warn" \
-      "$_FUNCTION_ID()" \
-      "not found second intermediate certificate"
+     "$_FUNCTION_ID()" \
+     "one or more intermediate certificate not found"
 
-  elif [[ "$_key_type_root" == "true" ]] && [[ "$_key_type_inter_count" -lt 1 ]] ; then
-
-    _key_chain_state=0
+  else
 
     printf "    \e[0;31m*\e[m %s\n" "not found first intermediate certificate"
 
@@ -117,12 +112,85 @@ function sslChainGenerate() {
       "$_FUNCTION_ID()" \
       "not found first intermediate certificate"
 
+    _key_chain_state=0
+    _key_type_inter_count=0
+
   fi
 
   # shellcheck disable=SC2154
   if [[ "$_key_type_root" == "true" ]] ; then
 
+    if [[ "$_key_type_inter" == "true" ]] ; then
+
+      if [[ "$_key_type_root_inter" == "true" ]] && \
+         [[ "$_key_type_inter_count" -gt 1 ]] ; then
+
+        _key_chain_state=1
+        _key_inter_state=1
+
+      elif [[ "$_key_type_root_inter" == "true" ]] && \
+           [[ "$_key_type_inter_count" -ge 1 ]] ; then
+
+        _key_chain_state=0
+        _key_inter_state=1
+
+        printf "    \e[0;31m*\e[m %s\n" "not found second intermediate certificate"
+
+        _logger "warn" \
+          "$_FUNCTION_ID()" \
+          "not found second intermediate certificate"
+
+      fi
+
+    elif [[ "$_key_type_root_inter" == "false" ]] ; then
+
+      _key_chain_state=1
+      _key_inter_state=1
+
+    elif [[ "$_key_type_inter_count" -lt 1 ]] ; then
+
+      _key_chain_state=0
+      _key_inter_state=0
+
+    else
+
+      _key_chain_state=1
+      _key_inter_state=1
+
+    fi
+
+  elif [[ "$_key_type_root_inter" == "false" ]] ; then
+
+    if [[ "$_key_type_inter_count" -eq 0 ]] ; then
+
+      _key_chain_state=1
+      _key_inter_state=1
+
+    elif [[ "$_key_type_inter_count" -le 1 ]] ; then
+
+      _key_chain_state=0
+      _key_inter_state=1
+
+      printf "    \e[0;31m*\e[m %s\n" "not found second intermediate certificate"
+
+      _logger "warn" \
+        "$_FUNCTION_ID()" \
+        "not found second intermediate certificate"
+
+    fi
+
+  else
+
     _key_chain_state=1
+    _key_inter_state=1
+
+  fi
+
+  # shellcheck disable=SC2154
+  if [[ "$_key_type_root" == "true" ]] ; then
+
+    #shellcheck disable=SC2034
+    _key_root_state=1
 
     printf "    \e[0;32m*\e[m %s\n" "found correct root certificate"
 
@@ -132,7 +200,16 @@ function sslChainGenerate() {
 
   else
 
-    _key_chain_state=0
+    if [[ "$_key_inter_state" -eq 0 ]] || \
+       [[ "$_key_type_inter_count" -eq 0 ]] ; then
+
+      _key_chain_state=0
+
+    else
+
+      _key_chain_state=0
+
+    fi
 
     printf "    \e[0;34m*\e[m %s\n" "not found correct root certificate"
 
