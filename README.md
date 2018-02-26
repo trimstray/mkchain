@@ -123,6 +123,42 @@ If you want to add a root certificate to the certificate chain, call the utility
 
 ![sslmerge_output](doc/img/ssllabs_output_1.png)
 
+## Output comments
+
+When generating the chain of certificates, **sslmerge** displays comments with information about certificates, including any errors. Here is a list of all possibilities:
+
+### not found identity (end-user, server) certificate
+
+The message is displayed in the absence of a server certificate that is the beginning of the chain. This is a unique case because in this situation the **sslmerge** ends its operation displaying only this information. The server certificate is the only certificate required to correctly create a chain. Without this certificate, the correct chain will not be created.
+
+### found correct identity (end-user, server) certificate
+
+The reverse situation here - message displayed when a valid server certificate is found.
+
+### not found first intermediate certificate
+
+This message appears when the first of the two intermediate certificates is not found. This information does not explicitly specify the absence of a second intermediate certificate and on the other hand it allows to determine whether the intermediate certificate to which the server certificate was signed exists. Additionally, it can be displayed if the second intermediate certificate has been delivered.
+
+### not found second intermediate certificate
+
+Similar to the above, however, it concerns the second intermediate certificate. However, it is possible to create the chain correctly using the second certification path, e.g. using the first intermediate certificate and replacing the second with the main certificate.
+
+### one or more intermediate certificate not found
+
+This message means that one or all of the required intermediate certificates are missing and displayed in the absence of the root certificate.
+
+### found 'n' correct intermediate certificate(s)
+
+This message indicates the number of valid intermediate certificates.
+
+### not found correct root certificate
+
+The lack of the root certificate is treated as a warning. Of course, when configuring certificates on the server side, it is not recommended to attach a root certificate, but if you create it with the **sslmerge**, it treats the chain as incomplete displaying information about the incorrect creation of the chain.
+
+### an empty CN field was found in one of the certificates
+
+This message does not inform about the error and about the lack of the CN field what can happen with some certificates (look at `example/google.com`). Common Name field identifies the host name associated with the certificate. There is no requirement in **RFC3280** for an Issuer DN to have a CN. Most CAs do include a CN in the Issuer DN, but some don't, such as this Equifax CA.
+
 ## Logging
 
 After running the script, the `log/` directory is created and in it the following files with logs:
