@@ -128,17 +128,25 @@ function sslChainGenerate() {
         _key_chain_state=1
         _key_inter_state=1
 
-      elif [[ "$_key_type_root_inter" == "true" ]] && \
-           [[ "$_key_type_inter_count" -ge 1 ]] ; then
+      elif [[ "$_key_type_root_inter_visible" == "true" ]] ; then
 
-        _key_chain_state=0
-        _key_inter_state=1
+        if [[ "$_key_type_inter_count" -eq 1 ]] && [[ "$_key_type_root_inter" == "true" ]] ; then
 
-        printf "    \e[0;31m*\e[m %s\n" "not found second intermediate certificate"
+          _key_chain_state=0
+          _key_inter_state=1
 
-        _logger "warn" \
-          "$_FUNCTION_ID()" \
-          "not found second intermediate certificate"
+          printf "    \e[0;31m*\e[m %s\n" "not found second intermediate certificate"
+
+          _logger "warn" \
+            "$_FUNCTION_ID()" \
+            "not found second intermediate certificate"
+
+        else
+
+          _key_chain_state=1
+          _key_inter_state=1
+
+        fi
 
       fi
 
