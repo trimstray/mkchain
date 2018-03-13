@@ -110,10 +110,6 @@ function sslChainRelation() {
           # shellcheck disable=SC2034
           _key_type_root="true"
 
-        fi
-
-        if [[ "${_key_issuer}" == "${_key_subject}" ]] ; then
-
           # shellcheck disable=SC2034
           _key_type_root_inter="true"
           _root_certificate_meta="$_key_issuer"
