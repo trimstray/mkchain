@@ -28,7 +28,7 @@
  • <a href="#certificate-chain">Certificate Chain</a>
  • <a href="#certificate-paths">Certificate Paths</a>
  • <a href="#output-comments">Output comments</a>
- • <a href="#loggind">Logging</a>
+ • <a href="#logging">Logging</a>
  • <a href="#contributing">Contributing</a>
  • <a href="#project-architecture">Project Architecture</a>
  • <a href="#license">License</a>
