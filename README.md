@@ -1,12 +1,47 @@
-# sslmerge
+<h1 align="center">SSLMerge</h1>
 
-## Releases
+<h4 align="center">Open source tool to help you build a valid SSL certificate chain.</h4>
 
-|                      **STABLE RELEASE**                      |                     **TESTING RELEASE**                      |
-| :----------------------------------------------------------: | :----------------------------------------------------------: |
-| [![](https://img.shields.io/badge/Branch-master-green.svg)]() | [![](https://img.shields.io/badge/Branch-testing-orange.svg)]() |
-| [![](https://img.shields.io/badge/Version-v1.4.0-lightgrey.svg)]() | [![](https://img.shields.io/badge/Version-v1.4.0-lightgrey.svg)]() |
-| [![Build Status](https://travis-ci.org/trimstray/sslmerge.svg?branch=master)](https://travis-ci.org/trimstray/sslmerge) | [![Build Status](https://travis-ci.org/trimstray/sslmerge.svg?branch=testing)](https://travis-ci.org/trimstray/sslmerge) |
+<p align="center">
+  <a href="https://img.shields.io/badge/Branch-master-green.svg">
+    <img src="https://img.shields.io/badge/Branch-master-green.svg"
+        alt="Branch">
+  </a>
+  <a href="https://img.shields.io/badge/Version-v1.4.0-lightgrey.svg">
+    <img src="https://img.shields.io/badge/Version-v1.4.0-lightgrey.svg"
+        alt="Version">
+  </a>
+  <a href="https://travis-ci.org/trimstray/sslmerge">
+    <img src="https://travis-ci.org/trimstray/sslmerge.svg?branch=master"
+        alt="Travis-CI">
+  <a href="http://www.gnu.org/licenses/">
+    <img src="https://img.shields.io/badge/license-GNU-blue.svg"
+        alt="License">
+  </a>
+</p>
+
+<p align="center">
+   <a href="#description">Description</a>
+ • <a href="#parameters">Parameters</a>
+ • <a href="#requirements">Requirements</a>
+ • <a href="#how-to-use">How To Use</a>
+ • <a href="#certificate-chain">Certificate Chain</a>
+ • <a href="#certificate-paths">Certificate Paths</a>
+ • <a href="#output-comments">Output comments</a>
+ • <a href="#loggind">Logging</a>
+ • <a href="#contributing">Contributing</a>
+ • <a href="#project-architecture">Project Architecture</a>
+ • <a href="#license">License</a>
+ • <a href="https://github.com/trimstray/sslmerge/wiki">Wiki</a>
+</p>
+
+<div align="center">
+  <sub>Created by
+  <a href="https://twitter.com/trimstray">trimstray</a> and
+  <a href="https://github.com/trimstray/sslmerge/graphs/contributors">
+    contributors
+  </a>
+</div>
 
 ## Description
 
@@ -39,7 +74,7 @@ Provides the following options:
 
 - [openssl](https://www.openssl.org/)
 
-## Install/uninstall
+## How To Use
 
 It's simple - for install:
 
@@ -55,8 +90,6 @@ For remove:
 
 > - symlink to `bin/sslmerge` is placed in `/usr/local/bin`
 > - man page is placed in `/usr/local/man/man8`
-
-## Use example
 
 Let's start with **ssllabs** certificate chain. They are delivered together with the **sslmerge** and can be found in the `example/ssllabs.com` directory which additionally contains the `all` directory (containing all the certificates needed to assemble the chain) and the `server_certificate` directory (containing only the server certificate).
 
