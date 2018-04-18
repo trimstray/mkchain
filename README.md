@@ -1,4 +1,4 @@
-<h1 align="center">SSLMerge</h1>
+<h1 align="center">Sslmerge</h1>
 
 <h4 align="center">Open source tool to help you build a valid SSL certificate chain.</h4>
 
