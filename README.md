@@ -32,7 +32,6 @@
  • <a href="#contributing">Contributing</a>
  • <a href="#project-architecture">Project Architecture</a>
  • <a href="#license">License</a>
- • <a href="https://github.com/trimstray/sslmerge/wiki">Wiki</a>
 </p>
 
 <div align="center">
