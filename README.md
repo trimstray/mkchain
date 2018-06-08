@@ -211,6 +211,11 @@ This message does not inform about the error and about the lack of the CN field 
 
 - [openssl](https://www.openssl.org/)
 
+This tool working with:
+
+- **GNU/Linux** (testing on Debian and CentOS)
+- **Bash** (testing on 4.4.19)
+
 ## Other
 
 ### Contributing
