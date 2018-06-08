@@ -38,6 +38,8 @@
   </a>
 </div>
 
+<br>
+
 <p align="center">
     <img src="/doc/img/sslmerge_preview.png"
         alt="Master">
