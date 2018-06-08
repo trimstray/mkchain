@@ -22,15 +22,11 @@
 
 <p align="center">
    <a href="#description">Description</a>
- • <a href="#parameters">Parameters</a>
- • <a href="#requirements">Requirements</a>
  • <a href="#how-to-use">How To Use</a>
- • <a href="#certificate-chain">Certificate Chain</a>
- • <a href="#certificate-paths">Certificate Paths</a>
- • <a href="#output-comments">Output comments</a>
- • <a href="#logging">Logging</a>
- • <a href="#contributing">Contributing</a>
- • <a href="#project-architecture">Project Architecture</a>
+ • <a href="#parameters">Parameters</a>
+ • <a href="#how-it-works">How it works</a>
+ • <a href="#requirements">Requirements</a>
+ • <a href="#other">Other</a>
  • <a href="#license">License</a>
 </p>
 
@@ -46,49 +42,49 @@
 
 Is an open source tool to help you build a valid SSL certificate chain from the root certificate to the end-user certificate. Also can help you fix the incomplete certificate chain and download all missing CA certificates.
 
+## How To Use
+
+It's simple:
+
+```bash
+# Clone this repository
+git clone https://github.com/trimstray/sslmerge
+
+# Go into the repository
+cd sslmerge
+
+# Install
+./setup.sh install
+
+# Run the app
+sslmerge -i /data/certs -o /data/certs/chain.crt
+```
+
+> * symlink to `bin/sslmerge` is placed in `/usr/local/bin`
+> * man page is placed in `/usr/local/man/man8`
+
 ## Parameters
 
 Provides the following options:
 
-```
+```bash
   Usage:
     sslmerge <option|long-option>
 
   Examples:
     sslmerge --in Root.crt --in Intermediate1.crt --in Server.crt --out bundle_chain_certs.crt
-    sslmerge --in /tmp/certs/ --out bundle_chain_certs.crt --with-root
+    sslmerge --in /tmp/certs --out bundle_chain_certs.crt --with-root
     sslmerge -i Server.crt -o bundle_chain_certs.crt
 
   Options:
         --help        show this message
         --debug       displays information on the screen (debug mode)
-    -i, --in          add certificates to merge (multiple files or directory)
+    -i, --in          add certificates to merge (certificate file, multiple files or directory with ssl certificates)
     -o, --out         saves the result (chain) to file
         --with-root   add root certificate to the certificate chain
 ```
 
-## Requirements
-
-**Sslmerge** uses external utilities to be installed before running:
-
-- [openssl](https://www.openssl.org/)
-
-## How To Use
-
-It's simple - for install:
-
-```
-./setup.sh install
-```
-
-For remove:
-
-```
-./setup.sh uninstall
-```
-
-> - symlink to `bin/sslmerge` is placed in `/usr/local/bin`
-> - man page is placed in `/usr/local/man/man8`
+## How it works
 
 Let's start with **ssllabs** certificate chain. They are delivered together with the **sslmerge** and can be found in the `example/ssllabs.com` directory which additionally contains the `all` directory (containing all the certificates needed to assemble the chain) and the `server_certificate` directory (containing only the server certificate).
 
@@ -122,19 +118,25 @@ The above code presents a full chain consisting of:
 
   issued for *Entrust Root Certification Authority* by *Entrust Root Certification Authority*
 
-### Scenario 1
+#### Scenario 1
 
 In this scenario, we will chain all delivered certificates. Example of running the tool:
 
-![sslmerge_output](doc/img/sslmerge_output_1.png)
+<p align="center">
+    <img src="/doc/img/sslmerge_output_1.png"
+        alt="Master">
+</p>
 
-### Scenario 2
+#### Scenario 2
 
 In this scenario, we only use the server certificate and use it to retrieve the remaining required certificates. Then, as above, we will combine all the provided certificates. Example of running the tool:
 
-![sslmerge_output](doc/img/sslmerge_output_2.png)
+<p align="center">
+    <img src="/doc/img/sslmerge_output_2.png"
+        alt="Master">
+</p>
 
-## Certificate chain
+### Certificate chain
 
 In order to create a valid chain, you must provide the tool with all the necessary certificates. It will be:
 
@@ -149,13 +151,16 @@ Because self-signed root certificates need not/should not be included in web ser
 
 If you want to add a root certificate to the certificate chain, call the utility with the `--with-root` parameter.
 
-## Certification Paths
+### Certification Paths
 
 **Sslmerge** allows use of two **certification paths**:
 
-![sslmerge_output](doc/img/ssllabs_output_1.png)
+<p align="center">
+    <img src="/doc/img/ssllabs_output_1.png"
+        alt="Master">
+</p>
 
-## Output comments
+### Output comments
 
 When generating the chain of certificates, **sslmerge** displays comments with information about certificates, including any errors.
 
@@ -193,43 +198,21 @@ The lack of the root certificate is treated as a warning. Of course, when config
 
 This message does not inform about the error and about the lack of the CN field what can happen with some certificates (look at `example/google.com`). Common Name field identifies the host name associated with the certificate. There is no requirement in **RFC3280** for an Issuer DN to have a CN. Most CAs do include a CN in the Issuer DN, but some don't, such as this Equifax CA.
 
-## Logging
+## Requirements
 
-After running the script, the `log/` directory is created and in it the following files with logs:
+**Sslmerge** uses external utilities to be installed before running:
 
-- `<script_name>.<date>.log` - all `_logger()` function calls are saved in it
-- `stdout.log` - a standard output and errors from the `_init_cmd()` function are written in it. If you want to redirect the output from command, use the following structure: `your_command >>"$_log_stdout" 2>&1 &`
+- [openssl](https://www.openssl.org/)
 
-## Contributing
+## Other
 
-See [CONTRIBUTING.md](CONTRIBUTING.md).
+### Contributing
 
-## Project architecture
+See **[this](CONTRIBUTING.md)**.
 
-    |-- LICENSE.md                 # GNU GENERAL PUBLIC LICENSE, Version 3, 29 June 2007
-    |-- README.md                  # this simple documentation
-    |-- CONTRIBUTING.md            # principles of project support
-    |-- .gitignore                 # ignore untracked files
-    |-- .travis.yml                # continuous integration with Travis CI
-    |-- setup.sh                   # install sslmerge on the system
-    |-- bin
-        |-- sslmerge               # main script (init)
-    |-- doc                        # includes documentation, images and manuals
-        |-- man8
-            |-- sslmerge.8         # man page for sslmergel
-    |-- lib                        # libraries, external functions
-    |-- log                        # contains logs, created after init
-    |-- src                        # includes external project files
-        |-- helpers                # contains core functions
-        |-- import                 # appends the contents of the lib directory
-        |-- __init__               # contains the __main__ function
-        |-- settings               # contains sslmergel settings
-    |-- example                    # examples of certs needed to build a chain
-        |-- github.com
-        |-- google.com
-        |-- mozilla.com
-        |-- ssllabs.com
-        |-- vultr.com
+### Project architecture
+
+See **<a href="https://github.com/trimstray/sslmerge/wiki/Project-architecture">this</a>**.
 
 ## License
 
