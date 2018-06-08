@@ -38,6 +38,11 @@
   </a>
 </div>
 
+<p align="center">
+    <img src="/doc/img/sslmerge_preview.png"
+        alt="Master">
+</p>
+
 ## Description
 
 Is an open source tool to help you build a valid SSL certificate chain from the root certificate to the end-user certificate. Also can help you fix the incomplete certificate chain and download all missing CA certificates.
