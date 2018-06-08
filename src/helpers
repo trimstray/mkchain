@@ -565,13 +565,13 @@ function _help_() {
 
   Examples:
     $_init_name --in Root.crt --in Intermediate1.crt --in Server.crt --out bundle_chain_certs.crt
-    $_init_name --in /tmp/certs/ --out bundle_chain_certs.crt --with-root
+    $_init_name --in /tmp/certs --out bundle_chain_certs.crt --with-root
     $_init_name -i Server.crt -o bundle_chain_certs.crt
 
   Options:
         --help        show this message
         --debug       displays information on the screen (debug mode)
-    -i, --in          add certificates to merge (multiple files or directory)
+    -i, --in          add certificates to merge (certificate file, multiple files or directory with ssl certificates)
     -o, --out         saves the result (chain) to file
         --with-root   add root certificate to the certificate chain
 
