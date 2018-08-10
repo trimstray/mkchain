@@ -32,8 +32,8 @@ function sslSetRowSize() {
   grep -v "CERTIFICATE" "${_ssl_delivered_certificates_file}" | \
   tr -d '\n' | \
   tr -d '\r' | \
-  sed -e "s/.\{$fixed_row_size\}/&\n/g" | \
-  sed -e "1s/^/$ssl_beg_cert_id\n/" | \
+  sed -e "s/.\\{$fixed_row_size\\}/&\\n/g" | \
+  sed -e "1s/^/$ssl_beg_cert_id\\n/" | \
   sed -e "\$a$ssl_end_cert_id" \
   > "${_ssl_delivered_certificates_file}.${fext}"
 
