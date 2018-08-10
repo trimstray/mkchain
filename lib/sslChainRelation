@@ -48,13 +48,16 @@ function sslChainRelation() {
       _key_issuer_hash=$(echo "$i" | awk -v FS="(:|:)" '{print $4}')
       _key_subject_hash=$(echo "$i" | awk -v FS="(:|:)" '{print $5}')
 
+      _key_issuer_filter=$(echo "$_key_issuer" | sed 's/  *//g')
+      _key_subject_filter=$(echo "$_key_subject" | sed 's/  *//g')
+
       _logger "info" \
         "$_FUNCTION_ID()" \
         "extracting items from ${i} => 0:${_key_path}, 1:${_key_issuer}, 2:${_key_subject}, 3:${_key_issuer_hash}, 4:${_key_subject_hash}"
 
       # Compares the current field 'Subject' certificate processed
       # on the last field 'Subject' of the previous certificate.
-      if [[ "$_key_subject" == "$_last_subject" ]] ; then
+      if [[ "$_key_subject_filter" == "$_last_subject" ]] ; then
 
         if [[ "$_last_subject" == *"."* ]] ; then
 
@@ -63,14 +66,14 @@ function sslChainRelation() {
           # shellcheck disable=SC2034
           _key_type_ident="true"
 
-        elif [[ "$_last_subject" == "$_key_issuer" ]] ; then
+        elif [[ "$_last_subject" == "$_key_issuer_filter" ]] ; then
 
           # shellcheck disable=SC2034
           _key_type="Root Certificate"
           # shellcheck disable=SC2034
           _key_type_root="true"
 
-        elif [[ "$_last_subject" != "$_key_issuer" ]] ; then
+        elif [[ "$_last_subject" != "$_key_issuer_filter" ]] ; then
 
           # shellcheck disable=SC2034
           _key_type="Intermediate Certificate"
@@ -86,24 +89,24 @@ function sslChainRelation() {
         fi
 
         # Assign an element to the array with 'paht:issuer:subject' notation.
-        _ssl_attr_sorted+=("${_key_path}:${_key_issuer}:${_last_subject}")
+        _ssl_attr_sorted+=("${_key_path}:${_key_issuer_filter}:${_last_subject}")
 
         printf "  \\t         (%s)\\n" "${_key_path_name}"
         printf "  \\t         (\\e[0;33m%s\\e[m)\\n" "${_key_type}"
         printf "    S:(\\e[1;36m%s\\e[m):(\\e[1;39m%s\\e[m)\\n" "${_key_subject_hash}" "${_last_subject}"
-        printf "    I:(\\e[1;36m%s\\e[m):(\\e[1;30m%s\\e[m)\\n" "${_key_issuer_hash}" "${_key_issuer}"
+        printf "    I:(\\e[1;36m%s\\e[m):(\\e[1;30m%s\\e[m)\\n" "${_key_issuer_hash}" "${_key_issuer_filter}"
 
         _logger "info" \
           "$_FUNCTION_ID()" \
-          "found relationship: $_last_subject <==> $_key_issuer"
+          "found relationship: $_last_subject <==> $_key_issuer_filter"
 
-        _last_subject="$_key_issuer"
+        _last_subject="$_key_issuer_filter"
 
         _ssl_keep_num=$((_ssl_keep_num+1))
 
       else
 
-        if [[ "${_key_issuer}" == "${_key_subject}" ]] ; then
+        if [[ "${_key_issuer_filter}" == "${_key_subject_filter}" ]] ; then
 
           # shellcheck disable=SC2034
           _key_type="Root Certificate"
@@ -112,7 +115,7 @@ function sslChainRelation() {
 
           # shellcheck disable=SC2034
           _key_type_root_inter="true"
-          _root_certificate_meta="$_key_issuer"
+          _root_certificate_meta="$_key_issuer_filter"
 
         fi
 
@@ -120,11 +123,11 @@ function sslChainRelation() {
 
       if [[ "${_key_type_inter}" == "true" ]] && [[ "${_key_type_root}" == "true" ]] ; then
 
-        if [[ ! "${_key_issuer}" == "${_key_subject}" ]] ; then
+        if [[ ! "${_key_issuer_filter}" == "${_key_subject}" ]] ; then
 
           if [[ ! "${_key_subject}" == *"."* ]] ; then
 
-            if [[ ! "${_key_issuer}" == "${_root_certificate_meta}" ]] ; then
+            if [[ ! "${_key_issuer_filter}" == "${_root_certificate_meta}" ]] ; then
 
               # shellcheck disable=SC2034
               _key_type_root_inter_visible="true"
