@@ -52,7 +52,8 @@ function sslInfo() {
     _key_issuer=$(openssl x509 -noout -issuer -in "$_key_path" | \
           grep "$_ssl_ident_issuer_string" | grep -Eo "$_ssl_regexp_string" | \
           cut -d "=" -f2 | \
-          sed 's/  *//g')
+          cut -d "," -f1 | \
+          awk '{$1=$1};1')
 
     _key_issuer_hash=$(openssl x509 -noout -issuer_hash -in "$_key_path")
 
