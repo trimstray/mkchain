@@ -152,7 +152,8 @@ function __main__() {
 
       -i|--in)
 
-        ssl_delivered_certificates+=("$2")
+        _input_fd=$(pwd)/"$2"
+        ssl_delivered_certificates+=("$_input_fd")
 
         shift 2 ;;
 
