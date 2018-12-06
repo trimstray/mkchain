@@ -261,6 +261,9 @@ function sslChainGenerate() {
 
   fi
 
+  printf "  \\e[1;34m%s\\e[m: " "Chain file"
+  printf "\\e[0;34m%s\\e[m\\n\\n" "${_output_fd}"
+
   return $_STATE
 
 }
