@@ -287,6 +287,16 @@ function __main__() {
 
             _uri_path=$(openssl x509 -noout -text -in "$i" | grep "CA Issuers - URI:" | cut -d ":" -f2-)
 
+            if [[ -z "$_uri_path" ]] ; then
+
+              _sprintf "stop" "incorrect CA Issuers for $i"
+
+              _logger "stop" \
+                "$_FUNCTION_ID()" \
+                "incorrect CA Issuers for $i" && _exit_ "1"
+
+            fi
+
             #shellcheck disable=SC2034
             _cert_path="$(dirname "$(readlink -f "$i")")"
 
