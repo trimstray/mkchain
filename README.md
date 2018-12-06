@@ -87,15 +87,15 @@ Provides the following options:
         --help        show this message
         --debug       displays information on the screen (debug mode)
     -i, --in          add certificates to merge (certificate file, multiple files or directory with ssl certificates)
-    -o, --out         saves the result (chain) to file
+    -o, --out         saves the result (chain) to file (default path: chains/)
         --with-root   add root certificate to the certificate chain
 ```
 
 ## How it works
 
-Let's start with **ssllabs** certificate chain. They are delivered together with the **sslmerge** and can be found in the `example/ssllabs.com` directory which additionally contains the `all` directory (containing all the certificates needed to assemble the chain) and the `server_certificate` directory (containing only the server certificate).
+Let's start with **ssllabs** certificate chain. They are delivered together with the `sslmerge` and can be found in the `example/ssllabs.com` directory which additionally contains the `all` directory (containing all the certificates needed to assemble the chain) and the `server_certificate` directory (containing only the server certificate).
 
-The correct chain for the ssllabs.com domain (the result of the **openssl** command):
+The correct chain for the **ssllabs.com** domain (the result of the `openssl` command):
 
 ```bash
 Certificate chain
@@ -152,7 +152,7 @@ In order to create a valid chain, you must provide the tool with all the necessa
 
 This is very important because without it you will not be able to determine the beginning and end of the chain.
 
-However, if you look inside the generated chain after generating with **sslmerge**, you will not find the root certificate there. Why?
+However, if you look inside the generated chain after generating with `sslmerge`, you will not find the root certificate there. Why?
 
 Because self-signed root certificates need not/should not be included in web server configuration. They serve no purpose (clients will always ignore them) and they incur a slight performance (latency) penalty because they increase the size of the SSL handshake.
 
@@ -160,7 +160,7 @@ If you want to add a root certificate to the certificate chain, call the utility
 
 ### Certification Paths
 
-**Sslmerge** allows use of two **certification paths**:
+`sslmerge` allows use of two **certification paths**:
 
 <p align="center">
     <img src="/doc/img/ssllabs_output_1.png"
@@ -169,13 +169,13 @@ If you want to add a root certificate to the certificate chain, call the utility
 
 ### Output comments
 
-When generating the chain of certificates, **sslmerge** displays comments with information about certificates, including any errors.
+When generating the chain of certificates, `sslmerge` displays comments with information about certificates, including any errors.
 
 Here is a list of all possibilities:
 
 #### not found identity (end-user, server) certificate
 
-The message is displayed in the absence of a server certificate that is the beginning of the chain. This is a unique case because in this situation the **sslmerge** ends its operation displaying only this information. The server certificate is the only certificate required to correctly create a chain. Without this certificate, the correct chain will not be created.
+The message is displayed in the absence of a server certificate that is the beginning of the chain. This is a unique case because in this situation the `sslmerge` ends its operation displaying only this information. The server certificate is the only certificate required to correctly create a chain. Without this certificate, the correct chain will not be created.
 
 #### found correct identity (end-user, server) certificate
 
@@ -199,7 +199,7 @@ This message indicates the number of valid intermediate certificates.
 
 #### not found correct root certificate
 
-The lack of the root certificate is treated as a warning. Of course, when configuring certificates on the server side, it is not recommended to attach a root certificate, but if you create it with the **sslmerge**, it treats the chain as incomplete displaying information about the incorrect creation of the chain.
+The lack of the root certificate is treated as a warning. Of course, when configuring certificates on the server side, it is not recommended to attach a root certificate, but if you create it with the `sslmerge`, it treats the chain as incomplete displaying information about the incorrect creation of the chain.
 
 #### an empty CN field was found in one of the certificates
 
@@ -207,7 +207,7 @@ This message does not inform about the error and about the lack of the CN field 
 
 ## Requirements
 
-**Sslmerge** uses external utilities to be installed before running:
+`sslmerge` uses external utilities to be installed before running:
 
 - [openssl](https://www.openssl.org/)
 
