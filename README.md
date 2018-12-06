@@ -1,4 +1,4 @@
-<h1 align="center">Sslmerge</h1>
+<code><h1 align="center">sslmerge</h1></code>
 
 <h4 align="center">Open source tool to help you build a valid SSL certificate chain.</h4>
 
@@ -7,8 +7,8 @@
     <img src="https://img.shields.io/badge/Branch-master-green.svg"
         alt="Branch">
   </a>
-  <a href="https://img.shields.io/badge/Version-v1.4.1-lightgrey.svg">
-    <img src="https://img.shields.io/badge/Version-v1.4.1-lightgrey.svg"
+  <a href="https://img.shields.io/badge/Version-v1.4.2-lightgrey.svg">
+    <img src="https://img.shields.io/badge/Version-v1.4.2-lightgrey.svg"
         alt="Version">
   </a>
   <a href="https://travis-ci.org/trimstray/sslmerge">
