@@ -1,2 +1,11 @@
 # This is where the result of the script output.
-log/
+log/*
+!/log/.gitkeep
+
+# Temporary files.
+tmp/*
+!/tmp/.gitkeep
+
+# Chains.
+chains/*
+!/chains/.gitkeep
