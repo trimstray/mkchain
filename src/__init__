@@ -50,7 +50,8 @@ function __main__() {
   _cert_path=""
 
   # Default output chain file.
-  _output_fd="${_chs}/default.chain.out-${_cdate}.crt"
+  _output_shm=$(date +%s | md5sum | awk '{print $1}')
+  _output_fd="${_chs}/${_output_shm}.crt"
 
   # Set main ssl certificates system path.
   readonly _system_ca_path="/etc/ssl/certs"

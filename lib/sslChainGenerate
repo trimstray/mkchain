@@ -40,9 +40,9 @@ function sslChainGenerate() {
           "$_FUNCTION_ID()" \
           "add $_path"
 
-        # alternative: (cat "$_absolute_path" ; echo) >> "$_fd"
+        # alternative: (cat "$_absolute_path" ; echo) >> "$_output_fd"
         # shellcheck disable=SC2154
-        cat "$_absolute_path" >> "$_fd"
+        cat "$_absolute_path" >> "$_output_fd"
 
       fi
 
@@ -54,9 +54,9 @@ function sslChainGenerate() {
         "$_FUNCTION_ID()" \
         "add $_path"
 
-      # alternative: (cat "$_absolute_path" ; echo) >> "$_fd"
+      # alternative: (cat "$_absolute_path" ; echo) >> "$_output_fd"
       # shellcheck disable=SC2154
-      cat "$_absolute_path" >> "$_fd"
+      cat "$_absolute_path" >> "$_output_fd"
 
     fi
 
