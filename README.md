@@ -87,7 +87,7 @@ Provides the following options:
         --help        show this message
         --debug       displays information on the screen (debug mode)
     -i, --in          add certificates to merge (certificate file, multiple files or directory with ssl certificates)
-    -o, --out         saves the result (chain) to file (default path: chains/)
+    -o, --out         saves the result (chain) to file (default path: sslmerge/chains/)
         --with-root   add root certificate to the certificate chain
 ```
 
@@ -152,9 +152,9 @@ In order to create a valid chain, you must provide the tool with all the necessa
 
 This is very important because without it you will not be able to determine the beginning and end of the chain.
 
-However, if you look inside the generated chain after generating with `sslmerge`, you will not find the root certificate there. Why?
+However, if you look inside the generated chain after generating with `sslmerge`, you will not find the root certificate there.
 
-Because self-signed root certificates need not/should not be included in web server configuration. They serve no purpose (clients will always ignore them) and they incur a slight performance (latency) penalty because they increase the size of the SSL handshake.
+Why? Because self-signed root certificates need not/should not be included in web server configuration. They serve no purpose (clients will always ignore them) and they incur a slight performance (latency) penalty because they increase the size of the SSL handshake.
 
 If you want to add a root certificate to the certificate chain, call the utility with the `--with-root` parameter.
 
