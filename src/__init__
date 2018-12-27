@@ -51,6 +51,7 @@ function __main__() {
 
   # Default output chain file.
   _output_shm=$(date +%s | md5sum | awk '{print $1}')
+  # shellcheck disable=SC2154
   _output_fd="${_chs}/${_output_shm}.crt"
 
   # Set main ssl certificates system path.

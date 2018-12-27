@@ -50,7 +50,9 @@ function sslChainRelation() {
       _key_issuer_hash=$(echo "$i" | awk -v FS="(:|:)" '{print $4}')
       _key_subject_hash=$(echo "$i" | awk -v FS="(:|:)" '{print $5}')
 
+      # shellcheck disable=SC2001
       _key_issuer_filter=$(echo "$_key_issuer" | sed 's/  *//g')
+      # shellcheck disable=SC2001
       _key_subject_filter=$(echo "$_key_subject" | sed 's/  *//g')
 
       _logger "info" \
