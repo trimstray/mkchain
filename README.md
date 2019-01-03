@@ -64,7 +64,7 @@ cd sslmerge
 ./setup.sh install
 
 # Run the app
-sslmerge -i /data/certs -o /data/certs/chain.crt
+sslmerge -i /data/certs -o /data/chain.crt
 ```
 
 > * symlink to `bin/sslmerge` is placed in `/usr/local/bin`
@@ -143,14 +143,16 @@ In this scenario, we only use the server certificate and use it to retrieve the 
         alt="Master">
 </p>
 
-### Certificate chain
+### Certificate Chain
 
-In order to create a valid chain, you must provide the tool with all the necessary certificates. It will be:
+In order to create a valid chain, you must provide the tool with all the necessary certificates (if you set directory for `-i|--in` param). It will be:
 
 - **Server Certificate**
 - **Intermediate CAs** and **Root CAs**
 
 This is very important because without it you will not be able to determine the beginning and end of the chain.
+
+  > If you set only certificate file as a `-i|--in` value, `sslmerge` automatically download all necessary certificates.
 
 However, if you look inside the generated chain after generating with `sslmerge`, you will not find the root certificate there.
 
@@ -209,12 +211,12 @@ This message does not inform about the error and about the lack of the CN field 
 
 `sslmerge` uses external utilities to be installed before running:
 
-- [openssl](https://www.openssl.org/)
+- **[OpenSSL](https://www.openssl.org/)** (testing on 1.1.0g/h)
 
 This tool working with:
 
 - **GNU/Linux** (testing on Debian and CentOS)
-- **Bash** (testing on 4.4.19)
+- **[Bash](https://www.gnu.org/software/bash/)** (testing on 4.4.19)
 
 ## Other
 
