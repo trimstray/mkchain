@@ -86,10 +86,12 @@ Provides the following options:
   Options:
         --help        show this message
         --debug       displays information on the screen (debug mode)
-    -i, --in          add certificates to merge (certificate file, multiple files or directory with ssl certificates)
-    -o, --out         saves the result (chain) to file (default path: sslmerge/chains/)
-        --with-root   add root certificate to the certificate chain
+    -i, --in          add certificates to merge (file, multiple files or directory with ssl certificates)
+    -o, --out         saves the result (chain) to a file
+        --with-root   add root certificate to certificates chain
 ```
+
+  > `-o|--out` - without this param `sslmerge` save output chain to `sslmerge/chains/` directory.
 
 ## How it works
 

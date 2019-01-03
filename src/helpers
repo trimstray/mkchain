@@ -570,12 +570,12 @@ function _help_() {
     $_init_name --in /tmp/certs --out bundle_chain_certs.crt --with-root
     $_init_name -i Server.crt -o bundle_chain_certs.crt
 
-  Options:
+Options:
         --help        show this message
         --debug       displays information on the screen (debug mode)
-    -i, --in          add certificates to merge (certificate file, multiple files or directory with ssl certificates)
-    -o, --out         saves the result (chain) to file
-        --with-root   add root certificate to the certificate chain
+    -i, --in          add certificates to merge (file, multiple files or directory with ssl certificates)
+    -o, --out         saves the result (chain) to a file
+        --with-root   add root certificate to certificates chain
 
 
   This program comes with ABSOLUTELY NO WARRANTY.
