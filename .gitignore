@@ -6,6 +6,6 @@ log/*
 tmp/*
 !/tmp/.gitkeep
 
-# Chains.
+# Default path for output chains.
 chains/*
 !/chains/.gitkeep
