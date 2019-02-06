@@ -95,6 +95,8 @@ Provides the following options:
 
 ## How it works
 
+  > Before read it, please see article about **[SSL Certificate Chain](https://support.dnsimple.com/articles/what-is-ssl-certificate-chain/)**.
+
 Let's start with **ssllabs** certificate chain. They are delivered together with the `mkchain` and can be found in the `example/ssllabs.com` directory which additionally contains the `all` directory (containing all the certificates needed to assemble the chain) and the `server_certificate` directory (containing only the server certificate).
 
 The correct chain for the **ssllabs.com** domain (the result of the `openssl` command):
