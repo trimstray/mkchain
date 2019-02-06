@@ -220,6 +220,11 @@ This tool working with:
 - **GNU/Linux** (testing on Debian and CentOS)
 - **[Bash](https://www.gnu.org/software/bash/)** (testing on 4.4.19)
 
+**MacOS/FreeBSD**:
+
+* replace for getopt(1) that supports GNU-style long options (`pkg install getopt`)
+* also work on MacOS with `greadlink` from **coreutils** (installed via homebrew)
+
 ## Other
 
 ### Contributing
