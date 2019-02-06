@@ -4,7 +4,7 @@
 #
 # Header:
 #
-#         fname : "sslmerge"
+#         fname : "mkchain"
 #         cdate : "04.01.2018"
 #        author : "Michał Żurawski <trimstray@gmail.com>"
 #      tab_size : "2"
@@ -16,7 +16,7 @@
 #
 # License:
 #
-#   sslmerge, Copyright (C) 2018  Michał Żurawski
+#   mkchain, Copyright (C) 2018  Michał Żurawski
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by

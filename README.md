@@ -1,4 +1,4 @@
-<code><h1 align="center">sslmerge</h1></code>
+<code><h1 align="center">mkchain</h1></code>
 
 <h4 align="center">Open source tool to help you build a valid SSL certificate chain.</h4>
 
@@ -11,8 +11,8 @@
     <img src="https://img.shields.io/badge/Version-v1.4.2-lightgrey.svg"
         alt="Version">
   </a>
-  <a href="https://travis-ci.org/trimstray/sslmerge">
-    <img src="https://travis-ci.org/trimstray/sslmerge.svg?branch=master"
+  <a href="https://travis-ci.org/trimstray/mkchain">
+    <img src="https://travis-ci.org/trimstray/mkchain.svg?branch=master"
         alt="Travis-CI">
   <a href="http://www.gnu.org/licenses/">
     <img src="https://img.shields.io/badge/license-GNU-blue.svg"
@@ -33,7 +33,7 @@
 <div align="center">
   <sub>Created by
   <a href="https://twitter.com/trimstray">trimstray</a> and
-  <a href="https://github.com/trimstray/sslmerge/graphs/contributors">
+  <a href="https://github.com/trimstray/mkchain/graphs/contributors">
     contributors
   </a>
 </div>
@@ -41,7 +41,7 @@
 <br>
 
 <p align="center">
-    <img src="/doc/img/sslmerge_preview.png"
+    <img src="/doc/img/mkchain_preview.png"
         alt="Master">
 </p>
 
@@ -55,19 +55,19 @@ It's simple:
 
 ```bash
 # Clone this repository
-git clone https://github.com/trimstray/sslmerge
+git clone https://github.com/trimstray/mkchain
 
 # Go into the repository
-cd sslmerge
+cd mkchain
 
 # Install
 ./setup.sh install
 
 # Run the app
-sslmerge -i /data/certs -o /data/chain.crt
+mkchain -i /data/certs -o /data/chain.crt
 ```
 
-> * symlink to `bin/sslmerge` is placed in `/usr/local/bin`
+> * symlink to `bin/mkchain` is placed in `/usr/local/bin`
 > * man page is placed in `/usr/local/man/man8`
 
 ## Parameters
@@ -76,12 +76,12 @@ Provides the following options:
 
 ```bash
   Usage:
-    sslmerge <option|long-option>
+    mkchain <option|long-option>
 
   Examples:
-    sslmerge --in Root.crt --in Intermediate1.crt --in Server.crt --out bundle_chain_certs.crt
-    sslmerge --in /tmp/certs --out bundle_chain_certs.crt --with-root
-    sslmerge -i Server.crt -o bundle_chain_certs.crt
+    mkchain --in Root.crt --in Intermediate1.crt --in Server.crt --out bundle_chain_certs.crt
+    mkchain --in /tmp/certs --out bundle_chain_certs.crt --with-root
+    mkchain -i Server.crt -o bundle_chain_certs.crt
 
   Options:
         --help        show this message
@@ -91,11 +91,11 @@ Provides the following options:
         --with-root   add root certificate to certificates chain
 ```
 
-  > `-o|--out` - without this param `sslmerge` save output chain to `sslmerge/chains/` directory.
+  > `-o|--out` - without this param `mkchain` save output chain to `mkchain/chains/` directory.
 
 ## How it works
 
-Let's start with **ssllabs** certificate chain. They are delivered together with the `sslmerge` and can be found in the `example/ssllabs.com` directory which additionally contains the `all` directory (containing all the certificates needed to assemble the chain) and the `server_certificate` directory (containing only the server certificate).
+Let's start with **ssllabs** certificate chain. They are delivered together with the `mkchain` and can be found in the `example/ssllabs.com` directory which additionally contains the `all` directory (containing all the certificates needed to assemble the chain) and the `server_certificate` directory (containing only the server certificate).
 
 The correct chain for the **ssllabs.com** domain (the result of the `openssl` command):
 
@@ -132,7 +132,7 @@ The above code presents a full chain consisting of:
 In this scenario, we will chain all delivered certificates. Example of running the tool:
 
 <p align="center">
-    <img src="/doc/img/sslmerge_output_1.png"
+    <img src="/doc/img/mkchain_output_1.png"
         alt="Master">
 </p>
 
@@ -141,7 +141,7 @@ In this scenario, we will chain all delivered certificates. Example of running t
 In this scenario, we only use the server certificate and use it to retrieve the remaining required certificates. Then, as above, we will combine all the provided certificates. Example of running the tool:
 
 <p align="center">
-    <img src="/doc/img/sslmerge_output_2.png"
+    <img src="/doc/img/mkchain_output_2.png"
         alt="Master">
 </p>
 
@@ -154,9 +154,9 @@ In order to create a valid chain, you must provide the tool with all the necessa
 
 This is very important because without it you will not be able to determine the beginning and end of the chain.
 
-  > If you set only certificate file as a `-i|--in` value, `sslmerge` automatically download all necessary certificates.
+  > If you set only certificate file as a `-i|--in` value, `mkchain` automatically download all necessary certificates.
 
-However, if you look inside the generated chain after generating with `sslmerge`, you will not find the root certificate there.
+However, if you look inside the generated chain after generating with `mkchain`, you will not find the root certificate there.
 
 Why? Because self-signed root certificates need not/should not be included in web server configuration. They serve no purpose (clients will always ignore them) and they incur a slight performance (latency) penalty because they increase the size of the SSL handshake.
 
@@ -164,7 +164,7 @@ If you want to add a root certificate to the certificate chain, call the utility
 
 ### Certification Paths
 
-`sslmerge` allows use of two **certification paths**:
+`mkchain` allows use of two **certification paths**:
 
 <p align="center">
     <img src="/doc/img/ssllabs_output_1.png"
@@ -173,13 +173,13 @@ If you want to add a root certificate to the certificate chain, call the utility
 
 ### Output comments
 
-When generating the chain of certificates, `sslmerge` displays comments with information about certificates, including any errors.
+When generating the chain of certificates, `mkchain` displays comments with information about certificates, including any errors.
 
 Here is a list of all possibilities:
 
 #### not found identity (end-user, server) certificate
 
-The message is displayed in the absence of a server certificate that is the beginning of the chain. This is a unique case because in this situation the `sslmerge` ends its operation displaying only this information. The server certificate is the only certificate required to correctly create a chain. Without this certificate, the correct chain will not be created.
+The message is displayed in the absence of a server certificate that is the beginning of the chain. This is a unique case because in this situation the `mkchain` ends its operation displaying only this information. The server certificate is the only certificate required to correctly create a chain. Without this certificate, the correct chain will not be created.
 
 #### found correct identity (end-user, server) certificate
 
@@ -203,7 +203,7 @@ This message indicates the number of valid intermediate certificates.
 
 #### not found correct root certificate
 
-The lack of the root certificate is treated as a warning. Of course, when configuring certificates on the server side, it is not recommended to attach a root certificate, but if you create it with the `sslmerge`, it treats the chain as incomplete displaying information about the incorrect creation of the chain.
+The lack of the root certificate is treated as a warning. Of course, when configuring certificates on the server side, it is not recommended to attach a root certificate, but if you create it with the `mkchain`, it treats the chain as incomplete displaying information about the incorrect creation of the chain.
 
 #### an empty CN field was found in one of the certificates
 
@@ -211,7 +211,7 @@ This message does not inform about the error and about the lack of the CN field 
 
 ## Requirements
 
-`sslmerge` uses external utilities to be installed before running:
+`mkchain` uses external utilities to be installed before running:
 
 - **[OpenSSL](https://www.openssl.org/)** (testing on 1.1.0g/h)
 
@@ -228,7 +228,7 @@ See **[this](CONTRIBUTING.md)**.
 
 ### Project architecture
 
-See **<a href="https://github.com/trimstray/sslmerge/wiki/Project-architecture">this</a>**.
+See **<a href="https://github.com/trimstray/mkchain/wiki/Project-architecture">this</a>**.
 
 ## License
 
