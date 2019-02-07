@@ -1,4 +1,4 @@
-<code><h1 align="center">mkchain</h1></code>
+<h1 align="center">mkchain</h1>
 
 <h4 align="center">Open source tool to help you build a valid SSL certificate chain.</h4>
 
@@ -47,7 +47,7 @@
 
 ## Description
 
-Is an open source tool to help you build a valid SSL certificate chain from the root certificate to the end-user certificate. Also can help you fix the incomplete certificate chain and download all missing CA certificates.
+Is an open source tool to help you build a valid SSL certificate chain. Also can help you fix the incomplete chain and download all missing CA certificates.
 
 ## How To Use
 
