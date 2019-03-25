@@ -39,7 +39,7 @@
 <br>
 
 <p align="center">
-    <img src="/doc/img/mkchain_preview.png"
+    <img src="/static/img/mkchain_preview.png"
         alt="Master">
 </p>
 
@@ -132,7 +132,7 @@ The above code presents a full chain consisting of:
 In this scenario, we will chain all delivered certificates. Example of running the tool:
 
 <p align="center">
-    <img src="/doc/img/mkchain_output_1.png"
+    <img src="/static/img/mkchain_output_1.png"
         alt="Master">
 </p>
 
@@ -141,7 +141,7 @@ In this scenario, we will chain all delivered certificates. Example of running t
 In this scenario, we only use the server certificate and use it to retrieve the remaining required certificates. Then, as above, we will combine all the provided certificates. Example of running the tool:
 
 <p align="center">
-    <img src="/doc/img/mkchain_output_2.png"
+    <img src="/static/img/mkchain_output_2.png"
         alt="Master">
 </p>
 
@@ -167,7 +167,7 @@ If you want to add a root certificate to the certificate chain, call the utility
 `mkchain` allows use of two **certification paths**:
 
 <p align="center">
-    <img src="/doc/img/ssllabs_output_1.png"
+    <img src="/static/img/ssllabs_output_1.png"
         alt="Master">
 </p>
 
