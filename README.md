@@ -3,20 +3,14 @@
 <h4 align="center">Open source tool to help you build a valid SSL certificate chain.</h4>
 
 <p align="center">
-  <a href="https://img.shields.io/badge/Branch-master-green.svg">
-    <img src="https://img.shields.io/badge/Branch-master-green.svg"
-        alt="Branch">
+  <a href="https://travis-ci.org/trimstray/mkchain">
+    <img src="https://travis-ci.org/trimstray/mkchain.svg?branch=master" alt="Travis-CI">
   </a>
   <a href="https://img.shields.io/badge/Version-v1.5.0-lightgrey.svg">
-    <img src="https://img.shields.io/badge/Version-v1.5.0-lightgrey.svg"
-        alt="Version">
+    <img src="https://img.shields.io/badge/Version-v1.5.0-lightgrey.svg" alt="Version">
   </a>
-  <a href="https://travis-ci.org/trimstray/mkchain">
-    <img src="https://travis-ci.org/trimstray/mkchain.svg?branch=master"
-        alt="Travis-CI">
   <a href="http://www.gnu.org/licenses/">
-    <img src="https://img.shields.io/badge/license-GNU-blue.svg"
-        alt="License">
+    <img src="https://img.shields.io/badge/license-GNU-blue.svg" alt="License">
   </a>
 </p>
 
@@ -39,8 +33,7 @@
 <br>
 
 <p align="center">
-    <img src="/static/img/mkchain_preview.png"
-        alt="Master">
+  <img src="/static/img/mkchain_preview.png" alt="Master">
 </p>
 
 ## Description
@@ -91,7 +84,7 @@ Provides the following options:
 
   > `-o|--out` - without this param `mkchain` save output chain to `mkchain/chains/` directory.
 
-## How it works
+## How It Works
 
   > Before read it, please see article about **[SSL Certificate Chain](https://support.dnsimple.com/articles/what-is-ssl-certificate-chain/)**.
 
@@ -132,8 +125,7 @@ The above code presents a full chain consisting of:
 In this scenario, we will chain all delivered certificates. Example of running the tool:
 
 <p align="center">
-    <img src="/static/img/mkchain_output_1.png"
-        alt="Master">
+  <img src="/static/img/mkchain_output_1.png" alt="Master">
 </p>
 
 #### Scenario 2
@@ -141,8 +133,7 @@ In this scenario, we will chain all delivered certificates. Example of running t
 In this scenario, we only use the server certificate and use it to retrieve the remaining required certificates. Then, as above, we will combine all the provided certificates. Example of running the tool:
 
 <p align="center">
-    <img src="/static/img/mkchain_output_2.png"
-        alt="Master">
+  <img src="/static/img/mkchain_output_2.png" alt="Master">
 </p>
 
 ### Certificate Chain
@@ -167,8 +158,7 @@ If you want to add a root certificate to the certificate chain, call the utility
 `mkchain` allows use of two **certification paths**:
 
 <p align="center">
-    <img src="/static/img/ssllabs_output_1.png"
-        alt="Master">
+  <img src="/static/img/ssllabs_output_1.png" alt="Master">
 </p>
 
 ### Output comments
@@ -233,7 +223,7 @@ See **[this](CONTRIBUTING.md)**.
 
 ### Project architecture
 
-See **<a href="https://github.com/trimstray/mkchain/wiki/Project-architecture">this</a>**.
+See **[this](https://github.com/trimstray/mkchain/wiki/Project-architecture)**.
 
 ## License
 
