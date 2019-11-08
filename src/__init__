@@ -284,6 +284,8 @@ function __main__() {
 
   if [[ "$_remote_chain_state" -eq 1 ]] ; then
 
+    _remote_chain_dir=$(pwd)
+
     sslRemoteChain "$_remote_chain"
 
     _input_fd=$(pwd)/"$_remote_chain_dir"

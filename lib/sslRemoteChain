@@ -20,25 +20,26 @@ function sslRemoteChain() {
   local _STATE=0
 
   local _ssl_remote_domain="$1"
+  local _remote_chain_dir_fpath="${_remote_chain_dir}/${_ssl_remote_domain}"
 
-  if [[ -d "${_remote_chain_dir}/${_ssl_remote_domain}" ]] ; then
+  if [[ -d "$_remote_chain_dir_fpath" ]] ; then
 
-    rm -fr "${_remote_chain_dir}/${_ssl_remote_domain}"
+    rm -fr "$_remote_chain_dir_fpath"
 
   fi
 
-  mkdir -p "${_remote_chain_dir}/${_ssl_remote_domain}"
+  mkdir -p "$_remote_chain_dir_fpath"
 
   # Save certificate chain.
   echo | openssl s_client -showcerts \
   -servername "$_ssl_remote_domain" -connect ${_ssl_remote_domain}:443 2>&1 \
-  | sed -n '/^-----BEGIN CERT/,/^-----END CERT/p' > "${_remote_chain_dir}/${_ssl_remote_domain}/${_remote_chain_fd}"
+  | sed -n '/^-----BEGIN CERT/,/^-----END CERT/p' > "${_remote_chain_dir_fpath}/${_remote_chain_fd}"
 
   _fd_c="0"
 
   while IFS= read -r line ; do
 
-    printf "%s\\n" "$line" >> "${_remote_chain_dir}/${_ssl_remote_domain}/cert.${_fd_c}.pem"
+    printf "%s\\n" "$line" >> "${_remote_chain_dir_fpath}/cert.${_fd_c}.pem"
 
     if [[ "$line" == "$ssl_end_cert_id" ]] ; then
 
@@ -46,11 +47,11 @@ function sslRemoteChain() {
 
     fi
 
-  done < "${_remote_chain_dir}/${_ssl_remote_domain}/${_remote_chain_fd}"
+  done < "${_remote_chain_dir_fpath}/${_remote_chain_fd}"
 
-  if [[ -e "${_remote_chain_dir}/${_ssl_remote_domain}/${_remote_chain_fd}" ]] ; then
+  if [[ -e "${_remote_chain_dir_fpath}/${_remote_chain_fd}" ]] ; then
 
-    rm -fr "${_remote_chain_dir}/${_ssl_remote_domain}/${_remote_chain_fd}"
+    rm -fr "${_remote_chain_dir_fpath}/${_remote_chain_fd}"
 
   fi
 
