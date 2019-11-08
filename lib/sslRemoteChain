@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+
+# shellcheck shell=bash
+
+# ``````````````````````````````````````````````````````````````````````````````
+# Function name: sslRemoteChain()
+#
+# Description:
+#
+# Usage:
+#   sslRemoteChain <domain>
+#
+# Examples:
+#   sslRemoteChain example.com
+#
+
+function sslRemoteChain() {
+
+  local _FUNCTION_ID="sslRemoteChain"
+  local _STATE=0
+
+  local _ssl_remote_domain="$1"
+
+  if [[ -d "${_remote_chain_dir}/${_ssl_remote_domain}" ]] ; then
+
+    rm -fr "${_remote_chain_dir}/${_ssl_remote_domain}"
+
+  fi
+
+  mkdir -p "${_remote_chain_dir}/${_ssl_remote_domain}"
+
+  # Save certificate chain.
+  echo | openssl s_client -showcerts \
+  -servername "$_ssl_remote_domain" -connect ${_ssl_remote_domain}:443 2>&1 \
+  | sed -n '/^-----BEGIN CERT/,/^-----END CERT/p' > "${_remote_chain_dir}/${_ssl_remote_domain}/${_remote_chain_fd}"
+
+  _fd_c="0"
+
+  while IFS= read -r line ; do
+
+    printf "%s\\n" "$line" >> "${_remote_chain_dir}/${_ssl_remote_domain}/cert.${_fd_c}.pem"
+
+    if [[ "$line" == "$ssl_end_cert_id" ]] ; then
+
+      _fd_c=$((_fd_c + 1))
+
+    fi
+
+  done < "${_remote_chain_dir}/${_ssl_remote_domain}/${_remote_chain_fd}"
+
+  if [[ -e "${_remote_chain_dir}/${_ssl_remote_domain}/${_remote_chain_fd}" ]] ; then
+
+    rm -fr "${_remote_chain_dir}/${_ssl_remote_domain}/${_remote_chain_fd}"
+
+  fi
+
+  return $_STATE
+
+}
