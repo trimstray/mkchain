@@ -20,7 +20,7 @@ function sslRemoteChain() {
   local _STATE=0
 
   local _ssl_remote_domain="$1"
-  local _remote_chain_dir_fpath="${_remote_chain_dir}/${_ssl_remote_domain}"
+  _remote_chain_dir_fpath="${_remote_chain_dir}/${_ssl_remote_domain}"
 
   if [[ -d "$_remote_chain_dir_fpath" ]] ; then
 

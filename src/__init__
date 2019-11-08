@@ -59,6 +59,7 @@ function __main__() {
   _remote_chain_state="0"
   _remote_chain_fd="remote_chain.pem"
   _remote_chain_dir=""
+  _remote_chain_dir_fpath=""
 
   # Set main ssl certificates system path.
   readonly _system_ca_path="/etc/ssl/certs"
@@ -288,7 +289,7 @@ function __main__() {
 
     sslRemoteChain "$_remote_chain"
 
-    _input_fd=$(pwd)/"$_remote_chain_dir"
+    _input_fd="$_remote_chain_dir_fpath"
     ssl_delivered_certificates+=("$_input_fd")
 
   fi
