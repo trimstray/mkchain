@@ -6,8 +6,8 @@
   <a href="https://travis-ci.org/trimstray/mkchain">
     <img src="https://travis-ci.org/trimstray/mkchain.svg?branch=master" alt="Travis-CI">
   </a>
-  <a href="https://img.shields.io/badge/Version-v1.5.0-lightgrey.svg">
-    <img src="https://img.shields.io/badge/Version-v1.5.0-lightgrey.svg" alt="Version">
+  <a href="https://img.shields.io/badge/Version-v1.5.1-lightgrey.svg">
+    <img src="https://img.shields.io/badge/Version-v1.5.1-lightgrey.svg" alt="Version">
   </a>
   <a href="http://www.gnu.org/licenses/">
     <img src="https://img.shields.io/badge/license-GNU-blue.svg" alt="License">
@@ -78,6 +78,7 @@ Provides the following options:
         --help        show this message
         --debug       displays information on the screen (debug mode)
     -i, --in          add certificates to merge (file, multiple files or directory with ssl certificates)
+    -r, --remote      get remote certificates and add them to merge (instead of -i, --in)
     -o, --out         saves the result (chain) to a file
         --with-root   add root certificate to certificates chain
 ```

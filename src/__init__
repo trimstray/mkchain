@@ -165,6 +165,13 @@ function __main__() {
 
         shift 2 ;;
 
+      -r|--remote)
+
+        _remote_chain_state="1"
+        _remote_chain="$2"
+
+        shift 2 ;;
+
       -o|--out)
 
         _output_fd="$2"
@@ -177,13 +184,6 @@ function __main__() {
         _with_root="1"
 
         shift ;;
-
-      -r|--remote)
-
-        _remote_chain_state="1"
-        _remote_chain="$2"
-
-        shift 2 ;;
 
       *)
 
