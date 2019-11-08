@@ -54,6 +54,12 @@ function __main__() {
   # shellcheck disable=SC2154
   _output_fd="${_chs}/${_output_shm}.crt"
 
+  # Remote chain (default value).
+  _remote_chain=""
+  _remote_chain_state="0"
+  _remote_chain_fd="remote_chain.pem"
+  _remote_chain_dir=""
+
   # Set main ssl certificates system path.
   readonly _system_ca_path="/etc/ssl/certs"
 
@@ -114,8 +120,8 @@ function __main__() {
 
   # Specifies the call parameters of the script, the exact description
   # can be found in _help_ and file README.md.
-  local _short_opt="i:o:"
-  local _long_opt="help,debug,in:,out:,with-root"
+  local _short_opt="i:o:r:"
+  local _long_opt="help,debug,in:,out:,with-root,remote:"
 
   _GETOPT_PARAMS=$(getopt -o "${_short_opt}" --long "${_long_opt}" \
                    -n "${_init_name}" -- "${__script_params[@]}")
@@ -171,6 +177,13 @@ function __main__() {
 
         shift ;;
 
+      -r|--remote)
+
+        _remote_chain_state="1"
+        _remote_chain="$2"
+
+        shift 2 ;;
+
       *)
 
         if [[ "$2" == "-" ]] || [[ ! -z "$2" ]] ; then
@@ -214,7 +227,11 @@ function __main__() {
   # or selected parameters without which the script can not work properly
   # have been used. Do not add the load_state variable to the _opt_values array,
   # which is supported above.
-  _opt_values=("ssl_delivered_certificates" "_output_fd")
+  if [[ "$_remote_chain_state" -eq 0 ]] ; then
+
+    _opt_values=("ssl_delivered_certificates" "_output_fd")
+
+  fi
 
   # Checking the value of the variables (if they are unset or empty):
   #   - variables for call parameters
@@ -264,6 +281,15 @@ function __main__() {
   # Temporary file extension.
   # shellcheck disable=SC2034
   fext="tmp"
+
+  if [[ "$_remote_chain_state" -eq 1 ]] ; then
+
+    sslRemoteChain "$_remote_chain"
+
+    _input_fd=$(pwd)/"$_remote_chain_dir"
+    ssl_delivered_certificates+=("$_input_fd")
+
+  fi
 
   : >"$_output_fd" && \
   _state="0" || _state="1"
