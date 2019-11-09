@@ -73,12 +73,13 @@ Provides the following options:
     mkchain --in Root.crt --in Intermediate1.crt --in Server.crt --out bundle_chain_certs.crt
     mkchain --in /tmp/certs --out bundle_chain_certs.crt --with-root
     mkchain -i Server.crt -o bundle_chain_certs.crt
+    mkchain -i https://incomplete-chain.badssl.com/
 
   Options:
         --help        show this message
         --debug       displays information on the screen (debug mode)
-    -i, --in          add certificates to merge (file, multiple files or directory with ssl certificates)
-    -r, --remote      get remote certificates and add them to merge (instead of -i, --in)
+    -i, --in          add certificates to merge (file, multiple files, directory with ssl certificates
+                      or remote domain)
     -o, --out         saves the result (chain) to a file
         --with-root   add root certificate to certificates chain
 ```

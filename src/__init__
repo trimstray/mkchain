@@ -121,8 +121,8 @@ function __main__() {
 
   # Specifies the call parameters of the script, the exact description
   # can be found in _help_ and file README.md.
-  local _short_opt="i:o:r:"
-  local _long_opt="help,debug,in:,out:,with-root,remote:"
+  local _short_opt="i:o:"
+  local _long_opt="help,debug,in:,out:,with-root"
 
   _GETOPT_PARAMS=$(getopt -o "${_short_opt}" --long "${_long_opt}" \
                    -n "${_init_name}" -- "${__script_params[@]}")
@@ -160,15 +160,23 @@ function __main__() {
 
       -i|--in)
 
-        _input_fd=$(pwd)/"$2"
-        ssl_delivered_certificates+=("$_input_fd")
+        if [[ $2 == *"https://"* ]]; then
 
-        shift 2 ;;
+          _remote_chain_state="1"
+          _remote_chain=$(echo $2 | sed -e 's|^[^/]*//||' -e 's|/.*$||')
 
-      -r|--remote)
+        else
 
-        _remote_chain_state="1"
-        _remote_chain="$2"
+          _input_fd=$(pwd)/"$2"
+
+          if [[ -e "$_input_fd" ]] || \
+             [[ -d "$_input_fd" ]] ; then
+
+            ssl_delivered_certificates+=("$_input_fd")
+
+          fi
+
+        fi
 
         shift 2 ;;
 
