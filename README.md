@@ -38,7 +38,7 @@
 
 ## Description
 
-Is an open source tool to help you build a valid SSL certificate chain. Also can help you fix the incomplete chain and download all missing CA certificates. You can also download all certificates from remote domain and check chain-of-trust.
+Is an open source tool to help you build a valid SSL certificate chain. Also can help you fix the incomplete chain and download all missing CA certificates. You can also download all certificates from remote server and [get your certificate chain right](https://medium.com/@superseb/get-your-certificate-chain-right-4b117a9c0fce).
 
 ## How To Use
 
