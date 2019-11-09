@@ -297,8 +297,9 @@ function __main__() {
 
     sslRemoteChain "$_remote_chain"
 
-    _input_fd="$_remote_chain_dir_fpath"
-    ssl_delivered_certificates+=("$_input_fd")
+    _input_fd=$(ls "$_remote_chain_dir_fpath" | head -n 1)
+
+    ssl_delivered_certificates+=("${_remote_chain_dir_fpath}/${_input_fd}")
 
   fi
 
@@ -335,7 +336,7 @@ function __main__() {
 
             fi
 
-            #shellcheck disable=SC2034
+            # shellcheck disable=SC2034
             _cert_path="$(dirname "$(readlink -f "$i")")"
 
             sslGetUriCA "$_uri_path" "$i"
@@ -349,6 +350,14 @@ function __main__() {
           fi
 
         done
+
+      fi
+
+      if [[ "$_remote_chain_state" -eq 1 ]] && [[ "$_with_root" -eq 1 ]] ; then
+
+        _cert_path="$_remote_chain_dir_fpath"
+
+        sslGetSysCA
 
       fi
 

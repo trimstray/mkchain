@@ -16,17 +16,17 @@
 
 function sslGetUriCA() {
 
-  #shellcheck disable=SC2034
+  # shellcheck disable=SC2034
   local _FUNCTION_ID="sslGetUriCA"
   local _STATE=0
 
   local uri="$1"
-  #shellcheck disable=SC2154
+  # shellcheck disable=SC2154
   local _bin_path="${_tmp}/certificate.bin"
 
   curl -ks --output "$_bin_path" "$uri"
 
-  #shellcheck disable=SC2154
+  # shellcheck disable=SC2154
   sslConvertToPem "$_bin_path" "$_cert_path"
 
   rm -fr "$_bin_path"

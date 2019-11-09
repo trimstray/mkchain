@@ -16,7 +16,7 @@
 
 function sslGetSha256() {
 
-  #shellcheck disable=SC2034
+  # shellcheck disable=SC2034
   local _FUNCTION_ID="sslGetSha256"
   local _STATE=0
 
@@ -31,7 +31,7 @@ function sslGetSha256() {
 
   elif [[ "$_hash_type" == "subject" ]] ; then
 
-    #shellcheck disable=SC2034
+    # shellcheck disable=SC2034
     _hash=$(openssl x509 -noout -subject_hash -in "$_cert")
 
   fi

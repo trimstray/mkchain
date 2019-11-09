@@ -100,11 +100,11 @@ function sslChainGenerate() {
     _key_chain_state=0
     _key_inter_state=1
 
-    printf "    \\e[0;31m*\\e[m %s\\n" "one or more intermediate certificate not found"
+    printf "    \\e[0;31m*\\e[m %s\\n" "one or more intermediate certificate(s) not found"
 
     _logger "warn" \
      "$_FUNCTION_ID()" \
-     "one or more intermediate certificate not found"
+     "one or more intermediate certificate(s) not found"
 
   else
 
@@ -199,10 +199,18 @@ function sslChainGenerate() {
   # shellcheck disable=SC2154
   if [[ "$_key_type_root" == "true" ]] ; then
 
-    #shellcheck disable=SC2034
+    # shellcheck disable=SC2034
     _key_root_state=1
 
-    printf "    \\e[0;32m*\\e[m %s\\n" "found correct root certificate"
+    if [[ "$_with_root" -eq 1 ]] ; then
+
+      printf "    \\e[0;32m*\\e[m %s\\n" "found correct root certificate (added)"
+
+    else
+
+      printf "    \\e[0;32m*\\e[m %s\\n" "found correct root certificate (not added)"
+
+    fi
 
     _logger "warn" \
       "$_FUNCTION_ID()" \
@@ -221,7 +229,7 @@ function sslChainGenerate() {
 
     fi
 
-    printf "    \\e[0;34m*\\e[m %s\\n" "not found correct root certificate"
+    printf "    \\e[0;33m*\\e[m %s\\n" "not found correct root certificate"
 
     _logger "warn" \
       "$_FUNCTION_ID()" \
