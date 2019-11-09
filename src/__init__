@@ -55,8 +55,10 @@ function __main__() {
   _output_fd="${_chs}/${_output_shm}.crt"
 
   # Remote chain (default value).
+  # shellcheck disable=SC2034
   _remote_chain_domain=""
   _remote_chain_state="0"
+  # shellcheck disable=SC2034
   _remote_chain_fd="remote_chain.pem"
   _remote_chain_dir=""
   _remote_chain_dir_fpath=""
@@ -80,7 +82,7 @@ function __main__() {
 
   for i in "${commands[@]}" ; do
 
-    if [[ ! -z "$i" ]] ; then
+    if [[ -n "$i" ]] ; then
 
       hash "$i" >/dev/null 2>&1 ; state="$?"
 
@@ -163,7 +165,7 @@ function __main__() {
         if [[ $2 == *"https://"* ]]; then
 
           _remote_chain_state="1"
-          _remote_domain=$(echo $2 | sed -e 's|^[^/]*//||' -e 's|/.*$||')
+          _remote_domain=$(echo "$2" | sed -e 's|^[^/]*//||' -e 's|/.*$||')
 
         else
 
@@ -195,7 +197,7 @@ function __main__() {
 
       *)
 
-        if [[ "$2" == "-" ]] || [[ ! -z "$2" ]] ; then
+        if [[ "$2" == "-" ]] || [[ -n "$2" ]] ; then
 
           printf "%s: invalid option -- '%s'\\n" "$_init_name" "$2"
           _exit_ "1"
@@ -298,6 +300,7 @@ function __main__() {
 
     sslRemoteChain "${_remote_domain}"
 
+    # shellcheck disable=SC2012
     _input_fd=$(ls "$_remote_chain_dir_fpath" | head -n 1)
 
     ssl_delivered_certificates+=("${_remote_chain_dir_fpath}")
@@ -358,11 +361,15 @@ function __main__() {
 
       fi
 
+      # shellcheck disable=SC2034
       if [[ "$_remote_chain_state" -eq 1 ]] && [[ "$_with_root" -eq 1 ]] ; then
 
         _cert_path="$_remote_chain_dir_fpath"
 
-        sslGetSha256 "issuer" "$_remote_chain_dir_fpath"/$(ls "$_remote_chain_dir_fpath" | tail -n 1)
+        # shellcheck disable=SC2012
+        _remote_chain_dir_fpath_last=$(ls "$_remote_chain_dir_fpath" | tail -n 1)
+
+        sslGetSha256 "issuer" "${_remote_chain_dir_fpath}/${_remote_chain_dir_fpath_last}"
 
         sslGetSysCA
 
@@ -393,6 +400,7 @@ function __main__() {
           # shellcheck disable=SC2207
           _ssl_cert_stack=($(find "$i" -maxdepth 1 -type f -printf "%f\\n"))
 
+          # shellcheck disable=SC2207
           IFS=$'\n' _ssl_cert_stack_tmp=($(sort <<<"${_ssl_cert_stack[*]}")); unset IFS
 
           for j in "${_ssl_cert_stack_tmp[@]}" ; do

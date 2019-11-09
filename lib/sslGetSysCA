@@ -25,7 +25,7 @@ function sslGetSysCA() {
   # shellcheck disable=SC2154
   _root_ca_path="${_cert_path}/${_root_ca_file}"
 
-  # shellcheck disable=SC2044
+  # shellcheck disable=SC2044,SC2154
   for i in $(find "$_system_ca_path" -name "*.pem") ; do
 
     # shellcheck disable=SC2154

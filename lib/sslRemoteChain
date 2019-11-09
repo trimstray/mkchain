@@ -16,11 +16,15 @@
 
 function sslRemoteChain() {
 
+  # shellcheck disable=SC2034
   local _FUNCTION_ID="sslRemoteChain"
   local _STATE=0
 
   local _ssl_remote_domain="$1"
+  # shellcheck disable=SC2154
+  local _remote_chain_dir_fpath_all="${_remote_chain_dir_fpath}/${_remote_chain_fd}"
 
+  # shellcheck disable=SC2154
   if [[ -d "$_remote_chain_dir_fpath" ]] ; then
 
     rm -fr "$_remote_chain_dir_fpath"
@@ -29,10 +33,11 @@ function sslRemoteChain() {
 
   mkdir -p "$_remote_chain_dir_fpath"
 
+  # shellcheck disable=SC2154
   # Save certificate chain.
   echo | openssl s_client -showcerts \
-  -servername "$_ssl_remote_domain" -connect ${_ssl_remote_domain}:443 2>&1 \
-  | sed -n '/^-----BEGIN CERT/,/^-----END CERT/p' > "${_remote_chain_dir_fpath}/${_remote_chain_fd}"
+  -servername "$_ssl_remote_domain" -connect "${_ssl_remote_domain}:443" 2>&1 \
+  | sed -n '/^-----BEGIN CERT/,/^-----END CERT/p' > "$_remote_chain_dir_fpath_all"
 
   _fd_c="0"
 
@@ -40,17 +45,18 @@ function sslRemoteChain() {
 
     printf "%s\\n" "$line" >> "${_remote_chain_dir_fpath}/X-${_fd_c}-CRT.pem"
 
+    # shellcheck disable=SC2154
     if [[ "$line" == "$ssl_end_cert_id" ]] ; then
 
       _fd_c=$((_fd_c + 1))
 
     fi
 
-  done < "${_remote_chain_dir_fpath}/${_remote_chain_fd}"
+  done < "$_remote_chain_dir_fpath_all"
 
-  if [[ -e "${_remote_chain_dir_fpath}/${_remote_chain_fd}" ]] ; then
+  if [[ -e "$_remote_chain_dir_fpath_all" ]] ; then
 
-    rm -fr "${_remote_chain_dir_fpath}/${_remote_chain_fd}"
+    rm -fr "$_remote_chain_dir_fpath_all"
 
   fi
 
