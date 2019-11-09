@@ -38,7 +38,7 @@
 
 ## Description
 
-Is an open source tool to help you build a valid SSL certificate chain. Also can help you fix the incomplete chain and download all missing CA certificates.
+Is an open source tool to help you build a valid SSL certificate chain. Also can help you fix the incomplete chain and download all missing CA certificates. You can also download all certificates from remote domain and check chain-of-trust.
 
 ## How To Use
 
@@ -73,7 +73,7 @@ Provides the following options:
     mkchain --in Root.crt --in Intermediate1.crt --in Server.crt --out bundle_chain_certs.crt
     mkchain --in /tmp/certs --out bundle_chain_certs.crt --with-root
     mkchain -i Server.crt -o bundle_chain_certs.crt
-    mkchain -i https://incomplete-chain.badssl.com/
+    mkchain -i https://incomplete-chain.badssl.com/ --with-root
 
   Options:
         --help        show this message
