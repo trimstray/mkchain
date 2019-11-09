@@ -55,7 +55,7 @@ function __main__() {
   _output_fd="${_chs}/${_output_shm}.crt"
 
   # Remote chain (default value).
-  _remote_chain=""
+  _remote_chain_domain=""
   _remote_chain_state="0"
   _remote_chain_fd="remote_chain.pem"
   _remote_chain_dir=""
@@ -163,7 +163,7 @@ function __main__() {
         if [[ $2 == *"https://"* ]]; then
 
           _remote_chain_state="1"
-          _remote_chain=$(echo $2 | sed -e 's|^[^/]*//||' -e 's|/.*$||')
+          _remote_domain=$(echo $2 | sed -e 's|^[^/]*//||' -e 's|/.*$||')
 
         else
 
@@ -294,12 +294,13 @@ function __main__() {
   if [[ "$_remote_chain_state" -eq 1 ]] ; then
 
     _remote_chain_dir=$(pwd)
+    _remote_chain_dir_fpath="${_remote_chain_dir}/${_remote_domain}"
 
-    sslRemoteChain "$_remote_chain"
+    sslRemoteChain "${_remote_domain}"
 
     _input_fd=$(ls "$_remote_chain_dir_fpath" | head -n 1)
 
-    ssl_delivered_certificates+=("${_remote_chain_dir_fpath}/${_input_fd}")
+    ssl_delivered_certificates+=("${_remote_chain_dir_fpath}")
 
   fi
 
@@ -339,13 +340,17 @@ function __main__() {
             # shellcheck disable=SC2034
             _cert_path="$(dirname "$(readlink -f "$i")")"
 
-            sslGetUriCA "$_uri_path" "$i"
+            if [[ "$_remote_chain_state" -eq 0 ]] ; then
 
-            sslGetSha256 "issuer" "$pem_cert_full_path"
+              sslGetUriCA "$_uri_path" "$i"
 
-            sslGetSysCA
+              sslGetSha256 "issuer" "$pem_cert_full_path"
 
-            ssl_delivered_certificates+=("$pem_cert_full_path" "$_root_ca_path")
+              sslGetSysCA
+
+              ssl_delivered_certificates+=("$pem_cert_full_path" "$_root_ca_path")
+
+            fi
 
           fi
 
@@ -356,6 +361,8 @@ function __main__() {
       if [[ "$_remote_chain_state" -eq 1 ]] && [[ "$_with_root" -eq 1 ]] ; then
 
         _cert_path="$_remote_chain_dir_fpath"
+
+        sslGetSha256 "issuer" "$_remote_chain_dir_fpath"/$(ls "$_remote_chain_dir_fpath" | tail -n 1)
 
         sslGetSysCA
 
@@ -386,7 +393,9 @@ function __main__() {
           # shellcheck disable=SC2207
           _ssl_cert_stack=($(find "$i" -maxdepth 1 -type f -printf "%f\\n"))
 
-          for j in "${_ssl_cert_stack[@]}" ; do
+          IFS=$'\n' _ssl_cert_stack_tmp=($(sort <<<"${_ssl_cert_stack[*]}")); unset IFS
+
+          for j in "${_ssl_cert_stack_tmp[@]}" ; do
 
             local _ssl_path_plus_name="${i}/${j}"
 

@@ -202,15 +202,7 @@ function sslChainGenerate() {
     # shellcheck disable=SC2034
     _key_root_state=1
 
-    if [[ "$_with_root" -eq 1 ]] ; then
-
-      printf "    \\e[0;32m*\\e[m %s\\n" "found correct root certificate (added)"
-
-    else
-
-      printf "    \\e[0;32m*\\e[m %s\\n" "found correct root certificate (not added)"
-
-    fi
+    printf "    \\e[0;32m*\\e[m %s\\n" "found correct root certificate"
 
     _logger "warn" \
       "$_FUNCTION_ID()" \

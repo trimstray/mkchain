@@ -20,7 +20,6 @@ function sslRemoteChain() {
   local _STATE=0
 
   local _ssl_remote_domain="$1"
-  _remote_chain_dir_fpath="${_remote_chain_dir}/${_ssl_remote_domain}"
 
   if [[ -d "$_remote_chain_dir_fpath" ]] ; then
 
@@ -39,7 +38,7 @@ function sslRemoteChain() {
 
   while IFS= read -r line ; do
 
-    printf "%s\\n" "$line" >> "${_remote_chain_dir_fpath}/cert.${_fd_c}.pem"
+    printf "%s\\n" "$line" >> "${_remote_chain_dir_fpath}/X-${_fd_c}-CRT.pem"
 
     if [[ "$line" == "$ssl_end_cert_id" ]] ; then
 
