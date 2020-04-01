@@ -369,16 +369,24 @@ function __main__() {
               else
 
                 # shellcheck disable=SC2034
-                _cert_path="$(dirname "$(readlink -f "$i")")"
+                _cert_path="$(dirname "$(readlink -f "$_r_cert")")"
 
                 if [[ "$_remote_chain_state" -eq 0 ]] ; then
 
                   # Second argument is unused:
-                  sslGetUriCA "$_uri_path" "$i"
+                  sslGetUriCA "$_uri_path" "$_r_cert"
 
                   sslGetSha256 "issuer" "$pem_cert_full_path"
 
-                  ssl_delivered_certificates+=("$pem_cert_full_path")
+                  _hash_subject=$(openssl x509 -noout -subject_hash -in "$pem_cert_full_path")
+                  _hash_issuer=$(openssl x509 -noout -issuer_hash -in "$pem_cert_full_path")
+
+                  # Check RootCA:
+                  if [[ "$_hash_issuer" != "$_hash_subject" ]] ; then
+
+                    ssl_delivered_certificates+=("$pem_cert_full_path")
+
+                  fi
 
                   _r_cert="$pem_cert_full_path"
 
@@ -394,9 +402,12 @@ function __main__() {
 
         done
 
-        sslGetSysCA
+        if [[ "$_with_root" -eq 1 ]] ; then
 
-        ssl_delivered_certificates+=("$_root_ca_path")
+          sslGetSysCA
+          ssl_delivered_certificates+=("$_root_ca_path")
+
+        fi
 
       fi
 
