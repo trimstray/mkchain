@@ -27,7 +27,7 @@ function sslGetUriCA() {
   curl -ks --output "$_bin_path" "$uri"
 
   # shellcheck disable=SC2154
-  sslConvertToPem "$_bin_path" "$_cert_path"
+  sslConvertToPem "$_bin_path" "$_cert_path" "$_cert_id"
 
   rm -fr "$_bin_path"
 

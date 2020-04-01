@@ -23,7 +23,7 @@ function sslConvertToPem() {
   local bin_path="$1"
 
   # shellcheck disable=SC2154
-  pem_cert_full_path="${_cert_path}/Intermediate1.crt"
+  pem_cert_full_path="${_cert_path}/Intermediate${_cert_id}.crt"
 
   openssl x509 -in "$bin_path" -inform der -outform pem -out "$pem_cert_full_path"
 

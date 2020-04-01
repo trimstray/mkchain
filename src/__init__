@@ -63,6 +63,9 @@ function __main__() {
   _remote_chain_dir=""
   _remote_chain_dir_fpath=""
 
+  # shellcheck disable=SC2034
+  _cert_id="0"
+
   # Set main ssl certificates system path.
   readonly _system_ca_path="/etc/ssl/certs"
 
@@ -166,6 +169,17 @@ function __main__() {
 
           _remote_chain_state="1"
           _remote_domain=$(echo "$2" | sed -e 's|^[^/]*//||' -e 's|/.*$||')
+
+        elif [[ $2 == /* ]] ; then
+
+          _input_fd="$2"
+
+          if [[ -e "$_input_fd" ]] || \
+             [[ -d "$_input_fd" ]] ; then
+
+            ssl_delivered_certificates+=("$_input_fd")
+
+          fi
 
         else
 
@@ -321,43 +335,68 @@ function __main__() {
       # Stores certificates.
       _ssl_cert_stack=""
 
-      # We do if you provide a server certificate.
+      # If you provide a server certificate.
       if [[ "${#ssl_delivered_certificates[@]}" -eq "1" ]] ; then
 
         for i in "${ssl_delivered_certificates[@]}" ; do
 
           if [[ -f "$i" ]] ; then
 
-            _uri_path=$(openssl x509 -noout -text -in "$i" | grep "CA Issuers - URI:" | cut -d ":" -f2-)
+            # shellcheck disable=SC2154
+            _uri_path_state="1"
+            _cert_id="1"
 
-            if [[ -z "$_uri_path" ]] ; then
+            _r_cert="$i"
 
-              _sprintf "stop" "incorrect CA Issuers for $i"
+            while [[ "$_uri_path_state" -eq 1 ]] ; do
 
-              _logger "stop" \
-                "$_FUNCTION_ID()" \
-                "incorrect CA Issuers for $i" && _exit_ "1"
+              _uri_path=$(openssl x509 -noout -text -in "$_r_cert" | grep "CA Issuers - URI:" | cut -d ":" -f2-)
 
-            fi
+              # if [[ -z "$_uri_path" ]] ; then
+              #
+              #  _sprintf "stop" "incorrect CA Issuers for $i"
+              #
+              #  _logger "stop" \
+              #    "$_FUNCTION_ID()" \
+              #    "incorrect CA Issuers for $i" && _exit_ "1"
+              #
+              # fi
 
-            # shellcheck disable=SC2034
-            _cert_path="$(dirname "$(readlink -f "$i")")"
+              if [[ -z "$_uri_path" ]] ; then
 
-            if [[ "$_remote_chain_state" -eq 0 ]] ; then
+                _uri_path_state="0"
 
-              sslGetUriCA "$_uri_path" "$i"
+              else
 
-              sslGetSha256 "issuer" "$pem_cert_full_path"
+                # shellcheck disable=SC2034
+                _cert_path="$(dirname "$(readlink -f "$i")")"
 
-              sslGetSysCA
+                if [[ "$_remote_chain_state" -eq 0 ]] ; then
 
-              ssl_delivered_certificates+=("$pem_cert_full_path" "$_root_ca_path")
+                  # Second argument is unused:
+                  sslGetUriCA "$_uri_path" "$i"
 
-            fi
+                  sslGetSha256 "issuer" "$pem_cert_full_path"
+
+                  ssl_delivered_certificates+=("$pem_cert_full_path")
+
+                  _r_cert="$pem_cert_full_path"
+
+                fi
+
+              fi
+
+              _cert_id=$((_cert_id + 1))
+
+            done
 
           fi
 
         done
+
+        sslGetSysCA
+
+        ssl_delivered_certificates+=("$_root_ca_path")
 
       fi
 
@@ -374,6 +413,8 @@ function __main__() {
         sslGetSysCA
 
       fi
+
+      # echo "${ssl_delivered_certificates[@]}"
 
       # For better control of the log file (do not use _sprintf).
       for i in "${ssl_delivered_certificates[@]}" ; do
