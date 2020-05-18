@@ -40,6 +40,10 @@ function sslInfo() {
     "$_FUNCTION_ID()" \
     "initialization of variables with initial values"
 
+  printf "\n  \\e[1;34m%s\\e[m:\\n\\n" "Analyze SSL certificates"
+
+  printf "    %s  %s\n" "subject" "issuer"
+
   for i in "${_ssl_delivered_certificates[@]}" ; do
 
     _key_path="$i"
@@ -55,6 +59,7 @@ function sslInfo() {
           grep "$_ssl_ident_issuer_string" | grep -Eo "$_ssl_regexp_string" | \
           cut -d "=" -f2 | \
           cut -d "," -f1 | \
+          sed 's/  *//g' | \
           awk '{$1=$1};1')
 
     _key_issuer_hash=$(openssl x509 -noout -issuer_hash -in "$_key_path")
@@ -85,6 +90,8 @@ function sslInfo() {
     _logger "info" \
       "$_FUNCTION_ID()" \
       "init _ssl_attr=() 'path':'issuer':'subject':'issuer_hash':'subject_hash' notation, _ssl_attr=('${_ssl_attr[-1]}')"
+
+    printf "    %s %s %s %s %s\n" "$_key_subject_hash" "$_key_issuer_hash" "$_key_subject" "$_key_issuer" "$_key_path_name"
 
   done
 
